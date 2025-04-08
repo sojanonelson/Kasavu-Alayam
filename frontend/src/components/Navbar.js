@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, User } from 'lucide-react';
+import Logo from '../assets/white.png'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +37,7 @@ const Navbar = () => {
       </div>
 
       {/* Main Navbar */}
-      <nav className="bg-black/20 backdrop-blur-xl shadow-md px-4 md:px-10 py-8">
+      <nav className="bg-black/20 backdrop-blur-xl items-center shadow-md px-4 md:px-10 py-8">
         <div className="max-w-10xl mx-auto flex items-center justify-between">
           {/* Left - Navigation Links */}
           <div className="hidden md:flex gap-8 text-white text-md font-medium poppins-regular flex-1">
@@ -49,8 +50,11 @@ const Navbar = () => {
 
           {/* Center - Logo */}
           <div className="absolute left-1/2 transform -translate-x-1/2">
-            <Link to="/">
+            {/* <Link to="/">
               <h1 className='text-4xl text-white font-bold poppins-bold'>Kasavu Aalayam</h1>
+            </Link> */}
+            <Link to="/">
+      <img src={Logo} className='h-16 mb-2'></img>
             </Link>
           </div>
 
