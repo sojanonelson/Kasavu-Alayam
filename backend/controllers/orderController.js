@@ -1,5 +1,5 @@
-const Order = require('../models/orderModel');
-const Product = require('../models/productModel');
+const Order = require('../models/Order');
+const Product = require('../models/Product');
 
 // Generate a unique order number
 const generateOrderNumber = async () => {

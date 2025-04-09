@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import OrderList from './components/orderlist';
-import OrderForm from './components/orderform';
+import OrderForm from './components/orderfrom';
 import ProductList from './components/productlist';
 import ProductForm from './components/productform';
 import CustomerList from './components/customerlist';
@@ -16,16 +16,16 @@ function App() {
         <OrderForm />
         <OrderList />
       </section>
-      <section>
+      {/* <section>
         <h2>Products</h2>
         <ProductForm />
         <ProductList />
-      </section>
-      <section>
+      </section> */}
+      {/* <section>
         <h2>Customers</h2>
         <CustomerForm />
         <CustomerList />
-      </section>
+      </section> */}
     </div>
   );
 }

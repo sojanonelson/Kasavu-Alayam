@@ -1,5 +1,5 @@
-const Customer = require('../models/customerModel');
-const Order = require('../models/orderModel');
+const Customer = require('../models/Customer');
+const Order = require('../models/Order');
 
 // Get all customers
 exports.getCustomers = async (req, res) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import customerService from '../services/customerService';
+import customerService from '../services/customerservice';
 
 const CustomerForm = () => {
   const [formData, setFormData] = useState({

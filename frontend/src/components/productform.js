@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import productService from '../services/productService';
+import productService from '../services/productservice';
 
 const ProductForm = () => {
   const [formData, setFormData] = useState({
