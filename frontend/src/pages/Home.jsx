@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -7,6 +7,7 @@ import 'swiper/css/autoplay';
 import 'swiper/css/effect-fade';
 import { Autoplay } from 'swiper/modules';
 import Navbar from '../components/Navbar';
+import ScrolledNavbar from '../components/ScrolledNavbar'
 
 const heroImages = [
   {
@@ -18,7 +19,7 @@ const heroImages = [
     title: "Traditional Wear"
   },
   {
-    url: "https://kalyansilks.com/_next/image?url=https%3A%2F%2Fapi.kalyansilks.com%2Fmedia%2Fvegam%2Fhomepage%2Fimages%2F1920_x1040_-_Main_Banner_-_02_1.jpg&w=1920&q=75",
+    url: "https://kalyansilks.com/_next/image?url=https%3A%2F%2Fapi.kalyansilks.com%2Fmedia%2Fvegam%2Fhomepage%2Fimages%2F1920_x1040_-_Main_Banner_-_03_1.jpg&w=1920&q=75",
     title: "Festive Collection"
   }
 ];
@@ -30,6 +31,20 @@ const HomePage = () => {
     setCurrentTitle(heroImages[swiper.realIndex].title);
   };
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+useEffect(() => {
+  const handleScroll = () => {
+    setIsScrolled(window.scrollY >600);
+  };
+
+  window.addEventListener('scroll', handleScroll);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+
+console.log("scroll:", window.scrollY)
+
+
   return (
     <div className="font-sans">
       {/* Helmet for dynamic title */}
@@ -38,7 +53,8 @@ const HomePage = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <Navbar/>
+      {isScrolled ? <ScrolledNavbar /> : <Navbar />}
+
       <section className="relative">
         <Swiper
           modules={[Autoplay]}
@@ -136,7 +152,7 @@ const CategoryCard = ({ title, img, link, index }) => (
       <img 
         src={img} 
         alt={title} 
-        className={`w-full h-64 object-cover transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-105 ${
+        className={`w-full h-72 object-cover transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-105 ${
           index === 0 ? 'rounded-tl-2xl rounded-bl-2xl' : 
           index === 2 ? 'rounded-tr-2xl rounded-br-2xl' : 
           'rounded-none'

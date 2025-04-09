@@ -1,31 +1,18 @@
-import React from 'react';
-import './App.css';
-import OrderList from './components/orderlist';
-import OrderForm from './components/orderfrom';
-import ProductList from './components/productlist';
-import ProductForm from './components/productform';
-import CustomerList from './components/customerlist';
-import CustomerForm from './components/customerform';
+import React from "react";
+import "./App.css";
+import OrderList from "./components/orderlist";
+import OrderForm from "./components/orderfrom";
+import ProductList from "./components/productlist";
+import ProductForm from "./components/productform";
+import CustomerList from "./components/customerlist";
+import CustomerForm from "./components/customerform";
+import AppRoutes from "./routes/AppRoute";
+import HomePage from "./pages/Home";
 
 function App() {
   return (
     <div className="App">
-      <h1>Shop Management</h1>
-      <section>
-        <h2>Orders</h2>
-        <OrderForm />
-        <OrderList />
-      </section>
-      {/* <section>
-        <h2>Products</h2>
-        <ProductForm />
-        <ProductList />
-      </section> */}
-      {/* <section>
-        <h2>Customers</h2>
-        <CustomerForm />
-        <CustomerList />
-      </section> */}
+    <AppRoutes/>
     </div>
   );
 }
