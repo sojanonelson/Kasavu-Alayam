@@ -216,8 +216,8 @@ const FilterSidebar = ({ filters, handleFilterChange, categories, colors, patter
                   <span className="absolute left-3 text-gray-500">₹</span>
                   <input
                     type="number"
-                    min="10"
-                    max="200"
+                    min="700"
+                    max="8000"
                     value={filters.minPrice || 10}
                     onChange={(e) => {
                       const event = {

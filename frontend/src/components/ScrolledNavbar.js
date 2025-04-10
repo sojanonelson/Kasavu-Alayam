@@ -81,7 +81,7 @@ const ScrollNavbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg px-6 py-4 flex flex-col gap-4 text-gray-700">
+        <div className="md:hidden bg-white/95 backdrop-blur-lg shadow-lg px-6 py-4 flex flex-col gap-4 text-gray-700">
           <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink>
           <MobileNavLink to="/mens" onClick={() => setIsOpen(false)}>Men's Collection</MobileNavLink>
           <MobileNavLink to="/womens" onClick={() => setIsOpen(false)}>Women's Collection</MobileNavLink>

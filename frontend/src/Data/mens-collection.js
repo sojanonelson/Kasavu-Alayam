@@ -17,7 +17,7 @@ const products = [
     color: 'Blue',
     pattern: 'Solid',
     brand: 'Brand B',
-    image: 'https://kalyansilks.com/_next/image?url=https%3A%2F%2Fcdn.pixelbin.io%2Fv2%2Froyal-sound-8c7142%2Foriginal%2Fcatalog%2Fproduct%2F2%2F_%2F2_397.jpg&w=640&q=75',
+    image: 'https://kalyansilks.com/_next/image?url=https%3A%2F%2Fcdn.pixelbin.io%2Fv2%2Froyal-sound-8c7142%2Foriginal%2Fcatalog%2Fproduct%2F1%2F_%2F1_412.jpg&w=828&q=75',
   },
   {
     id: 3,
@@ -117,7 +117,7 @@ const products = [
     color: 'White',
     pattern: 'Solid',
     brand: 'Brand L',
-    image: 'https://kalyansilks.com/_next/image?url=https%3A%2F%2Fcdn.pixelbin.io%2Fv2%2Froyal-sound-8c7142%2Foriginal%2Fcatalog%2Fproduct%2F2%2F_%2F2_412.jpg&w=640&q=75',
+    image: 'https://kalyansilks.com/_next/image?url=https%3A%2F%2Fcdn.pixelbin.io%2Fv2%2Froyal-sound-8c7142%2Foriginal%2Fcatalog%2Fproduct%2F1%2F_%2F1_412.jpg&w=828&q=75',
   }
 ];
 

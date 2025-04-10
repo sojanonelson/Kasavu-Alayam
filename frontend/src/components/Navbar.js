@@ -37,7 +37,7 @@ const Navbar = () => {
       </div>
 
       {/* Main Navbar */}
-      <nav className="bg-black/20 backdrop-blur-[1px] items-center shadow-md px-4 md:px-10 py-8">
+      <nav className="bg-black/50 backdrop-blur-[1px] items-center shadow-md px-4 md:px-10 py-8">
         <div className="max-w-10xl mx-auto flex items-center justify-between">
           {/* Left - Navigation Links */}
           <div className="hidden md:flex gap-8 text-white text-md font-medium poppins-regular flex-1">
