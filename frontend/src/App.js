@@ -9,12 +9,20 @@ import CustomerForm from "./components/customerform";
 import AppRoutes from "./routes/AppRoute";
 import HomePage from "./pages/Home";
 
+
+
+
 function App() {
   return (
     <div className="App">
     <AppRoutes/>
+    
     </div>
   );
 }
 
 export default App;
+
+
+
+

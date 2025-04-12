@@ -5,6 +5,7 @@ import ScrolledNavbar from '../components/ScrolledNavbar';
 import FilterSidebar from '../components/ui/FilterSidebar';
 import products from '../Data/mens-collection';
 
+
 const categories = ['Shirt', 'Pants', 'T-Shirts', 'Jackets'];
 const colors = ['White', 'Black', 'Blue', 'Red'];
 const patterns = ['Solid', 'Striped', 'Checked'];

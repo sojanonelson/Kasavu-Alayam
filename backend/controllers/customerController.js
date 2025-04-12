@@ -104,6 +104,7 @@ exports.getCustomerById = async (req, res) => {
         ...customer._doc,
         orderHistory: orders,
         orderCount: orders.length,
+        
         lifetimeValue
       }
     });

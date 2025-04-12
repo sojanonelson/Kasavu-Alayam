@@ -9,6 +9,7 @@ import { Autoplay } from 'swiper/modules';
 import Navbar from '../components/Navbar';
 import ScrolledNavbar from '../components/ScrolledNavbar'
 
+
 const heroImages = [
   {
     url: "https://kalyansilks.com/_next/image?url=https%3A%2F%2Fapi.kalyansilks.com%2Fmedia%2Fvegam%2Fhomepage%2Fimages%2FDesktop_Banner-_1920_x_1040_px_1.jpg&w=1920&q=75",

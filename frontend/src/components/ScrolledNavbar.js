@@ -19,7 +19,7 @@ const ScrollNavbar = () => {
 
   const MobileNavLink = ({ to, children, onClick }) => (
     <Link 
-      to={to} 
+      t    o={to} 
       onClick={onClick}
       className="relative group text-gray-700 py-1 transition-colors duration-300"
     >
