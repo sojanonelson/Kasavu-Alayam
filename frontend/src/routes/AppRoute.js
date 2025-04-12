@@ -16,6 +16,7 @@ import SareesSection from '../pages/sarees-collection';
 
 
 
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -25,6 +26,7 @@ const AppRoutes = () => {
       <Route path="/womens" element={<WomensCollection />} />
       <Route path='/components' element={<RegisterForm />} />
       <Route path="/sarees" element={<SareesSection />} />
+      
     
 
     </Routes>
