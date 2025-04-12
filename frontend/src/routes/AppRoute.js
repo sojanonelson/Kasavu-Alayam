@@ -9,6 +9,7 @@ import Navbar from '../components/Navbar';
 import MensCollection from '../pages/Mens-collection';
 import WomensCollection from '../pages/Womens-collection';
 import RegisterForm from '../components/RegisterForm';
+import SareesSection from '../pages/sarees-collection';
 
 
 
@@ -23,7 +24,7 @@ const AppRoutes = () => {
       <Route path="/mens" element={<MensCollection />} />
       <Route path="/womens" element={<WomensCollection />} />
       <Route path='/components' element={<RegisterForm />} />
-    
+      <Route path="/sarees" element={<SareesSection />} />
     
 
     </Routes>
