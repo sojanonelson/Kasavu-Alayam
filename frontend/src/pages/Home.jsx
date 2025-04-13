@@ -8,6 +8,7 @@ import 'swiper/css/effect-fade';
 import { Autoplay } from 'swiper/modules';
 import Navbar from '../components/Navbar';
 import ScrolledNavbar from '../components/ScrolledNavbar'
+import Footer from '../components/Footer';
 
 
 const heroImages = [
@@ -129,13 +130,8 @@ console.log("scroll:", window.scrollY)
         </p>
       </section>
 
-      {/* Footer Call to Action */}
-      <section className="bg-black text-white py-10 text-center">
-        <h2 className="text-xl mb-2">Stay Updated With New Arrivals</h2>
-        <button className="bg-white text-black px-6 py-2 rounded-full mt-4 hover:bg-gray-200">
-          Subscribe Now
-        </button>
-      </section>
+     
+      <Footer/>
     </div>
   );
 };

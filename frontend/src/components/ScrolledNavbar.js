@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, User } from 'lucide-react';
 import { motion } from 'framer-motion';
-import Logo from '../assets/white.png';
+import Logo from '../assets/2.png';
 
 const ScrollNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,7 +42,7 @@ const ScrollNavbar = () => {
         </div>
 
         {/* Main Navbar */}
-        <nav className="lg:bg-red-200/50 bg-gray-600 lg:backdrop-blur-sm items-center shadow-md px-4 md:px-10 py-8">
+        <nav className="lg:bg-white bg-gray-600 lg:backdrop-blur-sm items-center shadow-md px-4 md:px-10 py-8">
           <div className="max-w-10xl mx-auto flex items-center justify-between">
             {/* Left - Navigation Links */}
             <div className="hidden md:flex gap-8 text-black text-md font-medium poppins-regular flex-1">
@@ -62,7 +62,7 @@ const ScrollNavbar = () => {
 
             {/* Right - Account */}
             <div className="hidden md:flex items-center justify-end flex-1">
-              <Link to="/account" className="text-gray-100 hover:text-red-600 bg-red-500 rounded-full p-1   transition-colors duration-300">
+              <Link to="/account" className="text-gray-100 hover:text-white bg-gray-500 rounded-full p-1   transition-colors duration-300">
                 <User size={24} className='' />
               </Link>
             </div>
