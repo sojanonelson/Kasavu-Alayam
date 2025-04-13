@@ -17,11 +17,14 @@ import SareesSection from '../pages/sarees-collection';
 
 
 
+
+
 const AppRoutes = () => {
   return (
     <Routes>
         
       <Route path="/" element={<HomeScreen />} />
+     
       <Route path="/mens" element={<MensCollection />} />
       <Route path="/womens" element={<WomensCollection />} />
       <Route path='/components' element={<RegisterForm />} />

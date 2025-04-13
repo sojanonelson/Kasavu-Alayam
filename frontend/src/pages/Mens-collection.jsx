@@ -5,23 +5,18 @@ import ScrolledNavbar from '../components/ScrolledNavbar';
 import FilterSidebar from '../components/ui/FilterSidebar';
 import products from '../Data/mens-collection';
 
-
 const categories = ['Shirt', 'Pants', 'T-Shirts', 'Jackets'];
 const colors = ['White', 'Black', 'Blue', 'Red'];
 const patterns = ['Solid', 'Striped', 'Checked'];
 const brands = ['Brand A', 'Brand B', 'Brand C'];
 
 const MensCollection = () => {
-  const [filters, setFilters] = useState({ category: '', color: '', pattern: '', brand: '', price: 100 });
-
-  const filteredProducts = products.filter((product) => {
-    return (
-      (filters.category ? product.category === filters.category : true) &&
-      (filters.color ? product.color === filters.color : true) &&
-      (filters.pattern ? product.pattern === filters.pattern : true) &&
-      (filters.brand ? product.brand === filters.brand : true) &&
-      product.price <= filters.price
-    );
+  const [filters, setFilters] = useState({
+    category: [],
+    color: '',
+    pattern: '',
+    brand: [],
+    price: 100
   });
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -37,8 +32,30 @@ const MensCollection = () => {
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
+
+    setFilters((prev) => {
+      if (name === 'category' || name === 'brand') {
+        // Handle multi-select for category and brand
+        return {
+          ...prev,
+          [name]: prev[name].includes(value)
+            ? prev[name].filter((item) => item !== value)
+            : [...prev[name], value]
+        };
+      }
+      return { ...prev, [name]: value };
+    });
   };
+
+  const filteredProducts = products.filter((product) => {
+    return (
+      (filters.category.length ? filters.category.includes(product.category) : true) &&
+      (filters.color ? product.color === filters.color : true) &&
+      (filters.pattern ? product.pattern === filters.pattern : true) &&
+      (filters.brand.length ? filters.brand.includes(product.brand) : true) &&
+      product.price <= filters.price
+    );
+  });
 
   return (
     <div className="relative">
@@ -62,8 +79,15 @@ const MensCollection = () => {
         {/* Products Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
-            <div key={product.id} className="border rounded-sm cursor-pointer overflow-hidden transition">
-              <img src={product.image} alt={product.title} className="w-full object-cover aspect-[3/4]" />
+            <div
+              key={product.id}
+              className="border rounded-sm cursor-pointer overflow-hidden transition transform hover:scale-105 duration-300"
+            >
+              <img
+                src={product.image}
+                alt={product.title}
+                className="w-full object-cover aspect-[3/4] lazyload"
+              />
               <div className="p-3">
                 <h3 className="text-md font-medium poppins-regular-bold mb-1">{product.title}</h3>
                 <p className="text-sm text-gray-600 poppins-regular">₹{product.price}</p>
