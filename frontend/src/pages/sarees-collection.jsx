@@ -326,7 +326,7 @@ const SareesSection = () => {
                   <img 
                     src={saree.image} 
                     alt={saree.title} 
-                    className="w-full object-cover aspect-[3/4] group-hover:scale-105 transition-transform duration-500" 
+                    className="w-full object-cover aspect-[3/4]  transition-transform duration-500" 
                   />
                   <button 
                     onClick={() => toggleWishlist(saree.id)}
@@ -338,7 +338,7 @@ const SareesSection = () => {
                       stroke={wishlist.includes(saree.id) ? "#f43f5e" : "currentColor"}
                     />
                   </button>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 transform translate-y-0 transition-transform duration-300">
                     <button className="w-full bg-white text-black py-2 rounded-sm font-medium text-sm flex items-center justify-center gap-2">
                       <ShoppingBag size={16} />
                       Add to Cart
