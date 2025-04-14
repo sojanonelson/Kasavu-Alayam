@@ -12,6 +12,7 @@ import Navbar from '../components/Navbar';
 import ScrolledNavbar from '../components/ScrolledNavbar';
 import Footer from '../components/Footer';
 import { useInView } from 'react-intersection-observer';
+import SideContactNavbar from '../pages/sidecontactbar';
 
 const heroImages = [
   {
@@ -365,6 +366,7 @@ const HomePage = () => {
 
       
       <Footer />
+      <SideContactNavbar />
     </div>
   );
 };

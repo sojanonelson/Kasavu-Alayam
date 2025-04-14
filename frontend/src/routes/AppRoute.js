@@ -10,7 +10,7 @@ import MensCollection from '../pages/Mens-collection';
 import WomensCollection from '../pages/Womens-collection';
 import RegisterForm from '../components/RegisterForm';
 import SareesSection from '../pages/sarees-collection';
-
+import SideContactNavbar from '../pages/sidecontactbar';
 
 
 
@@ -24,7 +24,7 @@ const AppRoutes = () => {
     <Routes>
         
       <Route path="/" element={<HomeScreen />} />
-     
+      <Route path="/" element={<SideContactNavbar  />} />
       <Route path="/mens" element={<MensCollection />} />
       <Route path="/womens" element={<WomensCollection />} />
       <Route path='/components' element={<RegisterForm />} />
