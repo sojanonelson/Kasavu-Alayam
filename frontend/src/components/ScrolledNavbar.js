@@ -47,8 +47,8 @@ const ScrollNavbar = () => {
             {/* Left - Navigation Links */}
             <div className="hidden md:flex gap-8 text-black text-md font-medium poppins-regular flex-1">
               <NavLink to="/">Home</NavLink>
-              <NavLink to="/mens">Men's Collection</NavLink>
-              <NavLink to="/womens">Women's Collection</NavLink>
+              <NavLink to="/mens">Mens Collection</NavLink>
+              <NavLink to="/womens">Womens Collection</NavLink>
               <NavLink to="/sarees">Sarees</NavLink>
               <NavLink to="/dresses">Dresses</NavLink>
             </div>
@@ -83,8 +83,8 @@ const ScrollNavbar = () => {
       {isOpen && (
         <div className="md:hidden bg-white/95 backdrop-blur-lg shadow-lg px-6 py-4 flex flex-col gap-4 text-gray-700">
           <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink>
-          <MobileNavLink to="/mens" onClick={() => setIsOpen(false)}>Men's Collection</MobileNavLink>
-          <MobileNavLink to="/womens" onClick={() => setIsOpen(false)}>Women's Collection</MobileNavLink>
+          <MobileNavLink to="/mens" onClick={() => setIsOpen(false)}>Mens Collection</MobileNavLink>
+          <MobileNavLink to="/womens" onClick={() => setIsOpen(false)}>Womens Collection</MobileNavLink>
           <MobileNavLink to="/sarees" onClick={() => setIsOpen(false)}>Sarees</MobileNavLink>
           <MobileNavLink to="/dresses" onClick={() => setIsOpen(false)}>Dresses</MobileNavLink>
           <MobileNavLink to="/accessories" onClick={() => setIsOpen(false)}>Accessories</MobileNavLink>

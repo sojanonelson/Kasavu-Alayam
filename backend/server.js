@@ -5,7 +5,7 @@ const cors = require('cors');
 
 // Import routes
 const orderRoutes = require('./routes/OrderRoute');
-const productRoutes = require('./routes/ProductRoute');
+// const productRoutes = require('./routes/ProductRoute');
 const customerRoutes = require('./routes/CustomerRoute');
 
 // Initialize express app
@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/textileShop', {
+mongoose.connect('mongodb+srv://sojanonelson54:YbBMfoaXfV40ewch@cluster0.vvjc2.mongodb.net/kasavuaalayam?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -27,8 +27,8 @@ mongoose.connect('mongodb://localhost:27017/textileShop', {
 
 // Routes
 app.use('/api/orders', orderRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/customers', customerRoutes);
+// app.use('/api/products', productRoutes);
+// app.use('/api/customers', customerRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -41,12 +41,3 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-
-
-//reg
-const app = require('./app');
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});

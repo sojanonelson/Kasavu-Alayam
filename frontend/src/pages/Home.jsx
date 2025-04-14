@@ -15,7 +15,7 @@ import { useInView } from 'react-intersection-observer';
 
 const heroImages = [
   {
-    url: "https://kalyansilks.com/_next/image?url=https%3A%2F%2Fapi.kalyansilks.com%2Fmedia%2Fvegam%2Fhomepage%2Fimages%2FDesktop_Banner-_1920_x_1040_px_1.jpg&w=1920&q=75",
+    url: "https://kalyansilks.com/_next/image?url=https%3A%2F%2Fapi.kalyansilks.com%2Fmedia%2Fvegam%2Fhomepage%2Fimages%2F1920_x1040_-_Main_Banner_-_03_1.jpg&w=1920&q=75",
     title: "Premium Silk Collection",
     subtitle: "Elegance woven into every thread"
   },
@@ -56,19 +56,19 @@ const categories = [
   {
     title: "Sarees",
     img: "https://cdn.pixabay.com/photo/2015/05/15/06/50/indian-767880_960_720.jpg",
-    link: "/category/sarees",
+    link: "/sarees",
     description: "Traditional and contemporary sarees for every occasion"
   },
   {
     title: "Women's Collections",
     img: "https://byshree.com/cdn/shop/articles/Trendy-Ethnic-Sets-Exploring-the-Latest-Ethnic-Wear-Online.jpg",
-    link: "/category/women",
+    link: "/womens",
     description: "Kurtas, salwars, lehengas and more"
   },
   {
     title: "Men's Collections",
     img: "https://www.ratanjaipur.com/cdn/shop/articles/Blog_Banner_-_Latest_Men_s_Collection_1.jpg?v=1726216596&width=2048",
-    link: "/category/men",
+    link: "/mens",
     description: "Traditional and fusion wear for the modern man"
   }
 ];
@@ -167,78 +167,68 @@ const HomePage = () => {
 
       {isScrolled ? <ScrolledNavbar /> : <Navbar />}
 
-      {/* Hero Section with Enhanced Carousel */}
-      <section className="relative" aria-label="Featured collections carousel">
-        <Swiper
-          ref={swiperRef}
-          modules={[Autoplay, EffectFade, Pagination]}
-          effect="fade"
-          autoplay={{ 
-            delay: 5000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-          }}
-          pagination={{ 
-            clickable: true,
-            renderBullet: (index, className) => {
-              return `<span class="${className}" aria-label="Go to slide ${index + 1}"></span>`;
-            }
-          }}
-          speed={1000}
-          loop={true}
-          spaceBetween={0}
-          slidesPerView={1}
-          className="w-full h-screen"
-          onSlideChange={handleSlideChange}
-        >
-          {heroImages.map((img, index) => (
-            <SwiperSlide key={index}>
-              <div className="relative w-full h-screen overflow-hidden">
-                <img 
-                  src={img.url} 
-                  alt={`${img.title} - ${img.subtitle}`} 
-                  className="w-full h-full object-cover"
-                  onLoad={() => handleImageLoad(`hero-${index}`)}
-                />
-                {!imagesLoaded[`hero-${index}`] && (
-                  <div className="absolute inset-0 bg-gray-200 animate-pulse" />
-                )}
-                <div className="absolute inset-0 bg-black bg-opacity-30" />
-                <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6">
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: currentSlide === index ? 1 : 0, y: currentSlide === index ? 0 : 30 }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                    className="max-w-4xl"
-                  >
-                    <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">{img.title}</h1>
-                    <p className="text-xl md:text-2xl text-white mb-8 poppins-regular">{img.subtitle}</p>
-                    <button className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-lg font-medium transition-all transform hover:scale-105">
-                      Explore Collection
-                    </button>
-                  </motion.div>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        
-        <div className="absolute bottom-12 left-0 right-0 flex justify-center z-10">
-          <div className="flex space-x-3">
-            {heroImages.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => swiperRef.current?.swiper.slideTo(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
-                  currentSlide === index ? 'bg-white scale-125' : 'bg-white/50'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-                aria-current={currentSlide === index ? 'true' : 'false'}
-              />
-            ))}
+{/* Hero Section with Enhanced Carousel */}
+<section className="relative" aria-label="Featured collections carousel">
+  <Swiper
+    ref={swiperRef}
+    modules={[Autoplay, EffectFade, Pagination]}
+    effect="fade"
+    autoplay={{ 
+      delay: 5000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true
+    }}
+    pagination={{ 
+      clickable: true,
+      el: '.custom-pagination',
+      bulletClass: 'custom-bullet',
+      bulletActiveClass: 'custom-bullet-active',
+      renderBullet: (index, className) => {
+        return `<span class="${className}" aria-label="Go to slide ${index + 1}"></span>`;
+      }
+    }}
+    speed={1000}
+    loop={true}
+    spaceBetween={0}
+    slidesPerView={1}
+    className="w-full h-screen"
+    onSlideChange={handleSlideChange}
+  >
+    {heroImages.map((img, index) => (
+      <SwiperSlide key={index}>
+        <div className="relative w-full h-screen overflow-hidden">
+          <img 
+            src={img.url} 
+            alt={`${img.title} - ${img.subtitle}`} 
+            className="w-full h-full object-cover"
+            onLoad={() => handleImageLoad(`hero-${index}`)}
+          />
+          {!imagesLoaded[`hero-${index}`] && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+          )}
+          <div className="absolute inset-0 bg-black bg-opacity-20" />
+          <div className="absolute inset-0 flex flex-col justify-end items-center pb-32 text-center px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: currentSlide === index ? 1 : 0, y: currentSlide === index ? 0 : 30 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="max-w-4xl"
+            >
+              <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">{img.title}</h1>
+              <p className="text-xl md:text-2xl text-white mb-8 poppins-regular">{img.subtitle}</p>
+              <button className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-lg font-medium transition-all transform hover:scale-105">
+                Explore Collection
+              </button>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </SwiperSlide>
+    ))}
+  </Swiper>
+  
+  {/* Custom Pagination Container */}
+  <div className="custom-pagination !bottom-12" />
+</section>
 
       {/* Categories Section */}
       <section 
@@ -373,31 +363,7 @@ const HomePage = () => {
         </motion.div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="bg-amber-50 py-16 px-6 md:px-20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-          <p className="text-gray-700 mb-8">Subscribe to receive updates on new collections and exclusive offers</p>
-          
-          <form className="flex flex-col md:flex-row gap-4 justify-center">
-            <input
-              type="email"
-              placeholder="Your email address"
-              className="px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 md:w-64 w-full"
-              aria-label="Email address"
-              required
-            />
-            <button 
-              type="submit" 
-              className="bg-amber-700 hover:bg-amber-800 text-white px-6 py-3 rounded-lg transition-colors"
-            >
-              Subscribe
-            </button>
-          </form>
-          <p className="text-sm text-gray-500 mt-4">We respect your privacy and will never share your information</p>
-        </div>
-      </section>
-
+      
       <Footer />
     </div>
   );
@@ -409,33 +375,64 @@ const CategoryCard = ({ title, img, link, description, index }) => {
   return (
     <Link 
       to={link} 
-      className="group relative block overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-96 rounded-lg"
+      className="group relative block h-[28rem] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500"
+      aria-label={`Browse ${title} collection`}
     >
-      <div className="overflow-hidden h-full">
+      {/* Image container with loading state */}
+      <div className="relative h-full w-full overflow-hidden">
         <img 
           src={img} 
           alt={title} 
-          className="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           onLoad={() => setImageLoaded(true)}
+          loading={index < 3 ? "eager" : "lazy"}
         />
         {!imageLoaded && (
-          <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 animate-pulse" />
         )}
       </div>
       
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-300" />
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-transparent opacity-90 group-hover:from-black/90 transition-all duration-500" />
       
-      <div className="absolute bottom-0 left-0 right-0 p-6 transform transition-all duration-300 group-hover:translate-y-0">
-        <h3 className="text-white text-2xl font-semibold mb-2">
-          {title}
-        </h3>
-        <p className="text-white/90 mb-4 poppins-regular opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      {/* Content overlay */}
+      <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
+        {/* Title with decorative accent */}
+        <div className="mb-3 relative">
+          <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-2 transform group-hover:translate-x-2 transition-transform duration-300">
+            {title}
+          </h3>
+          <div className="w-12 h-1 bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100" />
+        </div>
+        
+        {/* Description with smooth reveal */}
+        <p className="text-white/90 poppins-regular text-sm md:text-base mb-6 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-75">
           {description}
         </p>
-        <span className="inline-block px-4 py-2 bg-white/20 text-white rounded backdrop-blur-sm text-sm font-medium transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-          Explore Collection
-        </span>
+        
+        {/* CTA button with arrow icon */}
+        <button 
+          className="self-start flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300 opacity-0 group-hover:opacity-100 translate-y-6 group-hover:translate-y-0 delay-150"
+          aria-hidden="true"
+        >
+          <span className="font-medium text-sm">Explore</span>
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-4 w-4" 
+            viewBox="0 0 20 20" 
+            fill="currentColor"
+          >
+            <path 
+              fillRule="evenodd" 
+              d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" 
+              clipRule="evenodd" 
+            />
+          </svg>
+        </button>
       </div>
+      
+      {/* Decorative corner accent */}
+      <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200" />
     </Link>
   );
 };

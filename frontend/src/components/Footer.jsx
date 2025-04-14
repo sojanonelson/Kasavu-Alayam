@@ -1,72 +1,85 @@
 import React from 'react';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, ShoppingBag, Heart, Clock, Truck } from 'lucide-react';
+import logo from '../assets/white.png';
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-gray-800 text-gray-200 py-12 px-6 md:px-16 mt-12">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
-        {/* About */}
-        <div className="transition-transform transform hover:scale-105">
-          <h3 className="text-xl font-semibold mb-4 text-white">About ATextile</h3>
-          <p className="text-sm leading-relaxed text-gray-400">
-            ATextile is one of the finest textile stores offering premium quality fabrics and
-            garments since 1998. We deliver style and comfort with a blend of tradition and
-            modernity.
-          </p>
+    <footer className="bg-red-700 text-white py-10 px-6 md:px-8 font-poppins">
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Main Content - 3 Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+          
+          {/* Left Column - Quick Links */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 border-b border-white/30 pb-2">
+              Quick Links
+            </h3>
+            <ul className="space-y-3">
+              <li>
+                <a href="#" className="flex items-center gap-2 hover:underline">
+                  <ShoppingBag size={16} />
+                  <span>Shop Now</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" className="flex items-center gap-2 hover:underline">
+                  <MapPin size={16} />
+                  <span>Our Stores</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" className="flex items-center gap-2 hover:underline">
+                  <Heart size={16} />
+                  <span>Wishlist</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Middle Column - Contact */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 border-b border-white/30 pb-2">
+              Contact Us
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Phone size={16} />
+                <span>+91 8129966333</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail size={16} />
+                <span>contact@kasavuaalayam.com</span>
+              </div>
+              <div className="pt-4">
+                <img src={logo} alt="Kasavu Aalayam" className="h-8" />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Newsletter (Focal Point) */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 border-b border-white/30 pb-2">
+              Exclusive Offers
+            </h3>
+            <p className="mb-3 text-sm">Get 10% off your first order when you subscribe</p>
+            <div className="flex">
+              <input
+                type="email"
+                placeholder="Your email"
+                className="px-3 py-2 w-full text-gray-900 placeholder-gray-500 focus:outline-none text-sm"
+              />
+              <button className="bg-white text-red-700 px-4 py-2 hover:bg-gray-100 transition-colors font-medium">
+                <Mail size={16} />
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Branches */}
-        <div className="transition-transform transform hover:scale-105">
-          <h3 className="text-xl font-semibold mb-4 text-white">Our Branches</h3>
-          <ul className="text-sm text-gray-400 space-y-2">
-            <li className="flex items-center gap-2">
-              <MapPin size={18} className="text-red-400" />
-              <span>MG Road, Bangalore</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <MapPin size={18} className="text-red-400" />
-              <span>T. Nagar, Chennai</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <MapPin size={18} className="text-red-400" />
-              <span>Ernakulam, Kochi</span>
-            </li>
-          </ul>
+        {/* Bottom Bar */}
+        <div className="pt-6 border-t border-white/20 text-center text-xs">
+          <p>© {new Date().getFullYear()} Kasavu Aalayam. All rights reserved.</p>
         </div>
-
-        {/* Contact */}
-        <div className="transition-transform transform hover:scale-105">
-          <h3 className="text-xl font-semibold mb-4 text-white">Contact Us</h3>
-          <ul className="text-sm text-gray-400 space-y-3">
-            <li className="flex items-center gap-2">
-              <Mail size={18} className="text-blue-400" />
-              <a href="mailto:support@atextile.com" className="hover:text-blue-300">
-                support@atextile.com
-              </a>
-            </li>
-            <li className="flex items-center gap-2">
-              <Phone size={18} className="text-green-400" />
-              <a href="tel:+919876543210" className="hover:text-green-300">
-                +91 98765 43210
-              </a>
-            </li>
-            <li className="flex items-center gap-2">
-              <MapPin size={18} className="text-red-400" />
-              <span>Head Office: MG Road, Bangalore, India</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Bottom Bar */}
-      <div className="mt-10 border-t border-gray-700 pt-6 text-center text-sm text-gray-500">
-        <p>
-          © {new Date().getFullYear()} ATextile. All rights reserved.
-        </p>
-        <p className="mt-2">
-          <a href="/privacy-policy" className="hover:text-gray-300">Privacy Policy</a> |
-          <a href="/terms-of-service" className="hover:text-gray-300"> Terms of Service</a>
-        </p>
       </div>
     </footer>
   );
