@@ -165,7 +165,7 @@ const HomePage = () => {
         <link rel="canonical" href="https://kasavuaalayam.com" />
       </Helmet>
 
-      {isScrolled ? <ScrolledNavbar /> : <Navbar />}
+      {/* {isScrolled ? <ScrolledNavbar /> : <Navbar />} */}
 
 {/* Hero Section with Enhanced Carousel */}
 <section className="relative" aria-label="Featured collections carousel">

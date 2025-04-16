@@ -61,7 +61,7 @@ const Navbar = () => {
 
           {/* Right - Account Icon */}
           <div className="hidden md:flex items-center justify-end flex-1">
-            <Link to="/account" className="text-gray-100 hover:text-red-600 transition-colors duration-300">
+            <Link to="/my-account" className="text-gray-100 hover:text-red-600 transition-colors duration-300">
               <User size={24} />
             </Link>
           </div>
@@ -88,7 +88,7 @@ const Navbar = () => {
           <MobileNavLink to="/accessories" onClick={() => setIsOpen(false)}>Accessories</MobileNavLink>
           <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Contact</MobileNavLink>
           <hr />
-          <MobileNavLink to="/account" onClick={() => setIsOpen(false)} className="flex items-center gap-2">
+          <MobileNavLink to="/my-account" onClick={() => setIsOpen(false)} className="flex items-center gap-2">
             <User size={20} /> Account
           </MobileNavLink>
         </div>

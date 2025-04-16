@@ -5,6 +5,11 @@ const CustomerSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  password: {
+    type: String,
+    required: true,
+    select: false 
+  },
   email: {
     type: String,
     required: true,
@@ -14,23 +19,12 @@ const CustomerSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  address: {
-    street: String,
-    city: String,
-    state: String,
-    postalCode: String,
-    country: String
-  },
-  customerType: {
+  role: {
     type: String,
-    enum: ['retail', 'wholesale', 'corporate'],
-    default: 'retail'
+    enum: ['customer', 'admin'],
+    default: 'customer'
   },
-  discount: {
-    type: Number,
-    default: 0
-  },
-  notes: String
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Customer', CustomerSchema);

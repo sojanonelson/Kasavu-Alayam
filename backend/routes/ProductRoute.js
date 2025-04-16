@@ -1,10 +1,9 @@
 const express = require('express');
+const { createProduct, getProducts, getProductBySlug } = require('../controllers/productController');
+const { protect, isAdmin } = require('../middleware/auth');
 const router = express.Router();
-const productController = require('../controllers/productController');
 
-router.get('/', productController.getProducts);
-router.post('/', productController.createProduct);
-router.put('/:id', productController.updateProduct);
-router.patch('/:id/stock', productController.updateStock);
-
+router.get('/', getProducts);
+router.get('/:slug', getProductBySlug);
+router.post('/', createProduct);
 module.exports = router;
