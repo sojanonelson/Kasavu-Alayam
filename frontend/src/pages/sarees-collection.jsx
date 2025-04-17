@@ -15,11 +15,11 @@ const brands = ['Brand A', 'Brand B', 'Brand C', 'Brand D', 'Brand E'];
 const sortOptions = ['Popularity', 'Price: Low to High', 'Price: High to Low', 'Newest First'];
 
 const SareesSection = () => {
-  const [filters, setFilters] = useState({ 
-    category: '', 
-    color: '', 
-    pattern: '', 
-    brand: '', 
+  const [filters, setFilters] = useState({
+    category: '',
+    color: '',
+    pattern: '',
+    brand: '',
     price: 5000,
     search: ''
   });
@@ -29,7 +29,9 @@ const SareesSection = () => {
   const [sortBy, setSortBy] = useState('Popularity');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [wishlist, setWishlist] = useState([]);
+  const [cart, setCart] = useState([]); // State to manage cart items
   const [activeColorFilter, setActiveColorFilter] = useState('');
+  const [blur, setBlur] = useState(false); // State to manage blur effect
 
   // Handle scroll for navbar
   useEffect(() => {
@@ -50,9 +52,9 @@ const SareesSection = () => {
         (filters.pattern ? saree.pattern === filters.pattern : true) &&
         (filters.brand ? saree.brand === filters.brand : true) &&
         saree.price <= filters.price &&
-        (filters.search ? 
-          saree.title.toLowerCase().includes(filters.search.toLowerCase()) || 
-          saree.category.toLowerCase().includes(filters.search.toLowerCase()) : 
+        (filters.search ?
+          saree.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+          saree.category.toLowerCase().includes(filters.search.toLowerCase()) :
           true)
       );
     })
@@ -90,9 +92,17 @@ const SareesSection = () => {
   };
 
   const toggleWishlist = (id) => {
-    setWishlist(prev => 
+    setWishlist(prev =>
       prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]
     );
+  };
+
+  const toggleCart = (id) => {
+    setCart(prev =>
+      prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]
+    );
+    setBlur(true); // Activate blur effect
+    setTimeout(() => setBlur(false), 500); // Deactivate blur effect after 500ms
   };
 
   const handleSearchChange = (e) => {
@@ -105,12 +115,12 @@ const SareesSection = () => {
     .length + (filters.price < 5000 ? 1 : 0);
 
   return (
-    <div className="relative bg-gray-50 min-h-screen">
+    <div className={`relative bg-gray-50 min-h-screen ${blur ? 'blur-sm' : ''}`}>
       {isScrolled ? <ScrolledNavbar /> : <Navbar />}
 
       {/* Mobile Filter Button */}
       <div className="fixed bottom-4 right-4 md:hidden z-50">
-        <button 
+        <button
           onClick={() => setIsMobileFilterOpen(true)}
           className="bg-black text-white p-3 rounded-full shadow-lg flex items-center justify-center"
         >
@@ -144,7 +154,7 @@ const SareesSection = () => {
               onColorSelect={handleColorSelect}
               activeColorFilter={activeColorFilter}
             />
-            <button 
+            <button
               onClick={() => setIsMobileFilterOpen(false)}
               className="w-full bg-black text-white py-3 rounded-md mt-6"
             >
@@ -176,7 +186,7 @@ const SareesSection = () => {
           <div className="text-sm text-gray-600">
             <Link to="/" className="text-blue-600 hover:underline">Home</Link> / <span>Sarees Collection</span>
           </div>
-          
+
           {/* Search */}
           <div className="relative flex-grow md:max-w-md">
             <input
@@ -192,29 +202,29 @@ const SareesSection = () => {
           {/* View Toggle and Sort */}
           <div className="flex items-center gap-4">
             <div className="flex border rounded-md overflow-hidden">
-              <button 
-                onClick={() => setView('grid')} 
+              <button
+                onClick={() => setView('grid')}
                 className={`p-2 ${view === 'grid' ? 'bg-black text-white' : 'bg-white'}`}
               >
                 <Grid3X3 size={18} />
               </button>
-              <button 
-                onClick={() => setView('list')} 
+              <button
+                onClick={() => setView('list')}
                 className={`p-2 ${view === 'list' ? 'bg-black text-white' : 'bg-white'}`}
               >
                 <List size={18} />
               </button>
             </div>
-            
+
             <div className="relative">
-              <button 
-                onClick={() => setShowSortDropdown(!showSortDropdown)} 
+              <button
+                onClick={() => setShowSortDropdown(!showSortDropdown)}
                 className="flex items-center gap-2 border rounded-md px-3 py-2"
               >
                 <span className="text-sm">Sort: {sortBy}</span>
                 <ChevronDown size={16} />
               </button>
-              
+
               {showSortDropdown && (
                 <div className="absolute right-0 top-full mt-1 bg-white border rounded-md shadow-lg z-10 w-48">
                   {sortOptions.map(option => (
@@ -242,7 +252,7 @@ const SareesSection = () => {
             {filters.category && (
               <span className="bg-gray-100 text-sm px-3 py-1 rounded-full flex items-center">
                 {filters.category}
-                <button 
+                <button
                   onClick={() => setFilters(prev => ({ ...prev, category: '' }))}
                   className="ml-2"
                 >
@@ -253,7 +263,7 @@ const SareesSection = () => {
             {filters.color && (
               <span className="bg-gray-100 text-sm px-3 py-1 rounded-full flex items-center">
                 {filters.color}
-                <button 
+                <button
                   onClick={() => {
                     setFilters(prev => ({ ...prev, color: '' }));
                     setActiveColorFilter('');
@@ -267,7 +277,7 @@ const SareesSection = () => {
             {filters.pattern && (
               <span className="bg-gray-100 text-sm px-3 py-1 rounded-full flex items-center">
                 {filters.pattern}
-                <button 
+                <button
                   onClick={() => setFilters(prev => ({ ...prev, pattern: '' }))}
                   className="ml-2"
                 >
@@ -278,7 +288,7 @@ const SareesSection = () => {
             {filters.brand && (
               <span className="bg-gray-100 text-sm px-3 py-1 rounded-full flex items-center">
                 {filters.brand}
-                <button 
+                <button
                   onClick={() => setFilters(prev => ({ ...prev, brand: '' }))}
                   className="ml-2"
                 >
@@ -289,7 +299,7 @@ const SareesSection = () => {
             {filters.price < 5000 && (
               <span className="bg-gray-100 text-sm px-3 py-1 rounded-full flex items-center">
                 Under ₹{filters.price}
-                <button 
+                <button
                   onClick={() => setFilters(prev => ({ ...prev, price: 5000 }))}
                   className="ml-2"
                 >
@@ -297,7 +307,7 @@ const SareesSection = () => {
                 </button>
               </span>
             )}
-            <button 
+            <button
               onClick={clearFilters}
               className="text-sm text-blue-600 hover:underline"
             >
@@ -315,31 +325,34 @@ const SareesSection = () => {
         {view === 'grid' ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {filteredSarees.map((saree) => (
-              <motion.div 
+              <motion.div
                 key={saree.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
                 className="bg-white border rounded-md overflow-hidden group"
               >
-                <div className="relative">
-                  <img 
-                    src={saree.image} 
-                    alt={saree.title} 
-                    className="w-full object-cover aspect-[3/4]  transition-transform duration-500" 
+                <div className="relative hover:z-10 hover:scale-105 hover:shadow-lg transition-transform duration-300">
+                  <img
+                    src={saree.image}
+                    alt={saree.title}
+                    className="w-full object-cover aspect-[3/4]"
                   />
-                  <button 
+                  <button
                     onClick={() => toggleWishlist(saree.id)}
                     className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md"
                   >
-                    <Heart 
-                      size={16} 
+                    <Heart
+                      size={16}
                       fill={wishlist.includes(saree.id) ? "#f43f5e" : "none"}
                       stroke={wishlist.includes(saree.id) ? "#f43f5e" : "currentColor"}
                     />
                   </button>
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 transform translate-y-0 transition-transform duration-300">
-                    <button className="w-full bg-white text-black py-2 rounded-sm font-medium text-sm flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => toggleCart(saree.id)}
+                      className="w-full bg-white text-black py-2 rounded-sm font-medium text-sm flex items-center justify-center gap-2"
+                    >
                       <ShoppingBag size={16} />
                       Add to Cart
                     </button>
@@ -361,8 +374,8 @@ const SareesSection = () => {
                   </div>
                   <div className="flex mt-2 gap-1">
                     {['Red', 'Blue', 'Green', 'Yellow'].slice(0, saree.id % 4 + 1).map(color => (
-                      <span 
-                        key={color} 
+                      <span
+                        key={color}
                         className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: color.toLowerCase() }}
                       />
@@ -375,25 +388,25 @@ const SareesSection = () => {
         ) : (
           <div className="space-y-4">
             {filteredSarees.map((saree) => (
-              <motion.div 
+              <motion.div
                 key={saree.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
                 className="bg-white border rounded-md overflow-hidden flex"
               >
-                <div className="relative w-1/3">
-                  <img 
-                    src={saree.image} 
-                    alt={saree.title} 
-                    className="w-full h-full object-cover" 
+                <div className="relative w-1/3 hover:z-10 hover:scale-105 hover:shadow-lg transition-transform duration-300">
+                  <img
+                    src={saree.image}
+                    alt={saree.title}
+                    className="w-full h-full object-cover"
                   />
-                  <button 
+                  <button
                     onClick={() => toggleWishlist(saree.id)}
                     className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md"
                   >
-                    <Heart 
-                      size={16} 
+                    <Heart
+                      size={16}
                       fill={wishlist.includes(saree.id) ? "#f43f5e" : "none"}
                       stroke={wishlist.includes(saree.id) ? "#f43f5e" : "currentColor"}
                     />
@@ -423,14 +436,17 @@ const SareesSection = () => {
                   <div className="flex items-center gap-4 mt-4">
                     <div className="flex gap-1">
                       {['Red', 'Blue', 'Green', 'Yellow'].slice(0, saree.id % 4 + 1).map(color => (
-                        <span 
-                          key={color} 
+                        <span
+                          key={color}
                           className="w-4 h-4 rounded-full"
                           style={{ backgroundColor: color.toLowerCase() }}
                         />
                       ))}
                     </div>
-                    <button className="bg-black text-white px-4 py-2 rounded-sm text-sm ml-auto flex items-center gap-2">
+                    <button
+                      onClick={() => toggleCart(saree.id)}
+                      className="bg-black text-white px-4 py-2 rounded-sm text-sm ml-auto flex items-center gap-2"
+                    >
                       <ShoppingBag size={16} />
                       Add to Cart
                     </button>
@@ -451,7 +467,7 @@ const SareesSection = () => {
             <p className="text-gray-500 text-center max-w-md mb-6">
               We couldn't find any sarees matching your current filters. Try adjusting your filters or search term.
             </p>
-            <button 
+            <button
               onClick={clearFilters}
               className="bg-black text-white px-6 py-2 rounded-md"
             >

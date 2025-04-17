@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Save, X, Edit2 } from 'lucide-react';
+import Footer from '../../components/Footer';
 
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -40,8 +41,9 @@ const ProfilePage = () => {
   };
   
   return (
-    <div className="font-['Poppins']">
-      <div className="flex justify-between items-center mb-8">
+    <div className="poppins-regular">
+     <div>
+     <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-semibold text-gray-800">Personal Information</h1>
         {!isEditing ? (
           <button 
@@ -54,7 +56,7 @@ const ProfilePage = () => {
         ) : null}
       </div>
       
-      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+      <div className="bg-white  p-6 border border-gray-100">
         <form onSubmit={handleSubmit}>
           <div className="grid md:grid-cols-2 gap-6">
             {/* First Name */}
@@ -158,6 +160,12 @@ const ProfilePage = () => {
           )}
         </form>
       </div>
+
+     </div>
+  
+
+      
+      
     </div>
   );
 };

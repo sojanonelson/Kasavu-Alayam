@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, User } from 'lucide-react';
 // import Logo from '../assets/2.png'
-import Logo from '../assets/white.png'
+import Logo from '../assets/black.png'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,10 +11,10 @@ const Navbar = () => {
   const NavLink = ({ to, children }) => (
     <Link 
       to={to} 
-      className="relative group text-white transition-colors duration-300"
+      className="relative group text-gray-800 transition-colors duration-300"
     >
       {children}
-      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-700 transition-all duration-300 group-hover:w-full"></span>
     </Link>
   );
 
@@ -38,10 +38,10 @@ const Navbar = () => {
       </div>
 
       {/* Main Navbar */}
-      <nav className="bg-black/70 backdrop-blur-[1px] items-center shadow-md px-4 md:px-10 py-8">
+      <nav className="bg-white/70 backdrop-blur-[1px] items-center  px-4 md:px-10 py-8">
         <div className="max-w-10xl mx-auto flex items-center justify-between">
           {/* Left - Navigation Links */}
-          <div className="hidden md:flex gap-8 text-white text-md font-medium poppins-regular flex-1">
+          <div className="hidden md:flex gap-8 text-gray-800 text-md font-medium poppins-regular flex-1">
             <NavLink to="/">Home</NavLink>
             <NavLink to="/mens">Mens Collection</NavLink>
             <NavLink to="/womens">Womens Collection</NavLink>
@@ -61,7 +61,7 @@ const Navbar = () => {
 
           {/* Right - Account Icon */}
           <div className="hidden md:flex items-center justify-end flex-1">
-            <Link to="/my-account" className="text-gray-100 hover:text-red-600 transition-colors duration-300">
+            <Link to="/my-account" className="text-gray-800 hover:text-yellow-600 transition-colors duration-300">
               <User size={24} />
             </Link>
           </div>
