@@ -15,6 +15,7 @@
   import SideContactNavbar from '../pages/sidecontactbar';
   import border1 from '../assets/elements/border2.png'
   import border2 from '../assets/elements/border1.png'
+  
 
   const heroImages = [
     {

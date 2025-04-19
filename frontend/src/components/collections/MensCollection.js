@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronDown, Filter, Heart, ShoppingBag, X, Search, Grid3X3, List } from 'lucide-react';
-import Navbar from '../components/Navbar';
-import ScrolledNavbar from '../components/ScrolledNavbar';
-import FilterSidebar from '../components/ui/FilterSidebar';
-import products from '../Data/mens-collection';
+import Navbar from '../Navbar';
+import ScrolledNavbar from '../ScrolledNavbar';
+import FilterSidebar from '../ui/FilterSidebar';
+import products from '../../Data/mens-collection';
 
 const categories = ['Shirt', 'Pants', 'T-Shirts', 'Jackets'];
 const colors = ['White', 'Black', 'Blue', 'Red'];
@@ -25,7 +25,7 @@ const MensCollection = () => {
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [view, setView] = useState('grid'); // 'grid' or 'list'
+  const [view, setView] = useState('grid');
   const [sortBy, setSortBy] = useState('Popularity');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [wishlist, setWishlist] = useState([]);
@@ -338,13 +338,12 @@ const MensCollection = () => {
                     />
                   </button>
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 transform translate-y-0 transition-transform duration-300">
-                    <button
-                      onClick={() => toggleCart(product.id)}
+                    <Link
+                      to={`/collections/${product.id}`}
                       className="w-full bg-white text-black py-2 rounded-sm font-medium text-sm flex items-center justify-center gap-2"
                     >
-                      <ShoppingBag size={16} />
-                      Add to Cart
-                    </button>
+                      Shop More
+                    </Link>
                   </div>
                 </div>
                 <div className="p-3">
@@ -432,13 +431,12 @@ const MensCollection = () => {
                         />
                       ))}
                     </div>
-                    <button
-                      onClick={() => toggleCart(product.id)}
+                    <Link
+                      to={`/collections/${product.id}`}
                       className="bg-black text-white px-4 py-2 rounded-sm text-sm ml-auto flex items-center gap-2"
                     >
-                      <ShoppingBag size={16} />
-                      Add to Cart
-                    </button>
+                      Shop More
+                    </Link>
                   </div>
                 </div>
               </motion.div>
