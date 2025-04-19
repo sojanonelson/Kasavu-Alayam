@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { ShoppingBag, Heart } from 'lucide-react';
-import collectionsData from '../../Data/collections-data'; // Correct path
+import collectionsData from '../../Data/collections-data'; 
 
 const CollectionsPage = () => {
   const { id } = useParams();
