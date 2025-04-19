@@ -269,7 +269,7 @@
           </motion.div>
         </section>
 <div className='flex justify-center items-center'>
-<img src={border1} className='h-16' alt='border'></img>
+<img draggable="false" src={border1} className='h-16' alt='border'></img>
 
 </div>
       
@@ -342,10 +342,10 @@
   </div>
 </div>
 
-            <div className='flex justify-center my-16 items-center'>
-<img src={border2} className='h-16' alt='border'></img>
-
+<div className='flex justify-center select-none my-16 items-center'>
+  <img src={border2} className='h-16' alt='border' draggable="false" />
 </div>
+
           </motion.div>
         </section>
 

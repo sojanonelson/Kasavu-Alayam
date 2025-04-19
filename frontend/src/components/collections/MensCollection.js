@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronDown, Filter, Heart, ShoppingBag, X, Search, Grid3X3, List } from 'lucide-react';
+import { ChevronDown, Filter, Heart, X, Search, Grid3X3, List } from 'lucide-react';
 import Navbar from '../Navbar';
 import ScrolledNavbar from '../ScrolledNavbar';
 import FilterSidebar from '../ui/FilterSidebar';

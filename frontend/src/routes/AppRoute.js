@@ -9,7 +9,7 @@ import SareesSection from '../pages/sarees-collection';
 import SideContactNavbar from '../pages/sidecontactbar';
 import CustomerLayout from '../Layouts/CustomerLayout';
 import Profile from '../pages/Customer/Profile';
-import Navbar from '../components/Navbar';
+
 import Orders from '../pages/Customer/Orders';
 import NotFound from '../pages/NotFound';
 import AppNotFound from '../pages/AppNotFound';
@@ -36,6 +36,7 @@ const AppRoutes = () => {
       <Route path="/" element={<MensCollection />} />
       <Route path="/collections/:id" element={<CollectionsPage />} />
       <Route path="/womens" element={<WomensCollection />} />
+      <Route path="/mens" element={<MensCollection />} />
       <Route path='/components' element={<RegisterForm />} />
       <Route path="/sarees" element={<SareesSection />} />
       <Route path='/product' element={<SingleProductPage/>}/>
