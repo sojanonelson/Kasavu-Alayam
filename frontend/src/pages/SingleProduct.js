@@ -5,10 +5,10 @@ const SingleProductPage = () => {
   // Product data - this would typically come from props or API
   const product = {
     id: 1,
-    title: 'Premium Comfort Sneakers',
+    title: 'Saree',
     brand: 'UrbanSteps',
-    price: 89.99,
-    discountPrice: 69.99,
+    price: 76000,
+    discountPrice: 6900,
     rating: 4.5,
     reviewCount: 124,
     description: 'Experience ultimate comfort with our premium sneakers featuring advanced cushioning technology and breathable materials for all-day wear.',
@@ -58,7 +58,7 @@ const SingleProductPage = () => {
   };
 
   // Open fullscreen viewer
-  const openFullscreen = (index: number) => {
+  const openFullscreen = (index) => {
     setCurrentFullscreenIndex(index);
     setIsFullscreen(true);
   };
@@ -69,7 +69,7 @@ const SingleProductPage = () => {
   };
 
   // Navigate between images in fullscreen
-  const navigateFullscreen = (direction: 'prev' | 'next') => {
+  const navigateFullscreen = (direction) => {
     if (direction === 'prev') {
       setCurrentFullscreenIndex(prev => 
         prev === 0 ? product.images.length - 1 : prev - 1
@@ -202,10 +202,10 @@ const SingleProductPage = () => {
           
           {/* Price */}
           <div className="mb-6">
-            <span className="text-2xl font-bold text-primary">${product.discountPrice}</span>
+            <span className="text-2xl font-bold text-primary">₹{product.discountPrice}</span>
             {product.discountPrice < product.price && (
               <>
-                <span className="text-gray-500 line-through ml-2">${product.price}</span>
+                <span className="text-gray-500 line-through ml-2">₹{product.price}</span>
                 <span className="bg-red-100 text-red-800 text-xs font-medium ml-2 px-2 py-0.5 rounded">
                   {Math.round((1 - product.discountPrice / product.price) * 100)}% OFF
                 </span>
@@ -261,7 +261,7 @@ const SingleProductPage = () => {
                   <label htmlFor={`delivery-${option.type}`} className="flex items-center">
                     <Truck size={16} className="mr-1" />
                     {option.type === 'standard' ? 'Standard' : 'Express'} Delivery: 
-                    {option.price > 0 ? `$${option.price}` : 'Free'} - {option.days} business days
+                    {option.price > 0 ? `₹${option.price}` : 'Free'} - {option.days} business days
                   </label>
                 </div>
               ))}
@@ -352,7 +352,7 @@ const SingleProductPage = () => {
                   <span className="text-xs text-gray-600">{product.rating}</span>
                 </div>
                 <div className="mt-2">
-                  <span className="font-bold">${product.price}</span>
+                  <span className="font-bold">₹{product.price}</span>
                 </div>
               </div>
             </div>
