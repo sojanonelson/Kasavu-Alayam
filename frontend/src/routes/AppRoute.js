@@ -3,7 +3,6 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import HomeScreen from '../pages/Home';
-import MensCollection from '../pages/Mens-collection';
 import WomensCollection from '../pages/Womens-collection';
 import RegisterForm from '../components/RegisterForm';
 import SareesSection from '../pages/sarees-collection';
@@ -15,6 +14,10 @@ import Orders from '../pages/Customer/Orders';
 import NotFound from '../pages/NotFound';
 import AppNotFound from '../pages/AppNotFound';
 import SingleProductPage from '../pages/SingleProduct';
+import CollectionsPage from '../components/collections/CollectionsPage';
+import MensCollection from '../components/collections/MensCollection';
+
+
 
 // Import nested pages
 
@@ -30,7 +33,8 @@ const AppRoutes = () => {
      
       <Route path="/" element={<HomeScreen />} />
       <Route path="/" element={<SideContactNavbar  />} />
-      <Route path="/mens" element={<MensCollection />} />
+      <Route path="/" element={<MensCollection />} />
+      <Route path="/collections/:id" element={<CollectionsPage />} />
       <Route path="/womens" element={<WomensCollection />} />
       <Route path='/components' element={<RegisterForm />} />
       <Route path="/sarees" element={<SareesSection />} />
