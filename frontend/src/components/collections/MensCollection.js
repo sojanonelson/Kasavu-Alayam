@@ -6,6 +6,7 @@ import Navbar from '../Navbar';
 import ScrolledNavbar from '../ScrolledNavbar';
 import FilterSidebar from '../ui/FilterSidebar';
 import products from '../../Data/mens-collection';
+import { Helmet } from 'react-helmet';
 
 const categories = ['Shirt', 'Pants', 'T-Shirts', 'Jackets'];
 const colors = ['White', 'Black', 'Blue', 'Red'];
@@ -112,6 +113,12 @@ const MensCollection = () => {
 
   return (
     <div className={`relative bg-gray-50 min-h-screen ${blur ? 'blur-sm' : ''}`}>
+      <Helmet>
+          <title>Kasavu Aalayam | Mens Collection</title>
+          <meta name="description" content="Discover the finest traditional Indian wear at Kasavu Aalayam. Explore premium silk sarees, ethnic wear collections for men and women, and exquisite bridal wear." />
+          <meta name="keywords" content="kasavu, sarees, traditional wear, indian fashion, silk sarees, ethnic wear" />
+          <link rel="canonical" href="https://kasavuaalayam.com" />
+        </Helmet>
       {isScrolled ? <ScrolledNavbar /> : <Navbar />}
 
       {/* Mobile Filter Button */}

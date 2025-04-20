@@ -15,6 +15,7 @@
   import SideContactNavbar from '../pages/sidecontactbar';
   import border1 from '../assets/elements/border2.png'
   import border2 from '../assets/elements/border1.png'
+import Cart from './Customer/Cart';
   
 
   const heroImages = [
@@ -101,6 +102,8 @@
   const HomePage = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [showCart, setShowCart] = useState(false);
+
     const swiperRef = useRef(null);
     
     // Animation refs
@@ -169,7 +172,7 @@
           <link rel="canonical" href="https://kasavuaalayam.com" />
         </Helmet>
 
-        {isScrolled ? <ScrolledNavbar /> : <Navbar />}
+        {isScrolled ? <ScrolledNavbar /> : <Navbar onCartClick={() => setShowCart(true)} />}
 
   {/* Hero Section with Enhanced Carousel */}
   <section className="relative" aria-label="Featured collections carousel">
@@ -232,6 +235,7 @@
     
     {/* Custom Pagination Container */}
     <div className="custom-pagination !bottom-12" />
+
   </section>
 
         {/* Categories Section */}

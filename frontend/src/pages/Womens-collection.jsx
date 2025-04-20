@@ -6,6 +6,9 @@ import Navbar from '../components/Navbar';
 import ScrolledNavbar from '../components/ScrolledNavbar';
 import FilterSidebar from '../components/ui/FilterSidebar';
 import products from '../Data/womens-collection';
+import { useDispatch, useSelector } from 'react-redux';  // Import necessary hooks
+import { addToCart, removeFromCart } from '../redux/features/cart/cartSlice';  // I
+import { Helmet } from 'react-helmet';
 
 const CATEGORIES = ['Dresses', 'Tops', 'Skirts', 'Jackets'];
 const COLORS = ['White', 'Black', 'Pink', 'Red'];
@@ -28,8 +31,17 @@ const WomensCollection = () => {
   const [sortBy, setSortBy] = useState('Popularity');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [wishlist, setWishlist] = useState([]);
-  const [cart, setCart] = useState([]);
+ 
   const [blur, setBlur] = useState(false);
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart.items);  // Get cart items from Redux store
+  console.log('Products:', cart)
+  
+  const cartCount = useMemo(() => {
+    return cart.reduce((total, item) => total + item.quantity, 0);  // Calculate total count of items in the cart
+  }, [cart]);
+  console.log('Cart:', cartCount)
+ 
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 600);
@@ -53,12 +65,15 @@ const WomensCollection = () => {
     setWishlist(prev => prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]);
   }, []);
 
-  const toggleCart = useCallback(id => {
-    setCart(prev => prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]);
-    setBlur(true);
-    setTimeout(() => setBlur(false), 500);
-  }, []);
-
+  const toggleCart = useCallback(product => {
+    const existingItem = cart.find(item => item.id === product.id);
+    if (existingItem) {
+      dispatch(removeFromCart(product));  // If item already in cart, remove it
+    } else {
+      dispatch(addToCart(product));  // If item not in cart, add it
+    }
+  }, [cart, dispatch]);
+  
   const activeFilterCount = useMemo(() => 
     Object.entries(filters)
       .filter(([key, value]) => value && key !== 'price' && key !== 'search')
@@ -227,6 +242,12 @@ const WomensCollection = () => {
 
   return (
     <div className={`relative bg-gray-50 min-h-screen ${blur ? 'blur-sm' : ''}`}>
+      <Helmet>
+          <title>Kasavu Aalayam | Womens collectionsr</title>
+          <meta name="description" content="Discover the finest traditional Indian wear at Kasavu Aalayam. Explore premium silk sarees, ethnic wear collections for men and women, and exquisite bridal wear." />
+          <meta name="keywords" content="kasavu, sarees, traditional wear, indian fashion, silk sarees, ethnic wear" />
+          <link rel="canonical" href="https://kasavuaalayam.com" />
+        </Helmet>
       {isScrolled ? <ScrolledNavbar /> : <Navbar />}
 
       {/* Mobile Filter Button */}
@@ -301,6 +322,16 @@ const WomensCollection = () => {
           <div className="text-sm text-gray-600">
             <Link to="/" className="text-blue-600 hover:underline">Home</Link> / <span>Women's Collection</span>
           </div>
+          <div className="top-4 right-4 z-90 flex items-center">
+        <Link to="/cart">
+          <button className="relative">
+            <ShoppingBag size={24} />
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+              {cartCount}  {/* Display cart item count */}
+            </span>
+          </button>
+        </Link>
+      </div>
 
           {/* Search */}
           <div className="relative flex-grow md:max-w-md">
