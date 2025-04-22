@@ -116,21 +116,21 @@ const AdminLayout = () => {
                   <img src={Logo} alt='logo'  className='bg-white border rounded-full'></img>
                 </div>
                 <div>
-                  <h2 className="text-sm font-semibold">Admin User</h2>
+                  <h2 className="text-sm font-semibold">Admin Panel </h2>
                   <p className="text-xs text-gray-500">admin@example.com</p>
                 </div>
               </div>
             </div>
 
-            <nav className="space-y-1 bg-white rounded-lg shadow-sm p-2">
+            <nav className="space-y-1  rounded-lg  p-2">
               {/* Dashboard Link */}
               <NavLink 
                 to="overview" 
                 className={({ isActive }) => 
-                  `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
+                  `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors   ${
                     isActive 
                       ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
-                      : 'text-gray-600 hover:bg-gray-50'
+                      : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
                   }`
                 }
                 onClick={() => isMobile && setSidebarOpen(false)}
@@ -146,7 +146,7 @@ const AdminLayout = () => {
                   `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
                     isActive 
                       ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
-                      : 'text-gray-600 hover:bg-gray-50'
+                      : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
                   }`
                 }
                 onClick={() => isMobile && setSidebarOpen(false)}
@@ -162,7 +162,7 @@ const AdminLayout = () => {
                   `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
                     isActive 
                       ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
-                      : 'text-gray-600 hover:bg-gray-50'
+                      : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
                   }`
                 }
                 onClick={() => isMobile && setSidebarOpen(false)}
@@ -178,7 +178,7 @@ const AdminLayout = () => {
                   `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
                     isActive 
                       ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
-                      : 'text-gray-600 hover:bg-gray-50'
+                      : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
                   }`
                 }
                 onClick={() => isMobile && setSidebarOpen(false)}
@@ -194,7 +194,7 @@ const AdminLayout = () => {
                   `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
                     isActive 
                       ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
-                      : 'text-gray-600 hover:bg-gray-50'
+                      : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
                   }`
                 }
                 onClick={() => isMobile && setSidebarOpen(false)}
@@ -210,7 +210,7 @@ const AdminLayout = () => {
                   `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
                     isActive 
                       ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
-                      : 'text-gray-600 hover:bg-gray-50'
+                      : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
                   }`
                 }
                 onClick={() => isMobile && setSidebarOpen(false)}
@@ -226,7 +226,7 @@ const AdminLayout = () => {
                   `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
                     isActive 
                       ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
-                      : 'text-gray-600 hover:bg-gray-50'
+                      : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
                   }`
                 }
                 onClick={() => isMobile && setSidebarOpen(false)}
@@ -237,7 +237,7 @@ const AdminLayout = () => {
             </nav>
 
             {/* Logout Button */}
-            <div className="mt-4 bg-white rounded-lg shadow-sm p-2">
+            <div className="mt-4 rounded-lg shadow-sm p-2">
               <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-red-500 hover:bg-red-50 transition-colors text-sm">
                 <LogOut size={18} className="flex-shrink-0" />
                 <span>Log out</span>
