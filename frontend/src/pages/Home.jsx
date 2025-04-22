@@ -1,4 +1,4 @@
-  import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
   import { Helmet } from 'react-helmet';
   import { Link } from 'react-router-dom';
   import { Swiper, SwiperSlide } from 'swiper/react';
@@ -16,6 +16,7 @@
   import border1 from '../assets/elements/border2.png'
   import border2 from '../assets/elements/border1.png'
 import Cart from './Customer/Cart';
+import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
   
 
   const heroImages = [
@@ -78,27 +79,6 @@ import Cart from './Customer/Cart';
     }
   ];
 
-  const testimonials = [
-    {
-      name: "Priya Sharma",
-      comment: "The quality of silk sarees from Kasavu Aalayam is unmatched. I received so many compliments at my daughter's wedding.",
-      rating: 5,
-      location: "Mumbai"
-    },
-    {
-      name: "Rahul Menon",
-      comment: "Excellent craftsmanship and timely delivery. The traditional wear collection here preserves our cultural heritage beautifully.",
-      rating: 5,
-      location: "Kochi"
-    },
-    {
-      name: "Ananya Patel",
-      comment: "I've been a loyal customer for years. Their attention to detail and customer service sets them apart from other stores.",
-      rating: 4,
-      location: "Bangalore"
-    }
-  ];
-
   const HomePage = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -118,11 +98,6 @@ import Cart from './Customer/Cart';
     });
     
     const [aboutRef, aboutInView] = useInView({ 
-      threshold: 0.2,
-      triggerOnce: true 
-    });
-    
-    const [testimonialRef, testimonialInView] = useInView({ 
       threshold: 0.2,
       triggerOnce: true 
     });
@@ -296,20 +271,6 @@ import Cart from './Customer/Cart';
               Every thread tells a story of cultural significance, passed down through generations of skilled artisans.
               From elegant kasavu sarees to premium wedding collections, we invite you to explore timeless fashion redefined for the modern era.
             </p>
-            {/* <div className="flex flex-wrap justify-center gap-4 mt-8">
-              <div className="flex flex-col items-center p-6 bg-gray-50 rounded-lg w-40">
-                <span className="text-3xl font-bold text-amber-600">30+</span>
-                <span className="text-sm text-gray-600 mt-2">Years of Excellence</span>
-              </div>
-              <div className="flex flex-col items-center p-6 bg-gray-50 rounded-lg w-40">
-                <span className="text-3xl font-bold text-amber-600">15k+</span>
-                <span className="text-sm text-gray-600 mt-2">Happy Customers</span>
-              </div>
-              <div className="flex flex-col items-center p-6 bg-gray-50 rounded-lg w-40">
-                <span className="text-3xl font-bold text-amber-600">200+</span>
-                <span className="text-sm text-gray-600 mt-2">Artisan Partners</span>
-              </div>
-            </div> */}
 
 <div className="flex flex-row justify-center pb-10 items-end gap-5">
   {/* First Image */}
@@ -387,38 +348,8 @@ import Cart from './Customer/Cart';
           </motion.div>
         </section>
         
-        {/* Testimonials Section */}
-        <section 
-          ref={testimonialRef}
-          className="py-16 px-6 md:px-20 bg-white"
-          aria-labelledby="testimonials-heading"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: testimonialInView ? 1 : 0, y: testimonialInView ? 0 : 40 }}
-            transition={{ duration: 0.7 }}
-          >
-            <h2 id="testimonials-heading" className="text-4xl font-semibold text-center mb-3 poppins-regular">What Our Customers Say</h2>
-            <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">Cherished experiences from our valued patrons</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: testimonialInView ? 1 : 0, y: testimonialInView ? 0 : 30 }}
-                  transition={{ duration: 0.5, delay: index * 0.2 }}
-                >
-                  <TestimonialCard testimonial={testimonial} />
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </section>
-
-        
-        
         <SideContactNavbar />
+        <EnhancedFeedbackSystem />
         <Footer />
       </div>
     );
@@ -529,31 +460,6 @@ import Cart from './Customer/Cart';
           </div>
         </div>
       </Link>
-    );
-  };
-
-  const TestimonialCard = ({ testimonial }) => {
-    return (
-      <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-        <div className="flex items-center mb-4">
-          {[...Array(5)].map((_, i) => (
-            <svg 
-              key={i} 
-              xmlns="http://www.w3.org/2000/svg" 
-              className={`h-5 w-5 ${i < testimonial.rating ? 'text-amber-500' : 'text-gray-300'}`} 
-              viewBox="0 0 20 20" 
-              fill="currentColor"
-            >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-          ))}
-        </div>
-        <p className="text-gray-700 mb-4 italic poppins-regular">{testimonial.comment}</p>
-        <div className="flex justify-between items-center">
-          <span className="font-semibold">{testimonial.name}</span>
-          <span className="text-sm text-gray-500">{testimonial.location}</span>
-        </div>
-      </div>
     );
   };
 

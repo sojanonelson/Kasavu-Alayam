@@ -5,14 +5,143 @@ import { ChevronDown, Filter, Heart, X, Search, Grid3X3, List } from 'lucide-rea
 import Navbar from '../Navbar';
 import ScrolledNavbar from '../ScrolledNavbar';
 import FilterSidebar from '../ui/FilterSidebar';
-import products from '../../Data/mens-collection';
-import { Helmet } from 'react-helmet';
 
-const categories = ['Shirt', 'Pants', 'T-Shirts', 'Jackets'];
+// Update the categories array - only 3 categories as requested
+const categories = ['Dhoti', 'Shirts', 'T-Shirts'];
 const colors = ['White', 'Black', 'Blue', 'Red'];
 const patterns = ['Solid', 'Striped', 'Checked'];
 const brands = ['Brand A', 'Brand B', 'Brand C'];
 const sortOptions = ['Popularity', 'Price: Low to High', 'Price: High to Low', 'Newest First'];
+
+// Updated product data with Google image URLs
+const products = [
+  {
+    id: 1,
+    title: "Traditional Cotton Dhoti",
+    category: "Dhoti",
+    price: 45,
+    originalPrice: 60,
+    color: "White",
+    pattern: "Solid",
+    brand: "Brand A",
+    popularity: 4.5,
+    createdAt: "2024-09-10",
+    image: "https://m.media-amazon.com/images/I/71jvQpjLmML._AC_UL480_FMwebp_QL65_.jpg",
+    description: "Traditional pure cotton dhoti with gold border, perfect for festivals and ceremonies."
+  },
+  {
+    id: 2,
+    title: "Premium Silk Dhoti",
+    category: "Dhoti",
+    price: 85,
+    originalPrice: 95,
+    color: "White",
+    pattern: "Solid",
+    brand: "Brand B",
+    popularity: 4.2,
+    createdAt: "2024-09-15",
+    image: "https://www.jiomart.com/images/product/original/rvrgwpjvsp/style-360-cotton-white-solid-dhoti-product-images-rvrgwpjvsp-0-202209240121.jpg",
+    description: "Luxurious silk dhoti with traditional design, ideal for special occasions."
+  },
+  {
+    id: 3,
+    title: "Casual Linen Dhoti",
+    category: "Dhoti",
+    price: 35,
+    originalPrice: 40,
+    color: "Blue",
+    pattern: "Solid",
+    brand: "Brand C",
+    popularity: 3.9,
+    createdAt: "2024-09-20",
+    image: "https://www.jiomart.com/images/product/original/rvbvq9tdwn/s9-store-white-cotton-solid-dhoti-product-images-rvbvq9tdwn-0-202206080522.jpg",
+    description: "Lightweight linen dhoti for everyday casual wear."
+  },
+  {
+    id: 4,
+    title: "Formal White Shirt",
+    category: "Shirts",
+    price: 50,
+    originalPrice: 65,
+    color: "White",
+    pattern: "Solid",
+    brand: "Brand A",
+    popularity: 4.7,
+    createdAt: "2024-09-05",
+    image: "https://m.media-amazon.com/images/I/61MK+FS84RL._AC_UL480_FMwebp_QL65_.jpg",
+    description: "Classic white formal shirt with regular fit, perfect for office and formal events."
+  },
+  {
+    id: 5,
+    title: "Casual Checkered Shirt",
+    category: "Shirts",
+    price: 40,
+    originalPrice: 55,
+    color: "Blue",
+    pattern: "Checked",
+    brand: "Brand B",
+    popularity: 4.3,
+    createdAt: "2024-09-12",
+    image: "https://rukminim2.flixcart.com/image/850/1000/xif0q/shirt/b/v/p/l-st2-vebnor-original-imagpv9ahv9rsmnr.jpeg",
+    description: "Stylish checkered shirt for casual outings and weekend wear."
+  },
+  {
+    id: 6,
+    title: "Linen Cotton Blend Shirt",
+    category: "Shirts",
+    price: 60,
+    originalPrice: 75,
+    color: "Black",
+    pattern: "Solid",
+    brand: "Brand C",
+    popularity: 4.0,
+    createdAt: "2024-09-18",
+    image: "https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/17187540/2022/2/17/a0e0dfe4-799c-4ad4-864c-503d3067566d1645099524664RoadsterMenBlackPureCottonSustainableCasualShirt2.jpg",
+    description: "Premium linen-cotton blend shirt for maximum comfort in any weather."
+  },
+  {
+    id: 7,
+    title: "Basic Crew Neck T-Shirt",
+    category: "T-Shirts",
+    price: 25,
+    originalPrice: 30,
+    color: "Black",
+    pattern: "Solid",
+    brand: "Brand A",
+    popularity: 4.6,
+    createdAt: "2024-09-08",
+    image: "https://assets.ajio.com/medias/sys_master/root/20230602/vHip/6479d136d55b7d0c63421460/-473Wx593H-464419395-black-MODEL.jpg",
+    description: "Essential crew neck t-shirt made from 100% cotton for everyday comfort."
+  },
+  {
+    id: 8,
+    title: "Graphic Print T-Shirt",
+    category: "T-Shirts",
+    price: 30,
+    originalPrice: 40,
+    color: "Red",
+    pattern: "Solid",
+    brand: "Brand B",
+    popularity: 4.1,
+    createdAt: "2024-09-14",
+    image: "https://www.jiomart.com/images/product/original/rvomvpspvy/eyebogler-men-s-red-typography-printed-cotton-t-shirt-product-images-rvomvpspvy-0-202207051929.jpg",
+    description: "Trendy graphic print t-shirt with modern design for a stylish casual look."
+  },
+  {
+    id: 9,
+    title: "Striped Polo T-Shirt",
+    category: "T-Shirts",
+    price: 35,
+    originalPrice: 45,
+    color: "Blue",
+    pattern: "Striped",
+    brand: "Brand C",
+    popularity: 4.4,
+    createdAt: "2024-09-22",
+    image: "https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/23049302/2023/5/5/9fb21207-ceb9-496c-9508-ae96ee9122871683282682632RoadsterMenWhiteStripedPocketsPoloCollarPureCottonT-shirt1.jpg",
+    description: "Classic striped polo t-shirt, perfect for casual outings and semi-formal occasions."
+  }
+];
 
 const MensCollection = () => {
   const [filters, setFilters] = useState({
@@ -30,8 +159,12 @@ const MensCollection = () => {
   const [sortBy, setSortBy] = useState('Popularity');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [wishlist, setWishlist] = useState([]);
-  const [cart, setCart] = useState([]);
-  const [blur, setBlur] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(9);
+  const [expandedSections, setExpandedSections] = useState(categories.reduce((acc, cat) => {
+    acc[cat] = true; // All sections expanded by default
+    return acc;
+  }, {}));
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,34 +189,8 @@ const MensCollection = () => {
       }
       return { ...prev, [name]: value };
     });
+    setCurrentPage(1); // Reset to the first page when filters change
   };
-
-  const filteredProducts = products
-    .filter((product) => {
-      return (
-        (filters.category.length ? filters.category.includes(product.category) : true) &&
-        (filters.color ? product.color === filters.color : true) &&
-        (filters.pattern ? product.pattern === filters.pattern : true) &&
-        (filters.brand.length ? filters.brand.includes(product.brand) : true) &&
-        product.price <= filters.price &&
-        (filters.search ?
-          product.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-          product.category.toLowerCase().includes(filters.search.toLowerCase()) :
-          true)
-      );
-    })
-    .sort((a, b) => {
-      switch(sortBy) {
-        case 'Price: Low to High':
-          return a.price - b.price;
-        case 'Price: High to Low':
-          return b.price - a.price;
-        case 'Newest First':
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        default: // Popularity
-          return b.popularity - a.popularity;
-      }
-    });
 
   const toggleWishlist = (id) => {
     setWishlist(prev =>
@@ -91,34 +198,67 @@ const MensCollection = () => {
     );
   };
 
-  const toggleCart = (id) => {
-    setCart(prev =>
-      prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]
-    );
-    setBlur(true);
-    setTimeout(() => setBlur(false), 500);
-  };
-
   const handleSearchChange = (e) => {
     setFilters(prev => ({ ...prev, search: e.target.value }));
+    setCurrentPage(1); // Reset to the first page when search changes
   };
 
   const clearFilters = () => {
     setFilters({ category: [], color: '', pattern: '', brand: [], price: 100, search: '' });
+    setCurrentPage(1); // Reset to the first page when filters are cleared
+  };
+
+  const toggleSection = (category) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [category]: !prev[category]
+    }));
   };
 
   const activeFilterCount = Object.entries(filters)
     .filter(([key, value]) => (Array.isArray(value) ? value.length > 0 : value) && key !== 'price' && key !== 'search')
     .length + (filters.price < 100 ? 1 : 0);
 
+  // Group products by category
+  const productsByCategory = categories.reduce((acc, category) => {
+    acc[category] = products
+      .filter(product => product.category === category)
+      .filter(product => {
+        return (
+          (filters.category.length ? filters.category.includes(product.category) : true) &&
+          (filters.color ? product.color === filters.color : true) &&
+          (filters.pattern ? product.pattern === filters.pattern : true) &&
+          (filters.brand.length ? filters.brand.includes(product.brand) : true) &&
+          product.price <= filters.price &&
+          (filters.search ?
+            product.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+            product.category.toLowerCase().includes(filters.search.toLowerCase()) :
+            true)
+        );
+      })
+      .sort((a, b) => {
+        switch(sortBy) {
+          case 'Price: Low to High':
+            return a.price - b.price;
+          case 'Price: High to Low':
+            return b.price - a.price;
+          case 'Newest First':
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          default: // Popularity
+            return b.popularity - a.popularity;
+        }
+      });
+    
+    return acc;
+  }, {});
+
+  // Calculate total filtered products
+  const totalFilteredProducts = Object.values(productsByCategory)
+    .flat()
+    .length;
+
   return (
-    <div className={`relative bg-gray-50 min-h-screen ${blur ? 'blur-sm' : ''}`}>
-      <Helmet>
-          <title>Kasavu Aalayam | Mens Collection</title>
-          <meta name="description" content="Discover the finest traditional Indian wear at Kasavu Aalayam. Explore premium silk sarees, ethnic wear collections for men and women, and exquisite bridal wear." />
-          <meta name="keywords" content="kasavu, sarees, traditional wear, indian fashion, silk sarees, ethnic wear" />
-          <link rel="canonical" href="https://kasavuaalayam.com" />
-        </Helmet>
+    <div className="relative bg-gray-50 min-h-screen">
       {isScrolled ? <ScrolledNavbar /> : <Navbar />}
 
       {/* Mobile Filter Button */}
@@ -159,7 +299,7 @@ const MensCollection = () => {
               onClick={() => setIsMobileFilterOpen(false)}
               className="w-full bg-black text-white py-3 rounded-md mt-6"
             >
-              Apply Filters ({filteredProducts.length} results)
+              Apply Filters ({totalFilteredProducts} results)
             </button>
           </div>
         </div>
@@ -183,7 +323,7 @@ const MensCollection = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between mt-28 mb-6 gap-4">
           {/* Breadcrumb */}
           <div className="text-sm text-gray-600">
-            <Link to="/" className="text-blue-600 hover:underline">Home</Link> / <span>Men’s Collection</span>
+            <Link to="/" className="text-blue-600 hover:underline">Home</Link> / <span>Men's Collection</span>
           </div>
 
           {/* Search */}
@@ -314,145 +454,11 @@ const MensCollection = () => {
 
         {/* Results Count */}
         <div className="mb-6">
-          <p className="text-sm text-gray-500">{filteredProducts.length} results found</p>
+          <p className="text-sm text-gray-500">{totalFilteredProducts} results found</p>
         </div>
 
-        {/* Grid or List View */}
-        {view === 'grid' ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="border rounded-sm overflow-hidden group relative"
-              >
-                <div className="relative hover:z-10 hover:scale-105 hover:shadow-lg transition-transform duration-300">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-full object-cover aspect-[3/4]"
-                  />
-                  <button
-                    onClick={() => toggleWishlist(product.id)}
-                    className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md"
-                  >
-                    <Heart
-                      size={16}
-                      fill={wishlist.includes(product.id) ? "#f43f5e" : "none"}
-                      stroke={wishlist.includes(product.id) ? "#f43f5e" : "currentColor"}
-                    />
-                  </button>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 transform translate-y-0 transition-transform duration-300">
-                    <Link
-                      to={`/collections/${product.id}`}
-                      className="w-full bg-white text-black py-2 rounded-sm font-medium text-sm flex items-center justify-center gap-2"
-                    >
-                      Shop More
-                    </Link>
-                  </div>
-                </div>
-                <div className="p-3">
-                  <p className="text-xs text-gray-500 mb-1">{product.category}</p>
-                  <h3 className="text-sm font-medium line-clamp-1">{product.title}</h3>
-                  <div className="flex items-baseline gap-2 mt-1">
-                    <p className="text-sm font-bold">₹{product.price}</p>
-                    {product.originalPrice && (
-                      <p className="text-xs text-gray-500 line-through">₹{product.originalPrice}</p>
-                    )}
-                    {product.originalPrice && (
-                      <p className="text-xs text-green-600">
-                        {Math.round((1 - product.price / product.originalPrice) * 100)}% off
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex mt-2 gap-1">
-                    {['White', 'Black', 'Blue', 'Red'].slice(0, product.id % 4 + 1).map(color => (
-                      <span
-                        key={color}
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: color.toLowerCase() }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {filteredProducts.map((product) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white border rounded-md overflow-hidden flex"
-              >
-                <div className="relative w-1/3 hover:z-10 hover:scale-105 hover:shadow-lg transition-transform duration-300">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <button
-                    onClick={() => toggleWishlist(product.id)}
-                    className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md"
-                  >
-                    <Heart
-                      size={16}
-                      fill={wishlist.includes(product.id) ? "#f43f5e" : "none"}
-                      stroke={wishlist.includes(product.id) ? "#f43f5e" : "currentColor"}
-                    />
-                  </button>
-                </div>
-                <div className="p-4 flex-1">
-                  <div className="flex justify-between">
-                    <div>
-                      <p className="text-xs text-gray-500 mb-1">{product.category}</p>
-                      <h3 className="text-md font-medium">{product.title}</h3>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-md font-bold">₹{product.price}</p>
-                      {product.originalPrice && (
-                        <div className="flex flex-col">
-                          <p className="text-xs text-gray-500 line-through">₹{product.originalPrice}</p>
-                          <p className="text-xs text-green-600">
-                            {Math.round((1 - product.price / product.originalPrice) * 100)}% off
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-                    {product.description || `High-quality ${product.category} with a ${product.pattern} pattern.`}
-                  </p>
-                  <div className="flex items-center gap-4 mt-4">
-                    <div className="flex gap-1">
-                      {['White', 'Black', 'Blue', 'Red'].slice(0, product.id % 4 + 1).map(color => (
-                        <span
-                          key={color}
-                          className="w-4 h-4 rounded-full"
-                          style={{ backgroundColor: color.toLowerCase() }}
-                        />
-                      ))}
-                    </div>
-                    <Link
-                      to={`/collections/${product.id}`}
-                      className="bg-black text-white px-4 py-2 rounded-sm text-sm ml-auto flex items-center gap-2"
-                    >
-                      Shop More
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        )}
-
-        {/* Empty State */}
-        {filteredProducts.length === 0 && (
+        {/* Section-based Product Display */}
+        {totalFilteredProducts === 0 ? (
           <div className="flex flex-col items-center justify-center py-16">
             <div className="h-32 w-32 bg-gray-200 rounded-full flex items-center justify-center mb-4">
               <Search size={48} className="text-gray-400" />
@@ -468,32 +474,158 @@ const MensCollection = () => {
               Clear All Filters
             </button>
           </div>
-        )}
-
-        {/* Pagination */}
-        {filteredProducts.length > 0 && (
-          <div className="flex justify-center mt-10 mb-10">
-            <div className="flex items-center gap-2">
-              <button className="w-10 h-10 border rounded-md flex items-center justify-center bg-gray-100">
-                &lt;
-              </button>
-              <button className="w-10 h-10 border rounded-md flex items-center justify-center bg-black text-white">
-                1
-              </button>
-              <button className="w-10 h-10 border rounded-md flex items-center justify-center">
-                2
-              </button>
-              <button className="w-10 h-10 border rounded-md flex items-center justify-center">
-                3
-              </button>
-              <span className="w-10 h-10 flex items-center justify-center">...</span>
-              <button className="w-10 h-10 border rounded-md flex items-center justify-center">
-                10
-              </button>
-              <button className="w-10 h-10 border rounded-md flex items-center justify-center bg-gray-100">
-                &gt;
-              </button>
-            </div>
+        ) : (
+          <div className="space-y-12">
+            {categories.map(category => {
+              const categoryProducts = productsByCategory[category];
+              if (categoryProducts?.length === 0) return null;
+              
+              return (
+                <div key={category} className="border-t pt-6">
+                  <div 
+                    className="flex justify-between items-center mb-4 cursor-pointer"
+                    onClick={() => toggleSection(category)}
+                  >
+                    <h2 className="text-xl font-semibold flex items-center">
+                      {category} 
+                      <span className="text-sm font-normal text-gray-500 ml-2">
+                        ({categoryProducts.length} items)
+                      </span>
+                    </h2>
+                    <ChevronDown 
+                      size={20} 
+                      className={`transform transition-transform ${expandedSections[category] ? 'rotate-180' : ''}`}
+                    />
+                  </div>
+                  
+                  {expandedSections[category] && (
+                    <>
+                      {view === 'grid' ? (
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                          {categoryProducts.map((product) => (
+                            <motion.div
+                              key={product.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="border rounded-sm overflow-hidden group relative"
+                            >
+                              <div className="relative">
+                                <img
+                                  src={product.image}
+                                  alt={product.title}
+                                  className="w-full object-cover aspect-[3/4]"
+                                />
+                                <button
+                                  onClick={() => toggleWishlist(product.id)}
+                                  className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md"
+                                >
+                                  <Heart
+                                    size={16}
+                                    fill={wishlist.includes(product.id) ? "#f43f5e" : "none"}
+                                    stroke={wishlist.includes(product.id) ? "#f43f5e" : "currentColor"}
+                                  />
+                                </button>
+                              </div>
+                              <div className="p-3">
+                                <p className="text-xs text-gray-500 mb-1">{product.category}</p>
+                                <h3 className="text-sm font-medium line-clamp-1">{product.title}</h3>
+                                <div className="flex items-baseline gap-2 mt-1">
+                                  <p className="text-sm font-bold">₹{product.price}</p>
+                                  {product.originalPrice && (
+                                    <p className="text-xs text-gray-500 line-through">₹{product.originalPrice}</p>
+                                  )}
+                                  {product.originalPrice && (
+                                    <p className="text-xs text-green-600">
+                                      {Math.round((1 - product.price / product.originalPrice) * 100)}% off
+                                    </p>
+                                  )}
+                                </div>
+                                <Link
+                                  to={`/collections/${product.id}`}
+                                  className="mt-3 w-full bg-black text-white py-2 rounded-sm font-medium text-sm flex items-center justify-center gap-2"
+                                >
+                                  Shop More
+                                </Link>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          {categoryProducts.map((product) => (
+                            <motion.div
+                              key={product.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="bg-white border rounded-md overflow-hidden flex"
+                            >
+                              <div className="relative w-1/3">
+                                <img
+                                  src={product.image}
+                                  alt={product.title}
+                                  className="w-full h-full object-cover"
+                                />
+                                <button
+                                  onClick={() => toggleWishlist(product.id)}
+                                  className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md"
+                                >
+                                  <Heart
+                                    size={16}
+                                    fill={wishlist.includes(product.id) ? "#f43f5e" : "none"}
+                                    stroke={wishlist.includes(product.id) ? "#f43f5e" : "currentColor"}
+                                  />
+                                </button>
+                              </div>
+                              <div className="p-4 flex-1">
+                                <div className="flex justify-between">
+                                  <div>
+                                    <p className="text-xs text-gray-500 mb-1">{product.category}</p>
+                                    <h3 className="text-md font-medium">{product.title}</h3>
+                                  </div>
+                                  <div className="text-right">
+                                    <p className="text-md font-bold">₹{product.price}</p>
+                                    {product.originalPrice && (
+                                      <div className="flex flex-col">
+                                        <p className="text-xs text-gray-500 line-through">₹{product.originalPrice}</p>
+                                        <p className="text-xs text-green-600">
+                                          {Math.round((1 - product.price / product.originalPrice) * 100)}% off
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+                                  {product.description}
+                                </p>
+                                <div className="flex items-center mt-4">
+                                  <Link
+                                    to={`/collections/${product.id}`}
+                                    className="bg-black text-white px-4 py-2 rounded-sm text-sm ml-auto flex items-center gap-2"
+                                  >
+                                    Shop More
+                                  </Link>
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {categoryProducts.length > 3 && (
+                        <Link 
+                          to={`/collections/category/${category.toLowerCase()}`}  
+                          className="block text-center text-blue-600 mt-6 hover:underline"
+                        >
+                          View all {category}
+                        </Link>
+                      )}
+                    </>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
