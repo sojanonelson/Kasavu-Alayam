@@ -24,6 +24,7 @@ import Customers from "../pages/Admin/Customers";
 import { Helmet } from "react-helmet";
 import OrdersPage from "../pages/Admin/Order";
 import NotificationsPage from "../pages/Admin/Notificaton";
+import InventoryManagement from "../pages/Admin/Inventory";
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -72,6 +73,7 @@ const AppRoutes = () => {
           <Route path="overview" element={<OverviewPage/>}/>
           <Route path="users" element={<Customers />} />
           <Route path="orders" element={<OrdersPage />} />
+          <Route path="inventory" element={<InventoryManagement />} />
           <Route path="notifications" element={<NotificationsPage/>} />
           <Route path="*" element={<NotFound />} />
         </Route>
