@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState,useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -241,43 +241,20 @@ const allFeedbacks = [
 ];
 
 const EnhancedFeedbackSystem = () => {
-  const [activeFeedbacks, setActiveFeedbacks] = useState([]);
-  const [filterRating, setFilterRating] = useState(0);
-  const [filterType, setFilterType] = useState('All');
+  const [activeFeedbacks,] = useState(allFeedbacks);
   const [feedbackInput, setFeedbackInput] = useState('');
   const [userRating, setUserRating] = useState(0);
   const [userName, setUserName] = useState('');
   const [showThankYou, setShowThankYou] = useState(false);
-  
+
   // Animation ref
   const [feedbackRef, feedbackInView] = useInView({
     threshold: 0.2,
     triggerOnce: true
   });
-  
+
   const swiperRef = useRef(null);
-  
-  // Initialize with all feedbacks
-  useEffect(() => {
-    filterFeedbacks();
-  }, [filterRating, filterType]);
-  
-  const filterFeedbacks = () => {
-    let filtered = [...allFeedbacks];
-    
-    if (filterRating > 0) {
-      filtered = filtered.filter(feedback => feedback.rating >= filterRating);
-    }
-    
-    if (filterType !== 'All') {
-      filtered = filtered.filter(feedback => 
-        feedback.productType.toLowerCase().includes(filterType.toLowerCase())
-      );
-    }
-    
-    setActiveFeedbacks(filtered);
-  };
-  
+
   const handleSubmitFeedback = (e) => {
     e.preventDefault();
     if (feedbackInput && userRating && userName) {
@@ -288,24 +265,21 @@ const EnhancedFeedbackSystem = () => {
         rating: userRating,
         date: new Date().toLocaleDateString()
       });
-      
+
       // Reset form and show thank you message
       setFeedbackInput('');
       setUserRating(0);
       setUserName('');
       setShowThankYou(true);
-      
+
       setTimeout(() => {
         setShowThankYou(false);
       }, 3000);
     }
   };
-  
-  // Product type filters
-  const productTypes = ['All', 'Saree', 'Wedding', 'Men\'s', 'Blouse', 'Festival', 'Traditional'];
-  
+
   return (
-    <section 
+    <section
       ref={feedbackRef}
       className="py-16 px-6 md:px-20 bg-gray-50"
       aria-labelledby="feedback-heading"
@@ -321,7 +295,7 @@ const EnhancedFeedbackSystem = () => {
         <p className="text-center text-gray-600 max-w-2xl mx-auto mb-6">
           Hear from our community of satisfied customers across India
         </p>
-        
+
         {/* Statistics Overview */}
         <div className="flex flex-wrap justify-center gap-4 mb-10">
           <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-center">
@@ -337,43 +311,7 @@ const EnhancedFeedbackSystem = () => {
             <span className="text-sm text-gray-600">Would Recommend</span>
           </div>
         </div>
-        
-        {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-3 mb-8">
-          <div className="flex items-center space-x-2">
-            <label htmlFor="rating-filter" className="text-sm font-medium text-gray-700">
-              Filter by Rating:
-            </label>
-            <select 
-              id="rating-filter"
-              value={filterRating}
-              onChange={(e) => setFilterRating(Number(e.target.value))}
-              className="rounded-lg border border-gray-300 px-3 py-1 text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-            >
-              <option value="0">All Ratings</option>
-              <option value="5">5 Stars</option>
-              <option value="4">4+ Stars</option>
-              <option value="3">3+ Stars</option>
-            </select>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <label htmlFor="type-filter" className="text-sm font-medium text-gray-700">
-              Product Type:
-            </label>
-            <select 
-              id="type-filter"
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              className="rounded-lg border border-gray-300 px-3 py-1 text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-            >
-              {productTypes.map((type, idx) => (
-                <option key={idx} value={type}>{type}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-        
+
         {/* Testimonial Carousel */}
         <div className="mb-12">
           <Swiper
@@ -403,11 +341,11 @@ const EnhancedFeedbackSystem = () => {
             ))}
           </Swiper>
         </div>
-        
+
         {/* Submit Feedback Form */}
         <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-sm p-6">
           <h3 className="text-xl font-semibold mb-4">Share Your Experience</h3>
-          
+
           {showThankYou ? (
             <div className="bg-green-50 text-green-700 p-4 rounded-lg text-center">
               <p className="font-medium">Thank you for your feedback!</p>
@@ -427,7 +365,7 @@ const EnhancedFeedbackSystem = () => {
                   required
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Your Rating</label>
                 <div className="flex space-x-1">
@@ -450,7 +388,7 @@ const EnhancedFeedbackSystem = () => {
                   ))}
                 </div>
               </div>
-              
+
               <div>
                 <label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-1">Your Feedback</label>
                 <textarea
@@ -463,7 +401,7 @@ const EnhancedFeedbackSystem = () => {
                   required
                 ></textarea>
               </div>
-              
+
               <button
                 type="submit"
                 className="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
@@ -507,13 +445,13 @@ const TestimonialCard = ({ feedback }) => {
             )}
           </div>
         </div>
-        
+
         {/* Product type badge */}
         <span className="bg-amber-50 text-amber-700 text-xs px-2 py-1 rounded-full">
           {feedback.productType}
         </span>
       </div>
-      
+
       {/* Rating stars */}
       <div className="flex items-center mb-3">
         {[...Array(5)].map((_, i) => (
@@ -528,10 +466,10 @@ const TestimonialCard = ({ feedback }) => {
           </svg>
         ))}
       </div>
-      
+
       {/* Review comment */}
       <p className="text-gray-700 text-sm italic flex-grow poppins-regular mb-3">"{feedback.comment}"</p>
-      
+
       {/* Footer */}
       <div className="flex justify-between items-center mt-auto pt-3 border-t border-gray-100">
         <div className="flex space-x-2">
