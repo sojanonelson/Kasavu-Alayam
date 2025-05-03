@@ -9,10 +9,10 @@ exports.getCustomers = async (req, res) => {
     const { search, page = 1, limit = 20 } = req.query;
 
     const filter = {};
-
     if (search) {
       filter.$or = [
-        { name: new RegExp(search, 'i') },
+        { firstname: new RegExp(search, 'i') },
+        { lastname: new RegExp(search, 'i') },
         { email: new RegExp(search, 'i') }
       ];
     }
@@ -20,7 +20,7 @@ exports.getCustomers = async (req, res) => {
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
     const customers = await Customer.find(filter)
-      .sort('name')
+      .sort('firstname')
       .skip(skip)
       .limit(parseInt(limit));
 
@@ -47,12 +47,12 @@ exports.getCustomers = async (req, res) => {
 // Create a new customer
 exports.createCustomer = async (req, res) => {
   try {
-    const { password, email, name, phone } = req.body;
+    const { firstname, lastname, email, phone, password, addresses } = req.body;
 
-    if (!name || !email || !phone || !password) {
+    if (!firstname || !lastname || !email || !phone || !password) {
       return res.status(400).json({
         success: false,
-        message: 'Name, email, phone, and password are required',
+        message: 'Firstname, lastname, email, phone, and password are required',
       });
     }
 
@@ -66,10 +66,12 @@ exports.createCustomer = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const customer = await Customer.create({
-      name,
+      firstname,
+      lastname,
       email,
       phone,
       password: hashedPassword,
+      addresses // array of address objects
     });
 
     res.status(201).json({
@@ -77,10 +79,12 @@ exports.createCustomer = async (req, res) => {
       message: 'Customer account created successfully',
       data: {
         id: customer._id,
-        name: customer.name,
+        firstname: customer.firstname,
+        lastname: customer.lastname,
         email: customer.email,
+        phone: customer.phone,
         role: customer.role,
-        phone: customer.phone
+        addresses: customer.addresses
       },
     });
   } catch (error) {
@@ -132,12 +136,13 @@ exports.loginCustomer = async (req, res) => {
       success: true,
       message: 'Login successful',
       token,
-      data: {
+      user: {
         id: customer._id,
-        name: customer.name,
+        firstname: customer.firstname,
+        lastname: customer.lastname,
         email: customer.email,
-        role: customer.role,
-        phone: customer.phone
+        phone: customer.phone,
+        role: customer.role
       }
     });
   } catch (error) {

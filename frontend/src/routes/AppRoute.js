@@ -25,6 +25,7 @@ import { Helmet } from "react-helmet";
 import OrdersPage from "../pages/Admin/Order";
 import NotificationsPage from "../pages/Admin/Notificaton";
 import InventoryManagement from "../pages/Admin/Inventory";
+import Register from "../pages/Register";
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -48,6 +49,7 @@ const AppRoutes = () => {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/" element={<SideContactNavbar />} />
           <Route path="/" element={<MensCollection />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/collections/:id" element={<CollectionsPage />} />
           <Route path="/womens" element={<WomensCollection />} />
           <Route path="/mens" element={<MensCollection />} />

@@ -281,7 +281,7 @@ const EnhancedFeedbackSystem = () => {
   return (
     <section
       ref={feedbackRef}
-      className="py-16 px-6 md:px-20 bg-gray-50"
+      className="py-16 px-6 md:px-20 "
       aria-labelledby="feedback-heading"
     >
       <motion.div
@@ -343,7 +343,7 @@ const EnhancedFeedbackSystem = () => {
         </div>
 
         {/* Submit Feedback Form */}
-        <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-sm p-6">
+        {/* <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-sm p-6">
           <h3 className="text-xl font-semibold mb-4">Share Your Experience</h3>
 
           {showThankYou ? (
@@ -422,7 +422,7 @@ const EnhancedFeedbackSystem = () => {
               </button>
             </form>
           )}
-        </div>
+        </div> */}
       </motion.div>
     </section>
   );

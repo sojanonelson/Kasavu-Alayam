@@ -42,19 +42,19 @@ import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
       title: "Wedding Silks",
       description: "Exquisite silk sarees and attire for your special day",
       link: "/featured/wedding",
-      image: "https://images.pexels.com/photos/2060240/pexels-photo-2060240.jpeg"
+      image: "https://cdn0.weddingwire.in/article/1169/3_2/1280/jpg/19611-silk-sarees-with-price-impressions-by-annuj-lead.jpeg"
     },
     {
       title: "Bridal Blouse Sets",
       description: "Intricately designed blouses to complement your sarees",
       link: "/featured/blouse-sets",
-      image: "https://images.pexels.com/photos/2960800/pexels-photo-2960800.jpeg"
+      image: "https://i.pinimg.com/736x/6d/0f/be/6d0fbe5bcf44b4ac4d21dec7102f6b1b.jpg"
     },
     {
       title: "Festival Picks",
       description: "Vibrant collections for all your celebration needs",
       link: "/featured/festive",
-      image: "https://images.pexels.com/photos/1677923/pexels-photo-1677923.jpeg"
+      image: "https://imgmediagumlet.lbb.in/media/2021/01/600004f78f18d85c00c1dddd_1610614007774.jpg"
     }
   ];
 
@@ -272,12 +272,12 @@ import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
               From elegant kasavu sarees to premium wedding collections, we invite you to explore timeless fashion redefined for the modern era.
             </p>
 
-<div className="flex flex-row justify-center pb-10 items-end gap-5">
+<div className="flex flex-row justify-center items-center pb-10 gap-5">
   {/* First Image */}
   <div className="w-2/6 text-center cursor-pointer">
     <img 
       className="w-full rounded-t-full object-cover" 
-      src="https://kalyansilks.com/_next/image?url=https%3A%2F%2Fcdn.pixelbin.io%2Fv2%2Froyal-sound-8c7142%2Foriginal%2Fcatalog%2Fproduct%2F2%2F_%2F2_564.jpg&w=640&q=75" 
+      src="https://kalyansilks.com/_next/image?url=https%3A%2F%2Fcdn.pixelbin.io%2Fv2%2Froyal-sound-8c7142%2Foriginal%2Fcatalog%2Fproduct%2F4%2F_%2F4_510.jpg&w=640&q=75" 
       alt="Product 1"
     />
     <p className="mt-2 font-semibold poppins-regular text-gray-70">Traditional Saree</p>
@@ -288,7 +288,7 @@ import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
   <div className="w-2/6 text-center cursor-pointer">
     <img 
       className="w-full rounded-t-full object-cover" 
-      src="https://kalyansilks.com/_next/image?url=https%3A%2F%2Fcdn.pixelbin.io%2Fv2%2Froyal-sound-8c7142%2Foriginal%2Fcatalog%2Fproduct%2F4%2F_%2F4_486.jpg&w=640&q=75" 
+      src="https://kalyansilks.com/_next/image?url=https%3A%2F%2Fcdn.pixelbin.io%2Fv2%2Froyal-sound-8c7142%2Foriginal%2Fcatalog%2Fproduct%2F4%2F_%2F4_510.jpg&w=640&q=75" 
       alt="Product 2"
     />
     <p className="mt-2 font-semibold poppins-regular text-gray-700">Wedding Saree</p>
@@ -317,7 +317,7 @@ import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
         {/* Featured Collections - Enhanced */}
         <section 
           ref={featuredRef}
-          className="py-16 px-6 md:px-20 bg-gray-100"
+          className="py-16 px-6 md:px-20 bg-white"
           aria-labelledby="featured-heading"
         >
           <motion.div
@@ -437,7 +437,7 @@ import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
     const [imageLoaded, setImageLoaded] = useState(false);
     
     return (
-      <Link to={link} className="block overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
+      <Link to={link} className="block overflow-hidden rounded-lg   transition-all duration-300">
         <div className="relative h-64">
           <img 
             src={image} 

@@ -414,8 +414,8 @@ const SideContactNavbar = () => {
 
 export default function Demo() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-6">
+    <div className=" bg-gray-100 flex items-center justify-center p-4">
+      {/* <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-6">
         <h1 className="text-2xl font-bold text-red-600 mb-6">Kasavu Aalayam</h1>
         <p className="text-gray-700 mb-4">
           Welcome to our website. Browse through our collection of premium traditional clothing.
@@ -435,7 +435,7 @@ export default function Demo() {
             <strong>Note:</strong> Check out our contact options on the right side of the screen to reach us or schedule an appointment!
           </p>
         </div>
-      </div>
+      </div> */}
       
       {/* The Side Contact Navbar component */}
       <SideContactNavbar />
