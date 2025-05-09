@@ -6,8 +6,8 @@ import Navbar from '../components/Navbar';
 import ScrolledNavbar from '../components/ScrolledNavbar';
 import FilterSidebar from '../components/ui/FilterSidebar';
 import products from '../Data/womens-collection';
-import { useDispatch, useSelector } from 'react-redux';  // Import necessary hooks
-import { addToCart, removeFromCart } from '../redux/features/cart/cartSlice';  // I
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart } from '../redux/features/cart/cartSlice';
 import { Helmet } from 'react-helmet';
 
 const CATEGORIES = ['Dresses', 'Tops', 'Skirts', 'Jackets'];
@@ -31,17 +31,13 @@ const WomensCollection = () => {
   const [sortBy, setSortBy] = useState('Popularity');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [wishlist, setWishlist] = useState([]);
- 
-  const [blur, setBlur] = useState(false);
-  const dispatch = useDispatch();
-  const cart = useSelector(state => state.cart.items);  // Get cart items from Redux store
-  console.log('Products:', cart)
   
-  const cartCount = useMemo(() => {
-    return cart.reduce((total, item) => total + item.quantity, 0);  // Calculate total count of items in the cart
-  }, [cart]);
-  console.log('Cart:', cartCount)
- 
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart.items);
+  
+  const cartCount = useMemo(() => (
+    cart.reduce((total, item) => total + item.quantity, 0)
+  ), [cart]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 600);
@@ -49,29 +45,15 @@ const WomensCollection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleFilterChange = useCallback((name, value) => {
-    setFilters(prev => ({ ...prev, [name]: value }));
-  }, []);
-
-  const handleSearchChange = useCallback(e => {
-    setFilters(prev => ({ ...prev, search: e.target.value }));
-  }, []);
-
-  const clearFilters = useCallback(() => {
-    setFilters({ category: '', color: '', pattern: '', brand: '', price: 100, search: '' });
-  }, []);
-
-  const toggleWishlist = useCallback(id => {
-    setWishlist(prev => prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]);
-  }, []);
-
+  // Simplified filter functions
+  const handleFilterChange = useCallback((name, value) => setFilters(prev => ({ ...prev, [name]: value })), []);
+  const handleSearchChange = useCallback(e => handleFilterChange('search', e.target.value), [handleFilterChange]);
+  const clearFilters = useCallback(() => setFilters({ category: '', color: '', pattern: '', brand: '', price: 100, search: '' }), []);
+  const toggleWishlist = useCallback(id => setWishlist(prev => prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]), []);
+  
   const toggleCart = useCallback(product => {
     const existingItem = cart.find(item => item.id === product.id);
-    if (existingItem) {
-      dispatch(removeFromCart(product));  // If item already in cart, remove it
-    } else {
-      dispatch(addToCart(product));  // If item not in cart, add it
-    }
+    existingItem ? dispatch(removeFromCart(product)) : dispatch(addToCart(product));
   }, [cart, dispatch]);
   
   const activeFilterCount = useMemo(() => 
@@ -123,7 +105,7 @@ const WomensCollection = () => {
     </div>
   );
 
-  const ProductCard = ({ product, isListView }) => {
+  const ProductCard = useCallback(({ product, isListView }) => {
     const discountPercent = product.originalPrice 
       ? Math.round((1 - product.price / product.originalPrice) * 100) 
       : null;
@@ -146,11 +128,11 @@ const WomensCollection = () => {
           transition={{ duration: 0.3 }}
           className="bg-white border rounded-md overflow-hidden flex"
         >
-          <div className="relative w-1/3 hover:z-10 hover:scale-105 hover:shadow-lg transition-transform duration-300">
-            <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
+          <div className="relative w-1/3 group">
+            <img src={product.image} alt={product.title} className="w-full h-full object-cover transition-all duration-300" />
             <button
               onClick={() => toggleWishlist(product.id)}
-              className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md"
+              className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md z-10"
             >
               <Heart
                 size={16}
@@ -180,12 +162,19 @@ const WomensCollection = () => {
             </p>
             <div className="flex items-center gap-4 mt-4">
               <div className="flex gap-1">{colorDots}</div>
+            </div>
+            <div className="flex items-center gap-3 mt-4">
               <button
-                onClick={() => toggleCart(product.id)}
-                className="bg-black text-white px-4 py-2 rounded-sm text-sm ml-auto flex items-center gap-2"
+                onClick={() => toggleCart(product)}
+                className="flex-1 bg-gray-800 hover:bg-black text-white py-2 rounded flex items-center justify-center gap-2 transition-all duration-300"
               >
                 <ShoppingBag size={16} />
                 Add to Cart
+              </button>
+              <button
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded flex items-center justify-center gap-2 transition-all duration-300"
+              >
+                Buy Now
               </button>
             </div>
           </div>
@@ -200,11 +189,15 @@ const WomensCollection = () => {
         transition={{ duration: 0.3 }}
         className="border rounded-sm overflow-hidden group relative"
       >
-        <div className="relative hover:z-10 hover:scale-105 hover:shadow-lg transition-transform duration-300">
-          <img src={product.image} alt={product.title} className="w-full object-cover aspect-[3/4]" />
+        <div className="relative">
+          <img 
+            src={product.image} 
+            alt={product.title} 
+            className="w-full object-cover aspect-[3/4] transition-transform duration-300 group-hover:scale-105" 
+          />
           <button
             onClick={() => toggleWishlist(product.id)}
-            className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md"
+            className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md z-10"
           >
             <Heart
               size={16}
@@ -212,15 +205,6 @@ const WomensCollection = () => {
               stroke={wishlist.includes(product.id) ? "#f43f5e" : "currentColor"}
             />
           </button>
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-            <button
-              onClick={() => toggleCart(product.id)}
-              className="w-full bg-white text-black py-2 rounded-sm font-medium text-sm flex items-center justify-center gap-2"
-            >
-              <ShoppingBag size={16} />
-              Add to Cart
-            </button>
-          </div>
         </div>
         <div className="p-3">
           <p className="text-xs text-gray-500 mb-1">{product.category}</p>
@@ -235,19 +219,34 @@ const WomensCollection = () => {
             )}
           </div>
           <div className="flex mt-2 gap-1">{colorDots}</div>
+          <div className="flex items-center gap-2 mt-3">
+            <button
+              onClick={() => toggleCart(product)}
+              className="flex-1 bg-gray-800 hover:bg-black text-white py-1.5 text-xs rounded flex items-center justify-center gap-1 transition-all duration-300"
+            >
+              <ShoppingBag size={12} />
+              Add to Cart
+            </button>
+            <button
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-1.5 text-xs rounded flex items-center justify-center transition-all duration-300"
+            >
+              Buy Now
+            </button>
+          </div>
         </div>
       </motion.div>
     );
-  };
+  }, [wishlist, toggleWishlist, toggleCart]);
 
   return (
-    <div className={`relative bg-gray-50 min-h-screen ${blur ? 'blur-sm' : ''}`}>
+    <div className="bg-gray-50 min-h-screen">
       <Helmet>
-          <title>Kasavu Aalayam | Womens collectionsr</title>
-          <meta name="description" content="Discover the finest traditional Indian wear at Kasavu Aalayam. Explore premium silk sarees, ethnic wear collections for men and women, and exquisite bridal wear." />
-          <meta name="keywords" content="kasavu, sarees, traditional wear, indian fashion, silk sarees, ethnic wear" />
-          <link rel="canonical" href="https://kasavuaalayam.com" />
-        </Helmet>
+        <title>Kasavu Aalayam | Womens Collections</title>
+        <meta name="description" content="Discover the finest traditional Indian wear at Kasavu Aalayam. Explore premium silk sarees, ethnic wear collections for men and women, and exquisite bridal wear." />
+        <meta name="keywords" content="kasavu, sarees, traditional wear, indian fashion, silk sarees, ethnic wear" />
+        <link rel="canonical" href="https://kasavuaalayam.com" />
+      </Helmet>
+      
       {isScrolled ? <ScrolledNavbar /> : <Navbar />}
 
       {/* Mobile Filter Button */}
@@ -322,16 +321,17 @@ const WomensCollection = () => {
           <div className="text-sm text-gray-600">
             <Link to="/" className="text-blue-600 hover:underline">Home</Link> / <span>Women's Collection</span>
           </div>
+          
           <div className="top-4 right-4 z-90 flex items-center">
-        <Link to="/cart">
-          <button className="relative">
-            <ShoppingBag size={24} />
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-              {cartCount}  {/* Display cart item count */}
-            </span>
-          </button>
-        </Link>
-      </div>
+            <Link to="/cart">
+              <button className="relative">
+                <ShoppingBag size={24} />
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {cartCount}
+                </span>
+              </button>
+            </Link>
+          </div>
 
           {/* Search */}
           <div className="relative flex-grow md:max-w-md">
