@@ -17,6 +17,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
   import border2 from '../assets/elements/border1.png'
 import Cart from './Customer/Cart';
 import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
+
   
 
   const heroImages = [
@@ -351,6 +352,7 @@ import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
         <SideContactNavbar />
         <EnhancedFeedbackSystem />
         <Footer />
+        
       </div>
     );
   };

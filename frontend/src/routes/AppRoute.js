@@ -26,6 +26,7 @@ import OrdersPage from "../pages/Admin/Order";
 import NotificationsPage from "../pages/Admin/Notificaton";
 import InventoryManagement from "../pages/Admin/Inventory";
 import Register from "../pages/Register";
+import KidsCollection from '../components/KidsCollection'; // Ensure this path is correct
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -58,7 +59,7 @@ const AppRoutes = () => {
           <Route path="/shopping-cart" element={<Cart />} />
           <Route path="/product" element={<SingleProductPage />} />
           <Route path="*" element={<AppNotFound />} />
-
+          <Route path="/kids-collection" component={KidsCollection} />
           <Route path="/my-account" element={<CustomerLayout />}>
             <Route index element={<Navigate to="profile" replace />} />
             <Route path="profile" element={<Profile />} />

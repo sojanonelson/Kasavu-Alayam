@@ -4,7 +4,7 @@ import "./App.css";
 import AppRoutes from "./routes/AppRoute";
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-
+import kidsCollection from "./Data/kids-collection";
 import Navbar from "./components/Navbar";
 
 
