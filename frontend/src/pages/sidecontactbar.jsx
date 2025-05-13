@@ -439,6 +439,8 @@ export default function Demo() {
       
       {/* The Side Contact Navbar component */}
       <SideContactNavbar />
-    </div>
+    </div>  
   );
 }
+
+
