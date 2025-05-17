@@ -27,7 +27,7 @@ const Navbar = () => {
             <Link to="/mens">Mens Collection</Link>
             <Link to="/womens">Womens Collection</Link>
             <Link to="/sarees">Sarees</Link>
-            <Link to="/dresses">Kids</Link>
+            <Link to="/kids">Kids</Link>
           </div>
 
           {/* Logo */}

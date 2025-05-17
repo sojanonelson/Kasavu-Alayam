@@ -16,6 +16,17 @@ import { Helmet } from 'react-helmet';
 // Rest of the component code remains the same, but update the Helmet title and meta tags as needed
 const KidsCollection = () => {
   // Component logic remains the same
+  <>
+  <div className='bg-red-600 h-32 p-32'>
+    <Helmet>
+      <title>Kids Collection</title>
+      <meta name="description" content="Explore our Kids Collection" />
+    </Helmet>
+    <Navbar />
+    <ScrolledNavbar />
+  </div>
+
+  </>
 };
 
 export default KidsCollection;

@@ -50,7 +50,7 @@ const ScrollNavbar = () => {
               <NavLink to="/mens">Mens Collection</NavLink>
               <NavLink to="/womens">Womens Collection</NavLink>
               <NavLink to="/sarees">Sarees</NavLink>
-              <NavLink to="/dresses">Dresses</NavLink>
+              <NavLink to="/kids">Dresses</NavLink>
             </div>
 
             {/* Center - Logo */}
