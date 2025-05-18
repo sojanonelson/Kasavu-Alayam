@@ -81,7 +81,7 @@ const Navbar = () => {
       </div>
 
       {/* Main Navbar */}
-      <nav className={`bg-white/70 backdrop-blur-md items-center px-4 md:px-10 py-8 transition-all duration-300 ${
+      <nav className={`bg-white backdrop-blur-md items-center   lg:h-auto justify-center px-4 md:px-10 py-8 transition-all duration-300 ${
         scrolled ? 'shadow-md py-4' : 'py-8'
       }`}>
         <div className="max-w-10xl mx-auto flex items-center justify-between">
@@ -101,6 +101,10 @@ const Navbar = () => {
             </Link>
             <Link to="/sarees" className="nav-link relative hover:text-red-600 transition-colors duration-300">
               Sarees
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+             <Link to="/dress" className="nav-link relative hover:text-red-600 transition-colors duration-300">
+              Dresses
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
             <Link to="/kids" className="nav-link relative hover:text-red-600 transition-colors duration-300">

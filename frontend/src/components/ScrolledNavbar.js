@@ -38,11 +38,11 @@ const ScrollNavbar = () => {
       >
         {/* Top Banner */}
         <div className="bg-gray-900 text-white text-sm py-2 text-center">
-          Order Available Worldwide | Free Shipping on Orders Above ₹2999
+          Order Available Worldwideeee | Free Shipping on Orders Above ₹2999
         </div>
 
         {/* Main Navbar */}
-        <nav className="lg:bg-white bg-gray-600 lg:backdrop-blur-sm items-center shadow-md px-4 md:px-10 py-8">
+        <nav className="lg:bg-white bg-gray-100 lg:backdrop-blur-sm items-center shadow-md px-4 md:px-10 py-8">
           <div className="max-w-10xl mx-auto flex items-center justify-between">
             {/* Left - Navigation Links */}
             <div className="hidden md:flex gap-8 text-black text-md font-medium poppins-regular flex-1">
@@ -72,9 +72,9 @@ const ScrollNavbar = () => {
             {/* Mobile Toggle */}
             <div className="md:hidden">
               {isOpen ? (
-                <X size={28} onClick={() => setIsOpen(false)} className="text-white" />
+                <X size={28} onClick={() => setIsOpen(false)} className="text-black" />
               ) : (
-                <Menu size={28} onClick={() => setIsOpen(true)} className="text-white" />
+                <Menu size={28} onClick={() => setIsOpen(true)} className="text-black" />
               )}
             </div>
           </div>
