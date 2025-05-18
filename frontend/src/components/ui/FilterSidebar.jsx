@@ -21,8 +21,7 @@ const FilterSidebar = ({ filters, handleFilterChange, categories, colors, patter
   };
 
   const handleClearFilters = () => {
-    // You'll need to implement this in the parent component
-    // and pass it as a prop
+   
     if (typeof handleFilterChange === 'function') {
       const event = {
         target: { name: 'clear', value: '' }

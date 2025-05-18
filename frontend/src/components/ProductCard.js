@@ -1,15 +1,13 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../../redux/features/cart/cartSlice';
+import { Heart, ShoppingBag } from 'lucide-react';
+import { motion } from 'framer-motion';
+import React from 'react'
 
-const ProductCard = ({ product, isListView, wishlist, toggleWishlist }) => {
-  const dispatch = useDispatch();
-
+const ProductCard = ({ product, isListView, wishlist, toggleWishlist, toggleCart }) => {
   const discountPercent = product.originalPrice
     ? Math.round((1 - product.price / product.originalPrice) * 100)
     : null;
 
-  const colorDots = ['White', 'Black', 'Blue', 'Red']
+  const colorDots = ['White', 'Black', 'Pink', 'Red']
     .slice(0, product.id % 4 + 1)
     .map(color => (
       <span
@@ -28,10 +26,10 @@ const ProductCard = ({ product, isListView, wishlist, toggleWishlist }) => {
         className="bg-white rounded-lg shadow-sm overflow-hidden flex"
       >
         <div className="relative w-1/3 group">
-          <img
-            src={product.image}
-            alt={product.title}
-            className="w-full h-full object-cover transition-all duration-300"
+          <img 
+            src={product.image} 
+            alt={product.title} 
+            className="w-full h-full object-cover transition-all duration-300" 
           />
           <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <button
@@ -72,10 +70,11 @@ const ProductCard = ({ product, isListView, wishlist, toggleWishlist }) => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => dispatch(addToCart(product))}
+              onClick={() => toggleCart(product)}
               className="flex-1 bg-gray-800 hover:bg-black text-white py-2 rounded-md flex items-center justify-center gap-2 transition-all duration-300"
               aria-label="Add to cart"
             >
+              <ShoppingBag size={16} />
               Add to Cart
             </motion.button>
             <motion.button
@@ -135,10 +134,11 @@ const ProductCard = ({ product, isListView, wishlist, toggleWishlist }) => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => dispatch(addToCart(product))}
+            onClick={() => toggleCart(product)}
             className="flex-1 bg-gray-800 hover:bg-black text-white py-1.5 text-xs rounded-md flex items-center justify-center gap-1 transition-all duration-300"
             aria-label="Add to cart"
           >
+            <ShoppingBag size={12} />
             Add to Cart
           </motion.button>
           <motion.button
@@ -155,4 +155,4 @@ const ProductCard = ({ product, isListView, wishlist, toggleWishlist }) => {
   );
 };
 
-export default ProductCard;
+export default ProductCard

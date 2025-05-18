@@ -87,13 +87,6 @@ const Navbar = () => {
         <div className="max-w-10xl mx-auto flex items-center justify-between">
           {/* Left Links */}
           <div className="hidden md:flex gap-8 text-gray-800 font-medium flex-1">
-<<<<<<< HEAD
-            <Link to="/">Home</Link>
-            <Link to="/mens">Mens Collection</Link>
-            <Link to="/womens">Womens Collection</Link>
-            <Link to="/sarees">Sarees</Link>
-            <Link to="/kids">Kids</Link>
-=======
             <Link to="/" className="nav-link relative hover:text-red-600 transition-colors duration-300">
               Home
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
@@ -110,11 +103,10 @@ const Navbar = () => {
               Sarees
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link to="/dresses" className="nav-link relative hover:text-red-600 transition-colors duration-300">
+            <Link to="/kids" className="nav-link relative hover:text-red-600 transition-colors duration-300">
               Kids
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
->>>>>>> origin/main
           </div>
 
           {/* Logo */}
@@ -249,12 +241,13 @@ const Navbar = () => {
 
       {/* Cart Drawer */}
       <div 
-        className={`fixed right-0 top-0 h-full w-80 bg-white shadow-lg z-50 p-4 transition-transform duration-300 ease-in-out ${
+        className={`fixed right-0 top-0 h-full w-80 bg-white shadow-lg z-50 p-4 h-screen transition-transform duration-300 ease-in-out ${
           cartOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Your Cart</h3>
+       
           <button 
             onClick={() => setCartOpen(false)}
             className="transition-transform duration-300 hover:rotate-90"
