@@ -19,7 +19,7 @@ const ScrollNavbar = () => {
 
   const MobileNavLink = ({ to, children, onClick }) => (
     <Link 
-      t    o={to} 
+      to={to} 
       onClick={onClick}
       className="relative group text-gray-700 py-1 transition-colors duration-300"
     >
@@ -45,26 +45,25 @@ const ScrollNavbar = () => {
         <nav className="lg:bg-white bg-gray-100 lg:backdrop-blur-sm items-center shadow-md px-4 md:px-10 py-8">
           <div className="max-w-10xl mx-auto flex items-center justify-between">
             {/* Left - Navigation Links */}
-            <div className="hidden md:flex gap-8 text-black text-md font-medium poppins-regular flex-1">
+            <div className="hidden md:flex gap-8 text-black text-md font-medium poppins-regular" style={{maxWidth: 'calc(50% - 100px)'}}>
               <NavLink to="/">Home</NavLink>
               <NavLink to="/mens">Mens Collection</NavLink>
               <NavLink to="/womens">Womens Collection</NavLink>
               <NavLink to="/sarees">Sarees</NavLink>
               <NavLink to="/dress">Dresses</NavLink>
-                <NavLink to="/kids">Kids</NavLink>
-
+              <NavLink to="/kids">Kids</NavLink>
             </div>
 
             {/* Center - Logo */}
             <div className="absolute left-1/2 transform -translate-x-1/2">
               <Link to="/">
-                <img src={Logo} className="h-16 mb-2" />
+                <img src={Logo} className="h-16 mb-2" alt="Logo" />
               </Link>
             </div>
 
             {/* Right - Account */}
-            <div className="hidden md:flex items-center justify-end flex-1">
-              <Link to="/account" className="text-gray-100 hover:text-white bg-gray-500 rounded-full p-1   transition-colors duration-300">
+            <div className="hidden md:flex items-center justify-end" style={{maxWidth: 'calc(50% - 100px)'}}>
+              <Link to="/account" className="text-gray-100 hover:text-white bg-gray-500 rounded-full p-1 transition-colors duration-300">
                 <User size={24} className='' />
               </Link>
             </div>
@@ -89,7 +88,7 @@ const ScrollNavbar = () => {
           <MobileNavLink to="/womens" onClick={() => setIsOpen(false)}>Womens Collection</MobileNavLink>
           <MobileNavLink to="/sarees" onClick={() => setIsOpen(false)}>Sarees</MobileNavLink>
           <MobileNavLink to="/dresses" onClick={() => setIsOpen(false)}>Dresses</MobileNavLink>
-          <MobileNavLink to="/accessories" onClick={() => setIsOpen(false)}>Accessories</MobileNavLink>
+          <MobileNavLink to="/kids" onClick={() => setIsOpen(false)}>Kids</MobileNavLink>
           <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Contact</MobileNavLink>
           <hr />
           <MobileNavLink to="/account" onClick={() => setIsOpen(false)} className="flex items-center gap-2">

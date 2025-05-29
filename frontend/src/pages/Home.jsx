@@ -354,11 +354,11 @@ const HomePage = () => {
           className="max-w-5xl mx-auto text-center"
         >
           <h2 id="about-heading" className="text-3xl poppins-bold mb-6">A Legacy of Tradition</h2>
-          <p className="text-gray-700 lg:text-lg text-sm mb-8 lg:leading-relaxed poppins-regular">
-            At <span className="font-semibold">Kasavu Aalayam</span>, we bring you the finest traditional wear rooted in the rich heritage of Indian craftsmanship.
-            Every thread tells a story of cultural significance, passed down through generations of skilled artisans.
-            From elegant kasavu sarees to premium wedding collections, we invite you to explore timeless fashion redefined for the modern era.
-          </p>
+          <p className="text-gray-700 lg:text-lg text-sm mb-8 lg:leading-relaxed poppins-regular text-justify">
+          At <span className="font-semibold">Kasavu Aalayam</span>, we bring you the finest traditional wear rooted in the rich heritage of Indian craftsmanship.
+          Every thread tells a story of cultural significance, passed down through generations of skilled artisans.
+          From elegant kasavu sarees to premium wedding collections, we invite you to explore timeless fashion redefined for the modern era.
+        </p>
 
           <div className="flex flex-row justify-center items-center pb-10 gap-5">
             {/* First Image */}
