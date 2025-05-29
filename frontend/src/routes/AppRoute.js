@@ -15,18 +15,19 @@ import AppNotFound from "../pages/AppNotFound";
 import SingleProductPage from "../pages/SingleProduct";
 import CollectionsPage from "../components/collections/CollectionsPage";
 import MensCollection from "../components/collections/Mens-collection";
-import Cart from "../pages/Customer/Cart";
+import Cart from "../pages/Admin/Cart";
 import AdminLayout from "../Layouts/AdminLayout";
-
 import Navbar from "../components/Navbar";
 import OverviewPage from "../pages/Admin/Overview";
 import Customers from "../pages/Admin/Customers";
-
 import OrdersPage from "../pages/Admin/Order";
 import NotificationsPage from "../pages/Admin/Notificaton";
 import InventoryManagement from "../pages/Admin/Inventory";
 import Register from "../pages/Register";
-import KidsCollection from '../components/collections/Kids-collection'; // Ensure this path is correct
+import KidsCollection from '../components/collections/Kids-collection'; 
+
+
+
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -53,7 +54,7 @@ const AppRoutes = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/collections/:id" element={<CollectionsPage />} />
           <Route path="/womens" element={<WomensCollection />} />
-             <Route path="/kids" element={<KidsCollection/>} />
+          <Route path="/kids" element={<KidsCollection/>} />
           <Route path="/mens" element={<MensCollection />} />
           <Route path="/components" element={<RegisterForm />} />
           <Route path="/sarees" element={<SareesSection />} />
@@ -62,10 +63,11 @@ const AppRoutes = () => {
           <Route path="*" element={<AppNotFound />} />
           <Route path="/kids-collection" component={KidsCollection} />
           <Route path="/my-account" element={<CustomerLayout />}>
-            <Route index element={<Navigate to="profile" replace />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="orders" element={<Orders />} />
-            <Route path="*" element={<NotFound />} />
+          <Route index element={<Navigate to="profile" replace />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="*" element={<NotFound />} />
+
           </Route>
         </Route>
 
