@@ -12,7 +12,7 @@ import Profile from "../pages/Customer/Profile";
 import Orders from "../pages/Customer/Orders";
 import NotFound from "../pages/NotFound";
 import AppNotFound from "../pages/AppNotFound";
-import SingleProductPage from "../pages/SingleProduct";
+import SingleProductPage from "../pages/BuyNow/SingleProduct";
 import CollectionsPage from "../components/collections/CollectionsPage";
 import MensCollection from "../components/collections/Mens-collection";
 import Cart from "../pages/Admin/Cart";
@@ -25,6 +25,14 @@ import NotificationsPage from "../pages/Admin/Notificaton";
 import InventoryManagement from "../pages/Admin/Inventory";
 import Register from "../pages/Register";
 import KidsCollection from '../components/collections/Kids-collection'; 
+
+// Test
+import CartComponent from '../pages/Admin/Cart';
+
+import MyAccount from "../pages/MyAccount/MyAccount";
+
+
+
 
 
 
@@ -62,11 +70,18 @@ const AppRoutes = () => {
           <Route path="/product" element={<SingleProductPage />} />
           <Route path="*" element={<AppNotFound />} />
           <Route path="/kids-collection" component={KidsCollection} />
+           <Route path="/details/:id" element={<SingleProductPage />} />
           <Route path="/my-account" element={<CustomerLayout />}>
           <Route index element={<Navigate to="profile" replace />} />
           <Route path="profile" element={<Profile />} />
           <Route path="orders" element={<Orders />} />
           <Route path="*" element={<NotFound />} />
+
+         
+
+            {/* <Route path="cart" element={<CartComponent />} />  */}
+   {/* <Route path="/buy-now" element={<BuyNow />} /> */}
+   {/* <Route path="/my-account" element={<MyAccount />}></Route> */}
 
           </Route>
         </Route>

@@ -6,6 +6,7 @@ import collectionsData from '../../Data/collections-data';
 const CollectionsPage = () => {
   const { id } = useParams();
   const product = collectionsData.find(item => item.id === parseInt(id));
+  console.log("Collection Page")
 
   if (!product) {
     return <div>Product not found</div>;

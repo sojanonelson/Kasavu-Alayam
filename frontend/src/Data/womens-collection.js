@@ -8,7 +8,7 @@ const products = [
     color: "Pink",
     colors: ["Pink", "White", "Red"],
     pattern: "Floral",
-    price: 45,
+    price: 4588,
     image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400",
     sizes: ["S", "M", "L", "XL"],
     material: "Premium Cotton",
