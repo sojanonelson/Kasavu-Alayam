@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, User, ShoppingCart } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import { selectCartTotalQuantity } from '../redux/features/cart/cartSelector';
+import { selectCartTotalQuantity } from '../pages/Cart/cartSelector';
 import Logo from '../assets/black.png';
 
 const Navbar = () => {
@@ -103,10 +103,7 @@ const Navbar = () => {
               Sarees
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
-             <Link to="/dress" className="nav-link relative hover:text-red-600 transition-colors duration-300">
-              Dresses
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
+             
             <Link to="/kids" className="nav-link relative hover:text-red-600 transition-colors duration-300">
               Kids
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>

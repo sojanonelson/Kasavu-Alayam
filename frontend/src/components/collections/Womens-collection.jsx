@@ -15,7 +15,7 @@ import Navbar from "../../components/Navbar";
 import ScrolledNavbar from "../../components/ScrolledNavbar";
 import products from "../../Data/womens-collection";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart } from "../../redux/features/cart/cartSlice";
+import { addToCart, removeFromCart } from "../../pages/Cart/cartSlice";
 import { Helmet } from "react-helmet";
 import ProductCard from "../ProductCard";
 import EmptyResults from "../ui/EmptyResults";
@@ -603,7 +603,7 @@ const WomensCollection = () => {
         </motion.button>
       )}
     </div>
-  );
-};
+  );  
+};  
 
 export default WomensCollection;

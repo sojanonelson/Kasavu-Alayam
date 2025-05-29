@@ -6,7 +6,7 @@ import Navbar from '../components/Navbar';
 import ScrolledNavbar from '../components/ScrolledNavbar';
 import sarees from '../Data/sarees-collection';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, removeFromCart } from '../redux/features/cart/cartSlice';
+import { addToCart, removeFromCart } from './Cart/cartSlice';
 import { Helmet } from 'react-helmet';
 
 // Constants moved to separate object for better organization
