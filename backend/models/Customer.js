@@ -5,8 +5,7 @@ const AddressSchema = new mongoose.Schema({
   place: { type: String, required: true },
   landmark: { type: String },
   address: { type: String, required: true },
-  houseNumber: { type: String },
-  userName: { type: String, required: true },
+  houseName: { type: String },
   phoneNumber: { type: String, required: true },
   city: { type: String, required: true },
   state: { type: String, required: true },
@@ -18,18 +17,14 @@ const AddressSchema = new mongoose.Schema({
 });
 
 const CustomerSchema = new mongoose.Schema({
-  firstname: {
-    type: String,
-    required: true
-  },
-  lastname: {
+  name: {
     type: String,
     required: true
   },
   password: {
     type: String,
     required: true,
-    select: false 
+    select: false // password should not be included in the output
   },
   email: {
     type: String,
@@ -40,12 +35,17 @@ const CustomerSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  gender: {
+    type: String,
+    enum: ['male', 'female'],
+    required: true
+  },
   role: {
     type: String,
     enum: ['customer', 'admin'],
     default: 'customer'
   },
-  addresses: [AddressSchema] 
+  addresses: [AddressSchema]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Customer', CustomerSchema);

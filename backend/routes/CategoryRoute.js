@@ -1,9 +1,20 @@
 const express = require('express');
-const { createCategory, getCategories } = require('../controllers/categoryController');
-const { protect, isAdmin } = require('../middleware/auth');
 const router = express.Router();
+const categoryController = require('../controllers/categoryController');
 
-router.get('/', getCategories);
-router.post('/',  createCategory);
+// Route to create a new category
+router.post('/categories', categoryController.createCategory);
+
+// Route to update a category by ID
+router.put('/categories/:id', categoryController.updateCategory);
+
+// Route to delete a category by ID
+router.delete('/categories/:id', categoryController.deleteCategory);
+
+// Route to get all categories
+router.get('/categories', categoryController.getAllCategories);
+
+// Route to get a category by ID
+router.get('/categories/:id', categoryController.getCategoryById);
 
 module.exports = router;

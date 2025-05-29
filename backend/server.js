@@ -25,9 +25,9 @@ connectDB();
 
 // Routes
 app.use('/api/orders', orderRoutes);
-app.use('/api/products', productRoutes);
+app.use('/api', productRoutes);
 app.use('/api/customer', customerRoutes);
-app.use('/api/categories' ,categoryRoutes)
+app.use('/api/categories', categoryRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

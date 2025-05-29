@@ -47,9 +47,9 @@ exports.getCustomers = async (req, res) => {
 // Create a new customer
 exports.createCustomer = async (req, res) => {
   try {
-    const { firstname, lastname, email, phone, password, addresses } = req.body;
+    const { name ,email,gender, phone, password, addresses } = req.body;
 
-    if (!firstname || !lastname || !email || !phone || !password) {
+    if (!name  || !gender || !email || !phone || !password) {
       return res.status(400).json({
         success: false,
         message: 'Firstname, lastname, email, phone, and password are required',
@@ -66,12 +66,12 @@ exports.createCustomer = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const customer = await Customer.create({
-      firstname,
-      lastname,
+      name,
+      gender,
       email,
       phone,
       password: hashedPassword,
-      addresses // array of address objects
+      addresses 
     });
 
     res.status(201).json({
@@ -79,8 +79,8 @@ exports.createCustomer = async (req, res) => {
       message: 'Customer account created successfully',
       data: {
         id: customer._id,
-        firstname: customer.firstname,
-        lastname: customer.lastname,
+        name: customer.name,
+        gender: customer.gender,
         email: customer.email,
         phone: customer.phone,
         role: customer.role,
@@ -97,7 +97,7 @@ exports.createCustomer = async (req, res) => {
   }
 };
 
-// Login customer
+
 exports.loginCustomer = async (req, res) => {
   const { email, password } = req.body;
 
