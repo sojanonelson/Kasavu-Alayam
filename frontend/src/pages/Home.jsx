@@ -159,6 +159,178 @@ const FeaturedCard = ({ title, description, link, image }) => {
   );
 };
 
+// Enhanced Scroll to Top Button Component
+const ScrollToTopButton = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      const scrollTop = window.pageYOffset;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      
+      // Show button after scrolling 300px
+      setIsVisible(scrollTop > 300);
+      
+      // Calculate scroll progress
+      const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
+      setScrollProgress(scrollPercent);
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  const circumference = 2 * Math.PI * 20; // radius = 20
+  const strokeDashoffset = circumference - (scrollProgress / 100) * circumference;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{
+        opacity: isVisible ? 1 : 0,
+        scale: isVisible ? 1 : 0,
+        rotate: isVisible ? 0 : 180
+      }}
+      transition={{
+        duration: 0.3,
+        type: "spring",
+        stiffness: 260,
+        damping: 20
+      }}
+      className="fixed bottom-8 right-8 z-50"
+    >
+      <motion.button
+        onClick={scrollToTop}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        whileHover={{
+          scale: 1.1,
+          rotate: -5
+        }}
+        whileTap={{
+          scale: 0.95
+        }}
+        className="relative group"
+        aria-label="Scroll to top"
+      >
+        {/* Outer glow effect */}
+        <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-amber-400 to-amber-600 blur-lg transition-all duration-300 ${isHovered ? 'opacity-75 scale-110' : 'opacity-0'}`} />
+        
+        {/* Main button container */}
+        <div className="relative w-14 h-14 bg-gradient-to-br from-amber-500 to-amber-700 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center border-2 border-white/20">
+          
+          {/* Progress circle */}
+          <svg
+            className="absolute inset-0 w-full h-full -rotate-90"
+            viewBox="0 0 44 44"
+          >
+            {/* Background circle */}
+            <circle
+              cx="22"
+              cy="22"
+              r="20"
+              stroke="rgba(255,255,255,0.2)"
+              strokeWidth="2"
+              fill="none"
+            />
+            {/* Progress circle */}
+            <circle
+              cx="22"
+              cy="22"
+              r="20"
+              stroke="white"
+              strokeWidth="2"
+              fill="none"
+              strokeDasharray={circumference}
+              strokeDashoffset={strokeDashoffset}
+              strokeLinecap="round"
+              className="transition-all duration-200 ease-out"
+            />
+          </svg>
+
+          {/* Arrow icon with animation */}
+          <motion.div
+            animate={{
+              y: isHovered ? -2 : 0
+            }}
+            transition={{ duration: 0.2 }}
+            className="relative z-10"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          </motion.div>
+
+          {/* Floating particles effect */}
+          {isHovered && (
+            <>
+              {[...Array(6)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{
+                    opacity: [0, 1, 0],
+                    scale: [0, 1, 0],
+                    y: [0, -20, -30],
+                    x: [0, Math.random() * 20 - 10, Math.random() * 30 - 15]
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    delay: i * 0.1,
+                    repeat: Infinity,
+                    repeatDelay: 1
+                  }}
+                  className="absolute w-1 h-1 bg-white rounded-full"
+                  style={{
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                />
+              ))}
+            </>
+          )}
+        </div>
+
+        {/* Tooltip */}
+        <motion.div
+          initial={{ opacity: 0, x: 10 }}
+          animate={{
+            opacity: isHovered ? 1 : 0,
+            x: isHovered ? 0 : 10
+          }}
+          transition={{ duration: 0.2 }}
+          className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg whitespace-nowrap"
+        >
+          Scroll to top
+          <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-900" />
+        </motion.div>
+      </motion.button>
+    </motion.div>
+  );
+};
+
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -459,6 +631,9 @@ const HomePage = () => {
           </div>
         </motion.div>
       </section>
+
+      {/* Scroll to Top Button */}
+      <ScrollToTopButton />
 
       <SideContactNavbar />
       <EnhancedFeedbackSystem />
