@@ -34,7 +34,11 @@ import product1Image from '../assets/k-1.jpg';
 import product2Image from '../assets/k-4.jpg';
 import product3Image from '../assets/k-1.jpg';
 
-const heroImages = [
+const heroImages = [ {
+    url: "https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Premium Silk Collection",
+    subtitle: "Elegance woven into every thread"
+  },
   {
     url: "https://kalyansilks.com/_next/image?url=https%3A%2F%2Fapi.kalyansilks.com%2Fmedia%2Fvegam%2Fhomepage%2Fimages%2F1920_x1040_-_Main_Banner_-_03_1.jpg&w=1920&q=75",
     title: "Premium Silk Collection",
