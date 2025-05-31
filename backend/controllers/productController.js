@@ -4,7 +4,11 @@ const SubCategory = require('../models/Subcategory');
 
 const createProduct = async (req, res) => {
   try {
-    const { title, description, stockQuantity, color, productDetails,subcategory, category, review, imageUrls } = req.body;
+    const { title, description, stockQuantity, color, productDetails,subcategory, category, review} = req.body;
+    const imageData = req.files.map(file => ({
+    url: file.path,
+    public_id: file.filename,
+  }));
 
     // Check if the category exists
     const categoryExists = await Category.findById(category);
@@ -26,7 +30,7 @@ const createProduct = async (req, res) => {
       category,
       subcategory,
       review,
-      imageUrls
+      images: imageData,
     });
 
     await newProduct.save();

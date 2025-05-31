@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');  // Import the controller functions
+const parser = require('../config/multer');
 
 // Route to create a new product
-router.post('/', productController.createProduct);
+// router.post('/', productController.createProduct);
+router.post('/', parser.array('images', 4), productController.createProduct);
 
 // Route to update an existing product by ID
 router.put('/:id', productController.updateProduct);

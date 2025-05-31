@@ -26,8 +26,12 @@ const productSchema = new mongoose.Schema({
   },
   review: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
   
-  // Array of image URLs for product images
-  imageUrls: [{ type: String }]
+    images: [
+    {
+      url: String,
+      public_id: String, // needed for deletion
+    }
+  ],
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);
