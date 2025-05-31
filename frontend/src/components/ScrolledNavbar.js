@@ -50,7 +50,6 @@ const ScrollNavbar = () => {
               <NavLink to="/mens">Mens Collection</NavLink>
               <NavLink to="/womens">Womens Collection</NavLink>
               <NavLink to="/sarees">Sarees</NavLink>
-              <NavLink to="/dress">Dresses</NavLink>
               <NavLink to="/kids">Kids</NavLink>
             </div>
 
