@@ -14,7 +14,16 @@ const productSchema = new mongoose.Schema({
     netQuantity: { type: String }
   },
 
-  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
+    category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true,
+  },
+  subcategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Subcategory',
+    required: true,
+  },
   review: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
   
   // Array of image URLs for product images

@@ -374,7 +374,7 @@ const MensCollection = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       <Helmet>
-        <title>Kasavu Aalayam | Women's Collection</title>
+        <title>Kasavu Aalayam | Men's Collection</title>
         <meta
           name="description"
           content="Discover the finest traditional Indian wear at Kasavu Aalayam. Explore premium silk sarees, ethnic wear collections for women, and exquisite bridal wear."

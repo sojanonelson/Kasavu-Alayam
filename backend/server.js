@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const orderRoutes = require('./routes/OrderRoute');
 const productRoutes = require('./routes/ProductRoute');
 const customerRoutes = require('./routes/CustomerRoute');
+const subcategoryRoutes = require('./routes/subcategoryRoutes');
 const categoryRoutes =require('./routes/CategoryRoute')
 const connectDB = require('./config/DB');
 
@@ -25,9 +26,12 @@ connectDB();
 
 // Routes
 app.use('/api/orders', orderRoutes);
-app.use('/api', productRoutes);
+app.use('/api/products', productRoutes);
 app.use('/api/customer', customerRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/subcategories', subcategoryRoutes);
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
