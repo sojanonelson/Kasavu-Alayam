@@ -1,25 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const productController = require('../controllers/productController');  // Import the controller functions
-const parser = require('../config/multer');
+const productController = require('../controllers/productController');
+const upload = require('../middleware/upload');
 
-// Route to create a new product
-// router.post('/', productController.createProduct);
-router.post('/', parser.array('images', 4), productController.createProduct);
+// Create Product
+router.post('/', upload.array('images', 4), productController.createProduct);
+router.post('/test', upload.array('images', 4), productController.TestcreateProduct);
 
-// Route to update an existing product by ID
+// ✅ Update Product - now handles new image uploads
 router.put('/:id', productController.updateProduct);
 
-// Route to delete a product by ID
+router.put('/:id/images', upload.array('images',4), productController.updateProductImages);
+
+
+// Delete Product
 router.delete('/:id', productController.deleteProduct);
 
-// Route to get all products
+// Get All Products
 router.get('/', productController.getAllProducts);
 
-// Route to get a product by its ID
-router.get('/:id', productController.getProductById);
-
-// Route to search products by name
+// Search by Name
 router.get('/search', productController.getProductByName);
+
+// Get by ID
+router.get('/:id', productController.getProductById);
 
 module.exports = router;

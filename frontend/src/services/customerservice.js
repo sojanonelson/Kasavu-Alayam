@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/customers';
+
+const API_URL = process.env.REACT_APP_BACKEND_API
 
 const getCustomers = async () => {
   const response = await axios.get(API_URL);
@@ -8,7 +9,7 @@ const getCustomers = async () => {
 };
 
 const createCustomer = async (customerData) => {
-  const response = await axios.post(API_URL, customerData);
+  const response = await axios.post(`${API_URL}/customers`, customerData);
   return response.data;
 };
 

@@ -15,6 +15,12 @@ dotenv.config(); // Only one call is needed
 const app = express();
 const PORT = process.env.PORT || 5000;
 console.log("PORT:", process.env.PORT)
+const fs = require('fs');
+const path = require('path');
+const uploadDir = path.join(__dirname, 'public/uploads/temp');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 // Middleware
 app.use(cors());
@@ -24,12 +30,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Connect to DB
 connectDB();
 
+
 // Routes
 app.use('/api/orders', orderRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/customer', customerRoutes);
 app.use('/api/categories', categoryRoutes);
-app.use('/api/categories', categoryRoutes);
+
 app.use('/api/subcategories', subcategoryRoutes);
 
 

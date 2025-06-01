@@ -30,6 +30,11 @@ import KidsCollection from '../components/collections/Kids-collection';
 import CartComponent from '../pages/Admin/Cart';
 
 import MyAccount from "../pages/MyAccount/MyAccount";
+import ManageCategory from "../pages/Admin/ManageCategory";
+
+import CreateProduct from "../pages/Admin/Products/CreateProduct";
+import ProductOverview from "../pages/Admin/ProductOverview";
+import UpdateProduct from "../pages/Admin/Products/UpdateProduct";
 
 
 
@@ -96,6 +101,10 @@ const AppRoutes = () => {
           <Route path="orders" element={<OrdersPage />} />
           <Route path="inventory" element={<InventoryManagement />} />
           <Route path="notifications" element={<NotificationsPage/>} />
+           <Route path="category" element={<ManageCategory/>} />
+           <Route path="products/create" element={<CreateProduct/>}/>
+            <Route path="products/update/:id" element={<UpdateProduct/>}/>
+           <Route path="products" element={<ProductOverview/>}/>
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

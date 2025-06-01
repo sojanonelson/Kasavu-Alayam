@@ -84,7 +84,7 @@ const AdminLayout = () => {
         </header>
       )}
 
-      <div className="flex flex-1 mx-auto w-full px-4 lg:px-0 gap-2">
+      <div className="flex flex-1 mx-auto w-full px-4 lg:px-0 gap-0">
         {/* Sidebar */}
         <aside 
           className={`
@@ -185,10 +185,24 @@ const AdminLayout = () => {
                 <Settings size={18} className="flex-shrink-0" />
                 <span className="text-sm">Inventory</span>
               </NavLink>
+               <NavLink 
+                to="category" 
+                className={({ isActive }) => 
+                  `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
+                    isActive 
+                      ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
+                      : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
+                  }`
+                }
+                onClick={() => isMobile && setSidebarOpen(false)}
+              >
+                <Settings size={18} className="flex-shrink-0" />
+                <span className="text-sm">Category</span>
+              </NavLink>
 
               {/* Reports */}
               <NavLink 
-                to="reports" 
+                to="products" 
                 className={({ isActive }) => 
                   `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
                     isActive 
@@ -199,7 +213,7 @@ const AdminLayout = () => {
                 onClick={() => isMobile && setSidebarOpen(false)}
               >
                 <FileText size={18} className="flex-shrink-0" />
-                <span className="text-sm">Reports</span>
+                <span className="text-sm">Products</span>
               </NavLink>
 
               {/* Notifications */}
