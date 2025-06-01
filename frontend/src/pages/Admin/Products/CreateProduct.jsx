@@ -229,7 +229,7 @@ const CreateProduct = () => {
                 </div>
               </div>
                <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Color*</label>
+                <label className="block text-sm font-medium text-gray-700">SKU*</label>
                 <div className="relative">
                   <Palette className="absolute left-3 top-2.5 text-gray-400" size={18} />
                   <input
@@ -238,7 +238,7 @@ const CreateProduct = () => {
                     placeholder="Stock keeping unit.."
                     value={form.sku}
                     onChange={handleChange}
-                    required
+                    
                     className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
