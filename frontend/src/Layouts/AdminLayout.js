@@ -1,5 +1,12 @@
 import { Outlet, NavLink } from 'react-router-dom';
-import { User, LayoutDashboard, Settings, Users, ShoppingBag, FileText, HelpCircle, Bell, LogOut, ChevronDown, Search, Menu } from 'lucide-react';
+import {  LayoutDashboard,
+  Users,
+
+  Boxes,
+  Tags,
+  Package,
+  PenTool,
+  LayoutGrid,User, Settings,ShoppingBag, FileText, HelpCircle, Bell, LogOut, ChevronDown, Search, Menu } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import AdminNavbar from '../components/AdminNavbar';
@@ -182,7 +189,7 @@ const AdminLayout = () => {
                 }
                 onClick={() => isMobile && setSidebarOpen(false)}
               >
-                <Settings size={18} className="flex-shrink-0" />
+                <Boxes  size={18} className="flex-shrink-0" />
                 <span className="text-sm">Inventory</span>
               </NavLink>
                <NavLink 
@@ -196,7 +203,7 @@ const AdminLayout = () => {
                 }
                 onClick={() => isMobile && setSidebarOpen(false)}
               >
-                <Settings size={18} className="flex-shrink-0" />
+                <Tags  size={18} className="flex-shrink-0" />
                 <span className="text-sm">Category</span>
               </NavLink>
 
@@ -212,10 +219,11 @@ const AdminLayout = () => {
                 }
                 onClick={() => isMobile && setSidebarOpen(false)}
               >
-                <FileText size={18} className="flex-shrink-0" />
+                <Package  size={18} className="flex-shrink-0" />
                 <span className="text-sm">Products</span>
               </NavLink>
-
+              
+             
               {/* Notifications */}
               <NavLink 
                 to="notifications" 
@@ -250,9 +258,9 @@ const AdminLayout = () => {
                 <span className="text-sm">Settings</span>
               </NavLink>
               
-              {/* Support */}
+             
               <NavLink 
-                to="support" 
+                to="homepage-editor" 
                 className={({ isActive }) => 
                   `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
                     isActive 
@@ -262,8 +270,9 @@ const AdminLayout = () => {
                 }
                 onClick={() => isMobile && setSidebarOpen(false)}
               >
-                <HelpCircle size={18} className="flex-shrink-0" />
-                <span className="text-sm">Support</span>
+                <LayoutGrid size={18} className="flex-shrink-0" />
+                <span className="text-sm"> Homepage Editor
+</span>
               </NavLink>
             </nav>
 

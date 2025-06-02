@@ -35,6 +35,8 @@ import ManageCategory from "../pages/Admin/ManageCategory";
 import CreateProduct from "../pages/Admin/Products/CreateProduct";
 import ProductOverview from "../pages/Admin/ProductOverview";
 import UpdateProduct from "../pages/Admin/Products/UpdateProduct";
+import Settings from "../pages/Admin/Settings";
+import HomepageEditor from "../pages/Admin/HomepageEditor";
 
 
 
@@ -99,6 +101,8 @@ const AppRoutes = () => {
           <Route path="overview" element={<OverviewPage/>}/>
           <Route path="users" element={<Customers />} />
           <Route path="orders" element={<OrdersPage />} />
+           <Route path="settings" element={<Settings />} />
+            <Route path="homepage-editor" element={<HomepageEditor />} />
           <Route path="inventory" element={<InventoryManagement />} />
           <Route path="notifications" element={<NotificationsPage/>} />
            <Route path="category" element={<ManageCategory/>} />

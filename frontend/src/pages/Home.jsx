@@ -460,13 +460,11 @@ const HomePage = () => {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: currentSlide === index ? 1 : 0, y: currentSlide === index ? 0 : 30 }}
                     transition={{ duration: 0.8, delay: 0.3 }}
-                    className="max-w-4xl"
+                    className="max-w-4xl "
                   >
                     <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">{img.title}</h1>
                     <p className="text-xl md:text-2xl text-white mb-8 poppins-regular">{img.subtitle}</p>
-                    <button className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-lg font-medium transition-all transform hover:scale-105">
-                      Explore Collection
-                    </button>
+                 
                   </motion.div>
                 </div>
               </div>
@@ -477,6 +475,10 @@ const HomePage = () => {
         {/* Custom Pagination Container */}
         <div className="custom-pagination !bottom-12" />
       </section>
+
+       <div className='flex justify-center items-center pt-10'>
+        <img draggable="false" src={border1} className='h-16' alt='border'></img>
+      </div>
 
       {/* Categories Section */}
       <section
@@ -513,9 +515,9 @@ const HomePage = () => {
         </motion.div>
       </section>
 
-      <div className='flex justify-center items-center'>
-        <img draggable="false" src={border1} className='h-16' alt='border'></img>
-      </div>
+        <SideContactNavbar />
+
+     
 
       {/* About / Brand Statement */}
       <section
@@ -571,7 +573,7 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className='flex justify-center select-none my-16 items-center'>
+          <div className='flex justify-center select-none my-16 pt-10 items-center'>
             <img src={border2} className='h-16' alt='border' draggable="false" />
           </div>
         </motion.div>
@@ -580,7 +582,7 @@ const HomePage = () => {
       {/* Featured Collections - Advanced */}
       <section
         ref={featuredRef}
-        className="py-20 px-6 md:px-20 bg-gradient-to-b from-white to-amber-50"
+        className="py-6 px-6 md:px-20 bg-gradient-to-b from-white to-amber-50"
         aria-labelledby="featured-heading"
       >
         <motion.div
@@ -592,7 +594,7 @@ const HomePage = () => {
           {/* Section header with decorative elements */}
           <div className="text-center mb-16 relative">
             <div className="absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/2 w-20 h-1 bg-amber-300"></div>
-            <h2 id="featured-heading" className="text-4xl font-semibold mb-4 poppins-regular relative inline-block">
+            <h2 id="featured-heading" className="text-4xl font-semibold mb-4 poppins-regular pt-2 relative inline-block">
               Featured Collections
               <div className="absolute -bottom-2 left-0 right-0 h-0.5 bg-amber-400"></div>
             </h2>
@@ -635,7 +637,7 @@ const HomePage = () => {
       {/* Scroll to Top Button */}
       <ScrollToTopButton />
 
-      <SideContactNavbar />
+    
       <EnhancedFeedbackSystem />
       <Footer />
     </div>
@@ -648,9 +650,9 @@ const CategoryCard = ({ title, img, link, description, index }) => {
   let imageRounded = '';
 
   if (index === 0) {
-    imageRounded = 'rounded-tl-2xl rounded-bl-2xl';
+    imageRounded = 'lg:rounded-tl-2xl lg:rounded-bl-2xl';
   } else if (index === 2) {
-    imageRounded = 'rounded-tr-2xl rounded-br-2xl';
+    imageRounded = 'lg:rounded-tr-2xl lg:rounded-br-2xl';
   }
 
   return (
