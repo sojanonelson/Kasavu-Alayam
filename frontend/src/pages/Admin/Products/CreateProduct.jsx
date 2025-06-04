@@ -5,25 +5,25 @@ import {
   Loader2, CheckCircle, AlertCircle, X
 } from "lucide-react";
 import productService from "../../../services/productservice";
-import catergoryService from "../../../services/categoryService";
+import categoryService from "../../../services/categoryService";
 
 const CreateProduct = () => {
   const [form, setForm] = useState({
-    title: "dcd",
-    description: "vdvd",
-    stockQuantity: "300",
-    color: "red",
+    title: "",
+    description: "",
+    stockQuantity: "",
+    color: "",
     category: "",
     subcategory: "",
-      price:"",
-      sku:"",
+    price: "",
+    sku: "",
     specialPrice: "",
     productDetails: {
-      type: "dvd",
-      fabric: "cotton",
-      idealFor: "male",
-      size: "M",
-      netQuantity: "1",
+      type: "",
+      fabric: "",
+      idealFor: "",
+      size: "",
+      netQuantity: "",
     },
   });
 
@@ -36,13 +36,13 @@ const CreateProduct = () => {
   const [imageError, setImageError] = useState("");
 
   useEffect(() => {
-    catergoryService.getAllCategoriesWithSubcategories()
+    categoryService.getAllCategoriesWithSubcategories()
       .then(res => {
         if (Array.isArray(res)) setCategories(res);
         else setCategories([]);
       })
       .catch(err => {
-        console.error(err);
+        console.error("Failed to fetch categories", err);
         setCategories([]);
       });
   }, []);
@@ -70,20 +70,18 @@ const CreateProduct = () => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
 
-      // Check number of images
       if (files.length + images.length > 4) {
-        setImageError("You can upload a maximum of 4 images");
+        setImageError("You can upload a maximum of 4 images.");
         return;
       }
 
-      // Check file sizes (assuming 2MB limit per image)
       const oversizedFiles = files.filter(file => file.size > 2 * 1024 * 1024);
       if (oversizedFiles.length > 0) {
-        setImageError("Some images are too large (max 2MB per image)");
+        setImageError("Some images exceed the 2MB size limit.");
         return;
       }
 
-      setImages(prev => [...prev, ...files].slice(0, 4)); // Ensure max 4 images
+      setImages(prev => [...prev, ...files].slice(0, 4));
     }
   };
 
@@ -94,9 +92,8 @@ const CreateProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate images
     if (images.length === 0) {
-      setImageError("Please upload at least one image");
+      setImageError("Please upload at least one image.");
       return;
     }
 
@@ -108,17 +105,15 @@ const CreateProduct = () => {
 
       Object.keys(form).forEach(key => {
         if (key === "productDetails") {
-          Object.keys(form.productDetails).forEach(subKey => {
-            formData.append(`productDetails[${subKey}]`, form.productDetails[subKey]);
+          Object.entries(form.productDetails).forEach(([subKey, val]) => {
+            formData.append(`productDetails[${subKey}]`, val);
           });
         } else {
           formData.append(key, form[key]);
         }
       });
 
-      images.forEach(img => {
-        formData.append("images", img);
-      });
+      images.forEach(img => formData.append("images", img));
 
       await productService.createProduct(formData);
       setSuccess(true);
@@ -130,10 +125,10 @@ const CreateProduct = () => {
         stockQuantity: "",
         color: "",
         category: "",
-        price:"",
-        sku:"",
-    specialPrice: "",
         subcategory: "",
+        price: "",
+        sku: "",
+        specialPrice: "",
         productDetails: {
           type: "",
           fabric: "",
@@ -145,363 +140,374 @@ const CreateProduct = () => {
       setImages([]);
       setSelectedCategoryId("");
 
-      setTimeout(() => setSuccess(false), 3000);
+      // Remove success after 3.5 seconds
+      setTimeout(() => setSuccess(false), 3500);
     } catch (err) {
-      alert(err.message || "Failed to create product");
+      alert(err.message || "Failed to create product.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full h-screen overflow-y-auto  bg-gray-100">
-      <div className="w-full max-w-full mx-auto bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 flex items-center p-6">
-          <PlusCircle className="mr-2 text-indigo-600" />
-          Add New Product
-        </h1>
+    <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center">
+      <div className="w-full max-w-5xl bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden relative">
+        <header className="bg-red-600 text-white py-6 px-8 flex items-center space-x-3">
+          <PlusCircle size={36} className="text-red-300" />
+          <h1 className="text-3xl font-bold tracking-wider select-none">Add New Product</h1>
+        </header>
 
-        <form onSubmit={handleSubmit} className="space-y-6 p-6">
-          {/* Basic Information Section */}
-          <div className="bg-gray-50 p-5 rounded-lg w-full">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
-              <Tag className="mr-2 text-indigo-500" size={18} />
-              Basic Information
+        <form onSubmit={handleSubmit} className="p-10 space-y-12 relative z-10">
+          {/* Basic Information */}
+          <section className="space-y-5">
+            <h2 className="flex items-center space-x-3 text-black text-2xl font-semibold tracking-tight border-b border-gray-300 pb-2 select-none">
+              <Tag size={28} className="text-gray-700" />
+              <span>Basic Information</span>
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-              <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Product Title*</label>
+            <div className="grid gap-8 md:grid-cols-2">
+              <InputGroup label="Product Title" required>
                 <input
                   type="text"
                   name="title"
-                  placeholder="e.g., Cotton T-Shirt"
                   value={form.title}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={inputClass}
+                  autoComplete="off"
                 />
-              </div>
+              </InputGroup>
 
-              <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Stock Quantity*</label>
-                <div className="relative">
-                  <Package className="absolute left-3 top-2.5 text-gray-400" size={18} />
-                  <input
-                    type="number"
-                    name="stockQuantity"
-                    placeholder="100"
-                    value={form.stockQuantity}
-                    onChange={handleChange}
-                    required
-                    className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-              </div>
-               <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Price*</label>
-                <div className="relative">
-                  <Package className="absolute left-3 top-2.5 text-gray-400" size={18} />
-                  <input
-                    type="number"
-                    name="price"
-                    placeholder="100"
-                    value={form.price}
-                    onChange={handleChange}
-                    required
-                    className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-              </div>
-               <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Special Price*</label>
-                <div className="relative">
-                  <Package className="absolute left-3 top-2.5 text-gray-400" size={18} />
-                  <input
-                    type="number"
-                    name="specialPrice"
-                    placeholder="100"
-                    value={form.specialPrice}
-                    onChange={handleChange}
-                    required
-                    className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-              </div>
-               <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">SKU*</label>
-                <div className="relative">
-                  <Palette className="absolute left-3 top-2.5 text-gray-400" size={18} />
-                  <input
-                    type="text"
-                    name="sku"
-                    placeholder="Stock keeping unit.."
-                    value={form.sku}
-                    onChange={handleChange}
-                    
-                    className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-              </div>
+              <InputGroup label="Stock Quantity" required icon={<Package size={20} className="text-gray-500" />}>
+                <input
+                  type="number"
+                  name="stockQuantity"
+                  value={form.stockQuantity}
+                  onChange={handleChange}
+                  min="0"
+                  required
+                  className={inputClass}
+                  autoComplete="off"
+                />
+              </InputGroup>
 
-              <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Color*</label>
-                <div className="relative">
-                  <Palette className="absolute left-3 top-2.5 text-gray-400" size={18} />
-                  <input
-                    type="text"
-                    name="color"
-                    placeholder="e.g., Navy Blue"
-                    value={form.color}
-                    onChange={handleChange}
-                    required
-                    className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-              </div>
+              <InputGroup label="Price" required icon={<Package size={20} className="text-gray-500" />}>
+                <input
+                  type="number"
+                  name="price"
+                  value={form.price}
+                  onChange={handleChange}
+                  min="0"
+                  required
+                  className={inputClass}
+                  autoComplete="off"
+                />
+              </InputGroup>
 
-              <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Description*</label>
+              <InputGroup label="Special Price" icon={<Package size={20} className="text-gray-500" />}>
+                <input
+                  type="number"
+                  name="specialPrice"
+                  value={form.specialPrice}
+                  onChange={handleChange}
+                  min="0"
+                  className={inputClass}
+                  autoComplete="off"
+                />
+              </InputGroup>
+
+              <InputGroup label="SKU" icon={<Palette size={20} className="text-gray-500" />}>
+                <input
+                  type="text"
+                  name="sku"
+                  value={form.sku}
+                  onChange={handleChange}
+                  className={inputClass}
+                  autoComplete="off"
+                />
+              </InputGroup>
+
+              <InputGroup label="Color" required icon={<Palette size={20} className="text-gray-500" />}>
+                <input
+                  type="text"
+                  name="color"
+                  value={form.color}
+                  onChange={handleChange}
+                  required
+                  className={inputClass}
+                  autoComplete="off"
+                />
+              </InputGroup>
+
+              <div className="md:col-span-2">
+                <label htmlFor="description" className="block text-black font-semibold mb-2 tracking-wide select-none">
+                  Description <span className="text-red-600">*</span>
+                </label>
                 <textarea
+                  id="description"
                   name="description"
-                  placeholder="Product description..."
+                  rows={4}
                   value={form.description}
                   onChange={handleChange}
                   required
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full rounded-md border border-gray-300 focus:outline-none focus:ring-4 focus:ring-green-400 px-4 py-3 resize-none text-black placeholder-gray-400 shadow-sm transition duration-200"
                 />
               </div>
             </div>
-          </div>
+          </section>
 
-          {/* Category Section */}
-          <div className="bg-gray-50 p-5 rounded-lg w-full">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
-              <ListTree className="mr-2 text-indigo-500" size={18} />
-              Category & Subcategory
+          {/* Category & Subcategory */}
+          <section className="space-y-5">
+            <h2 className="flex items-center space-x-3 text-black text-2xl font-semibold tracking-tight border-b border-gray-300 pb-2 select-none">
+              <ListTree size={28} className="text-gray-700" />
+              <span>Category & Subcategory</span>
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-              <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Category*</label>
+            <div className="grid gap-8 md:grid-cols-2">
+              <SelectGroup label="Category" required>
                 <select
                   name="category"
                   value={form.category}
-                  onChange={(e) => {
+                  onChange={e => {
                     handleChange(e);
                     setSelectedCategoryId(e.target.value);
                     setForm(prev => ({ ...prev, subcategory: "" }));
                   }}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={selectClass}
+                  aria-label="Select category"
                 >
-                  <option value="">Select Category</option>
-                  {(Array.isArray(categories) ? categories : []).map(cat => (
-                    <option value={cat._id} key={cat._id}>{cat.name}</option>
+                  <option value="" disabled>Choose a category</option>
+                  {categories.map(cat => (
+                    <option key={cat._id} value={cat._id}>{cat.name}</option>
                   ))}
                 </select>
-              </div>
+              </SelectGroup>
 
-              <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Subcategory*</label>
+              <SelectGroup label="Subcategory" required>
                 <select
                   name="subcategory"
                   value={form.subcategory}
                   onChange={handleChange}
-                  required
                   disabled={!form.category}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100"
+                  required
+                  className={selectClass + (form.category ? "" : " bg-gray-100 cursor-not-allowed")}
+                  aria-label="Select subcategory"
                 >
-                  <option value="">{form.category ? "Select Subcategory" : "Select category first"}</option>
-                  {(Array.isArray(subcategories) ? subcategories : []).map(sub => (
-                    <option value={sub._id} key={sub._id}>{sub.name}</option>
+                  {!form.category && <option value="">Select category first</option>}
+                  {form.category && <option value="">Choose a subcategory</option>}
+                  {subcategories.map(sub => (
+                    <option key={sub._id} value={sub._id}>{sub.name}</option>
                   ))}
                 </select>
-              </div>
+              </SelectGroup>
             </div>
-          </div>
+          </section>
 
-          {/* Product Details Section */}
-          <div className="bg-gray-50 p-5 rounded-lg w-full">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
-              <BookOpen className="mr-2 text-indigo-500" size={18} />
-              Product Details
+          {/* Product Details */}
+          <section className="space-y-5">
+            <h2 className="flex items-center space-x-3 text-black text-2xl font-semibold tracking-tight border-b border-gray-300 pb-2 select-none">
+              <BookOpen size={28} className="text-gray-700" />
+              <span>Product Details</span>
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-              <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Type</label>
-                <div className="relative">
-                  <Scissors className="absolute left-3 top-2.5 text-gray-400" size={18} />
-                  <input
-                    type="text"
-                    name="type"
-                    placeholder="e.g., T-Shirt, Dress"
-                    value={form.productDetails.type}
-                    onChange={handleChange}
-                    className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Fabric</label>
+            <div className="grid gap-8 md:grid-cols-2">
+              <InputGroup label="Type" icon={<Scissors size={20} className="text-gray-500" />}>
+                <input
+                  type="text"
+                  name="type"
+                  value={form.productDetails.type}
+                  onChange={handleChange}
+                  className={inputClass}
+                  autoComplete="off"
+                />
+              </InputGroup>
+              <InputGroup label="Fabric">
                 <input
                   type="text"
                   name="fabric"
-                  placeholder="e.g., 100% Cotton"
                   value={form.productDetails.fabric}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={inputClass}
+                  autoComplete="off"
                 />
-              </div>
-
-              <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Ideal For</label>
-                <div className="relative">
-                  <Users className="absolute left-3 top-2.5 text-gray-400" size={18} />
-                  <input
-                    type="text"
-                    name="idealFor"
-                    placeholder="e.g., Men, Women, Kids"
-                    value={form.productDetails.idealFor}
-                    onChange={handleChange}
-                    className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Size</label>
-                <div className="relative">
-                  <Ruler className="absolute left-3 top-2.5 text-gray-400" size={18} />
-                  <input
-                    type="text"
-                    name="size"
-                    placeholder="e.g., S, M, L, XL"
-                    value={form.productDetails.size}
-                    onChange={handleChange}
-                    className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2 w-full">
-                <label className="block text-sm font-medium text-gray-700">Net Quantity</label>
+              </InputGroup>
+              <InputGroup label="Ideal For" icon={<Users size={20} className="text-gray-500" />}>
+                <input
+                  type="text"
+                  name="idealFor"
+                  value={form.productDetails.idealFor}
+                  onChange={handleChange}
+                  className={inputClass}
+                  autoComplete="off"
+                />
+              </InputGroup>
+              <InputGroup label="Size" icon={<Ruler size={20} className="text-gray-500" />}>
+                <input
+                  type="text"
+                  name="size"
+                  value={form.productDetails.size}
+                  onChange={handleChange}
+                  className={inputClass}
+                  autoComplete="off"
+                />
+              </InputGroup>
+              <InputGroup label="Net Quantity">
                 <input
                   type="text"
                   name="netQuantity"
-                  placeholder="e.g., 1 piece"
                   value={form.productDetails.netQuantity}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={inputClass}
+                  autoComplete="off"
                 />
-              </div>
+              </InputGroup>
             </div>
-          </div>
+          </section>
 
-          {/* Image Upload Section */}
-          <div className="bg-gray-50 p-5 rounded-lg w-full">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
-              <Upload className="mr-2 text-indigo-500" size={18} />
-              Product Images
+          {/* Image Upload */}
+          <section className="space-y-5">
+            <h2 className="flex items-center space-x-3 text-black text-2xl font-semibold tracking-tight border-b border-gray-300 pb-2 select-none">
+              <Upload size={28} className="text-gray-700" />
+              <span>Product Images</span>
             </h2>
 
-            <div className="space-y-4 w-full">
-              <div className="flex items-center justify-center w-full">
-                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Upload className="w-8 h-8 mb-3 text-gray-500" />
-                    <p className="mb-2 text-sm text-gray-500">
-                      <span className="font-semibold">Click to upload</span> or drag and drop
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      PNG, JPG, JPEG (Max 4 images, 2MB each)
-                    </p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      For faster website loading, please optimize your images
-                    </p>
-                  </div>
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                </label>
-              </div>
-
-              {imageError && (
-                <div className="flex items-center p-3 bg-red-50 text-red-600 rounded-md">
-                  <AlertCircle className="mr-2" size={16} />
-                  <span className="text-sm">{imageError}</span>
-                </div>
-              )}
-
-              {images.length > 0 && (
-                <div className="w-full">
-                  <p className="text-sm text-gray-500 mb-2">
-                    {images.length}/4 images selected ({images.reduce((acc, img) => acc + Math.round(img.size / 1024), 0)}KB total)
-                  </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 w-full">
-                    {Array.from(images).map((file, index) => (
-                      <div key={index} className="relative group">
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt={`Preview ${index}`}
-                          className="h-24 w-full object-cover rounded border border-gray-200"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeImage(index)}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
-                        >
-                          <X size={14} />
-                        </button>
-                        <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 text-center">
-                          {Math.round(file.size / 1024)}KB
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+            <div className="border-4 border-dashed border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 transition cursor-pointer p-6 flex flex-col items-center justify-center">
+              <label
+                htmlFor="uploadImages"
+                className="flex flex-col items-center justify-center cursor-pointer"
+                aria-label="Upload product images"
+              >
+                <Upload className="h-12 w-12 text-gray-400 mb-4 animate-pulse" />
+                <p className="text-black font-semibold mb-1 text-lg select-none">Click to upload or drag & drop</p>
+                <p className="text-gray-500 text-sm select-none">PNG, JPG, JPEG (Max 4 images | 2MB each)</p>
+                <input
+                  type="file"
+                  id="uploadImages"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+              </label>
             </div>
-          </div>
+
+            {imageError && (
+              <div className="flex items-center gap-2 bg-red-100 text-red-700 p-3 rounded shadow animate-shake select-none">
+                <AlertCircle size={20} />
+                <span>{imageError}</span>
+              </div>
+            )}
+
+            {images.length > 0 && (
+              <>
+                <p className="text-black font-semibold text-sm select-none">{images.length}/4 images selected ({images.reduce((acc, img) => acc + Math.round(img.size / 1024), 0)} KB total)</p>
+
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+                  {images.map((file, index) => (
+                    <div
+                      key={index}
+                      className="relative rounded-lg overflow-hidden shadow hover:shadow-lg transform hover:scale-[1.05] transition cursor-pointer border border-gray-300"
+                      title={file.name}
+                    >
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`Preview ${index + 1}`}
+                        className="h-28 w-full object-cover select-none"
+                        draggable={false}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 shadow focus:outline-none focus:ring-2 focus:ring-red-500"
+                        aria-label={`Remove image ${file.name}`}
+                      >
+                        <X size={16} />
+                      </button>
+                      <div className="absolute bottom-0 left-0 right-0 bg-gray-900 bg-opacity-80 text-white text-xs py-1 text-center select-none">
+                        {Math.round(file.size / 1024)} KB
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </section>
 
           {/* Submit Button */}
-          <div className="flex justify-end w-full">
+          <div className="flex justify-end">
             <button
               type="submit"
               disabled={loading}
-              className={`flex items-center px-6 py-2.5 rounded-md text-white font-medium ${
-                loading ? "bg-indigo-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
-              } transition-colors`}
+              className={`${loading ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-black"} flex items-center gap-3 rounded-lg px-10 py-3 font-bold text-white shadow-lg transition-colors focus:outline-none focus:ring-4 focus:ring-green-400 select-none`}
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing...
+                  <Loader2 className="animate-spin" size={20} />
+                  <span>Processing...</span>
                 </>
               ) : success ? (
                 <>
-                  <CheckCircle className="mr-2 h-4 w-4" />
-                  Product Added!
+                  <CheckCircle size={20} />
+                  <span>Product Added!</span>
                 </>
               ) : (
                 <>
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  Add Product
+                  <PlusCircle size={20} />
+                  <span>Add Product</span>
                 </>
               )}
             </button>
           </div>
         </form>
+
+        {/* Success Message Overlay */}
+        {success && (
+          <div className="absolute inset-0 bg-green-100 bg-opacity-90 flex items-center justify-center z-20 rounded-xl">
+            <div className="bg-green-600 text-white px-10 py-6 rounded-lg shadow-lg flex items-center space-x-3 select-none">
+              <CheckCircle size={32} />
+              <span className="text-2xl font-semibold">Product Created Successfully!</span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
+// Shared styling for inputs
+const inputClass =
+  "w-full rounded-md border border-gray-300 px-4 py-2 text-black placeholder-transparent focus:outline-none focus:ring-4 focus:ring-green-400 transition duration-200 shadow-sm";
+
+// Shared select styling
+const selectClass =
+  "w-full rounded-md border border-gray-300 px-4 py-2 text-black bg-white cursor-pointer focus:outline-none focus:ring-4 focus:ring-green-400 transition duration-200 shadow-sm";
+
+// Input group wrapper with label
+const InputGroup = ({ label, icon, children, required }) => (
+  <div className="space-y-1">
+    <label
+      className="flex items-center gap-2 text-black font-semibold text-sm uppercase tracking-widest select-none"
+    >
+      {icon && <span>{icon}</span>}
+      <span>{label}</span>
+      {required && <span className="text-red-600">*</span>}
+    </label>
+    {children}
+  </div>
+);
+
+// Select group wrapper with label
+const SelectGroup = ({ label, children, required }) => (
+  <div className="space-y-1">
+    <label
+      className="text-black font-semibold text-sm uppercase tracking-widest select-none"
+    >
+      {label} {required && <span className="text-red-600">*</span>}
+    </label>
+    {children}
+  </div>
+);
+
 export default CreateProduct;
+

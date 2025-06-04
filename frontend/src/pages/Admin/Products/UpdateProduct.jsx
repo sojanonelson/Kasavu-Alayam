@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import productService from "../../../services/productservice";
-import { Edit, Save, Trash2 } from "lucide-react";
+import { Edit, Save, Trash2, Info } from "lucide-react";
 import { useToast } from "../../../components/ui/ToastContext";
+
+const TOOLTIP_STYLE = "bg-gray-800 text-white text-xs rounded py-1 px-2 absolute z-20 bottom-full mb-2 left-1/2 transform -translate-x-1/2 whitespace-no-wrap shadow-lg";
 
 const UpdateProduct = () => {
   const { id } = useParams();
@@ -18,7 +20,7 @@ const UpdateProduct = () => {
     fabric: "",
     idealFor: "",
     size: "",
-       price:"",
+    price: "",
     specialPrice: "",
     netQuantity: "",
     category: "",
@@ -28,6 +30,8 @@ const UpdateProduct = () => {
   const [images, setImages] = useState([]);
   const [initialImages, setInitialImages] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -38,8 +42,8 @@ const UpdateProduct = () => {
           title: res.title,
           description: res.description,
           stockQuantity: res.stockQuantity,
-          price:res.price,
-    specialPrice:res.specialPrice,
+          price: res.price,
+          specialPrice: res.specialPrice,
           color: res.color,
           type: res.productDetails?.type || "",
           fabric: res.productDetails?.fabric || "",
@@ -82,44 +86,44 @@ const UpdateProduct = () => {
   const handleDeleteImage = (index) => {
     if (images.length <= 1) {
       alert("You must have at least one image.");
+      setShowConfirmDelete(null);
       return;
     }
     setImages(prev => prev.filter((_, i) => i !== index));
+    setShowConfirmDelete(null);
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-  try {
-    const updates = {
-      title: productForm.title,
-      description: productForm.description,
-      stockQuantity: productForm.stockQuantity,
-      price: productForm.price,
-      specialPrice: productForm.specialPrice,
-      color: productForm.color,
-      productDetails: {
-        type: productForm.type,
-        fabric: productForm.fabric,
-        idealFor: productForm.idealFor,
-        size: productForm.size,
-        netQuantity: productForm.netQuantity
-      },
-      category: productForm.category,
-      subcategory: productForm.subcategory
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const updates = {
+        title: productForm.title,
+        description: productForm.description,
+        stockQuantity: productForm.stockQuantity,
+        price: productForm.price,
+        specialPrice: productForm.specialPrice,
+        color: productForm.color,
+        productDetails: {
+          type: productForm.type,
+          fabric: productForm.fabric,
+          idealFor: productForm.idealFor,
+          size: productForm.size,
+          netQuantity: productForm.netQuantity
+        },
+        category: productForm.category,
+        subcategory: productForm.subcategory
+      };
 
-    await productService.updateProduct(id, updates);
-     showToast("Product data updated successfully!", "success");
-    // Add success notification here
-  } catch (err) {
-    console.error("Failed to update product", err);
-    // Add error notification here
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+      await productService.updateProduct(id, updates);
+      showToast("Product data updated successfully!", "success");
+    } catch (err) {
+      console.error("Failed to update product", err);
+      showToast("Failed to update product", "error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleImageSubmit = async () => {
     setIsSubmitting(true);
@@ -143,8 +147,7 @@ const handleSubmit = async (e) => {
       });
 
       await productService.updateProductImages(id, formData);
-       showToast("Product cover image updated successfully!", "success");
-     
+      showToast("Product cover image updated successfully!", "success");
       
       // Refresh images after update
       const res = await productService.getProductById(id);
@@ -152,340 +155,264 @@ const handleSubmit = async (e) => {
       setInitialImages(res.images || []);
     } catch (err) {
       console.error("Failed to update product images", err);
-     
+      showToast("Failed to update product images", "error");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   if (!productData) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return <div className="flex justify-center items-center h-screen text-xl font-semibold text-gray-600">Loading product details...</div>;
   }
 
-  console.log("Data D:",productForm)
+  // Sidebar menu items with icons
+  const sections = [
+    { key: "details", label: "Product Details", icon: <Edit className="inline mr-2" size={18} /> },
+    { key: "images", label: "Product Images", icon: <Save className="inline mr-2" size={18} /> },
+    { key: "basic", label: "Basic Information", icon: <Trash2 className="inline mr-2" size={18} /> },
+  ];
+
   return (
-    <div className="flex w-full mx-auto min-h-screen p-4">
-      <aside className="w-1/5 p-4 bg-gray-50 rounded-lg">
-        <h2 className="text-lg font-semibold mb-4">Sections</h2>
-        <ul className="space-y-2">
-          <li>
+    <div className="flex w-full min-h-screen bg-gray-50 text-gray-800">
+      {/* Sidebar */}
+      <aside className="sticky top-4 h-[calc(100vh-1rem)] w-1/5 bg-white rounded-xl shadow-lg p-6 flex flex-col">
+        <h2 className="text-xl font-extrabold mb-6 tracking-wide text-blue-700 select-none">Edit Product</h2>
+        <nav className="flex flex-col space-y-3">
+          {sections.map(({ key, label, icon }) => (
             <button
+              key={key}
               type="button"
-              onClick={() => setActiveSection("details")}
-              className={`w-full text-left p-2 rounded transition ${
-                activeSection === "details"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
+              onClick={() => setActiveSection(key)}
+              className={`flex items-center px-4 py-3 rounded-lg font-semibold tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                activeSection === key 
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+                  : "text-gray-600 hover:text-blue-700 hover:bg-blue-50"
               }`}
+              aria-current={activeSection === key ? "page" : undefined}
             >
-              Product Details
+              {icon}
+              {label}
             </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              onClick={() => setActiveSection("images")}
-              className={`w-full text-left p-2 rounded transition ${
-                activeSection === "images"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
-            >
-              Product Images
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              onClick={() => setActiveSection("basic")}
-              className={`w-full text-left p-2 rounded transition ${
-                activeSection === "basic"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
-            >
-              Basic Information
-            </button>
-          </li>
-        </ul>
+          ))}
+        </nav>
       </aside>
 
-      <main className="w-3/4 p-4 ml-4 bg-white rounded-lg ">
-        <h1 className="text-2xl font-bold mb-6 flex items-center">
-          <Edit className="mr-2" /> Edit Product
-        </h1>
+      {/* Main Content */}
+      <main className="flex-1 p-8 max-w-5xl mx-auto rounded-xl bg-white shadow-xl">
+        {/* Header */}
+        <header className="flex items-center mb-8">
+          <Edit size={32} className="text-blue-600 mr-3" />
+          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 select-none">Update Product</h1>
+        </header>
 
+        {/* Sections */}
         {activeSection === "details" && (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  value={productForm.title}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Stock Quantity
-                </label>
-                <input
-                  type="number"
-                  name="stockQuantity"
-                  value={productForm.stockQuantity}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                  min="0"
-                  required
-                />
-              </div>
-               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Price
-                </label>
-                <input
-                  type="number"
-                  name="price"
-                  value={productForm.price}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                  min=""
-                  required
-                />
-              </div>
-               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Special price
-                </label>
-                <input
-                  type="number"
-                  name="specialPrice"
-                  value={productForm.specialPrice}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                  min="0"
-                  required
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  value={productForm.description}
-                  onChange={handleChange}
-                  rows={4}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Color
-                </label>
-                <input
-                  type="text"
-                  name="color"
-                  value={productForm.color}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormInput label="Title" name="title" value={productForm.title} onChange={handleChange} required />
+              <FormInput label="Stock Quantity" name="stockQuantity" type="number" value={productForm.stockQuantity} onChange={handleChange} min="0" required />
+              <FormInput label="Price" name="price" type="number" value={productForm.price} onChange={handleChange} required />
+              <FormInput label="Special Price" name="specialPrice" type="number" value={productForm.specialPrice} onChange={handleChange} min="0" />
+              <FormTextarea label="Description" name="description" value={productForm.description} onChange={handleChange} rows={4} required />
+              <FormInput label="Color" name="color" value={productForm.color} onChange={handleChange} required />
             </div>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                isSubmitting ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
-              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
-            >
-              {isSubmitting ? 'Saving...' : (
-                <>
-                  <Save  className="mr-2" /> Save Changes
-                </>
-              )}
-            </button>
+            <PrimaryButton disabled={isSubmitting} loading={isSubmitting} icon={<Save />}>
+              Save Changes
+            </PrimaryButton>
           </form>
         )}
 
         {activeSection === "images" && (
-          <div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Product Images (Max 4)
-              </label>
-              <div className="flex flex-wrap gap-4">
-                {images.map((image, index) => (
-                  <div key={index} className="relative group">
+          <section className="space-y-8">
+            <div>
+              <label className="block text-sm font-medium text-gray-800 mb-4">Product Images (Max 4)</label>
+              <div className="flex flex-wrap gap-5">
+                {images.map((image, idx) => (
+                  <div
+                    key={idx}
+                    className="relative group rounded-xl overflow-hidden shadow-lg w-40 h-40 cursor-pointer transform transition-transform hover:scale-105"
+                    onMouseEnter={() => setHoveredImageIndex(idx)}
+                    onMouseLeave={() => {
+                      setHoveredImageIndex(null);
+                      setShowConfirmDelete(null);
+                    }}
+                  >
                     <img
                       src={image.file ? URL.createObjectURL(image.file) : image.url}
-                      alt={`Product ${index}`}
-                      className="w-40 h-40 object-cover rounded-lg shadow"
+                      alt={`Product ${idx + 1}`}
+                      className="object-cover w-full h-full"
+                      draggable={false}
                     />
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteImage(index)}
-                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    {(hoveredImageIndex === idx) && (
+                      <>
+                        <div
+                          className="absolute inset-0 bg-black bg-opacity-30 rounded-xl"
+                          onClick={() => setShowConfirmDelete(idx)}
+                          aria-label="Delete Image Overlay"
+                        />
+                        {showConfirmDelete === idx && (
+                          <div className="absolute inset-0 bg-gray-900 bg-opacity-85 rounded-xl flex flex-col items-center justify-center space-y-3 p-2 text-white">
+                            <p className="text-center font-semibold">Remove this image?</p>
+                            <div className="flex space-x-3">
+                              <button
+                                onClick={() => handleDeleteImage(idx)}
+                                className="bg-red-600 px-3 py-1 rounded-md text-white font-semibold hover:bg-red-700"
+                              >
+                                Yes
+                              </button>
+                              <button
+                                onClick={() => setShowConfirmDelete(null)}
+                                className="bg-gray-600 px-3 py-1 rounded-md text-white font-semibold hover:bg-gray-700"
+                              >
+                                No
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Upload New Images
-              </label>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-800 mb-2">Upload New Images</label>
               <input
                 type="file"
                 multiple
                 accept="image/*"
                 onChange={handleImageChange}
-                className="block w-full text-sm text-gray-500
+                className="block w-full text-sm text-gray-700
                   file:mr-4 file:py-2 file:px-4
                   file:rounded-md file:border-0
                   file:text-sm file:font-semibold
                   file:bg-blue-50 file:text-blue-700
-                  hover:file:bg-blue-100"
+                  hover:file:bg-blue-100
+                  cursor-pointer"
               />
               <p className="mt-1 text-sm text-gray-500">
-                {images.length} of 4 images uploaded
+                {images.length} / 4 images uploaded
               </p>
             </div>
-            <button
-              type="button"
-              onClick={handleImageSubmit}
-              disabled={isSubmitting}
-              className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                isSubmitting ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
-              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
-            >
-              {isSubmitting ? 'Saving...' : (
-                <>
-                  <Save className="mr-2" /> Save Image Changes
-                </>
-              )}
-            </button>
-          </div>
+
+            <PrimaryButton disabled={isSubmitting} loading={isSubmitting} icon={<Save />} onClick={handleImageSubmit}>
+              Save Image Changes
+            </PrimaryButton>
+          </section>
         )}
 
         {activeSection === "basic" && (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Type
-                </label>
-                <input
-                  type="text"
-                  name="type"
-                  value={productForm.type}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Fabric
-                </label>
-                <input
-                  type="text"
-                  name="fabric"
-                  value={productForm.fabric}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Ideal For
-                </label>
-                <input
-                  type="text"
-                  name="idealFor"
-                  value={productForm.idealFor}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Size
-                </label>
-                <input
-                  type="text"
-                  name="size"
-                  value={productForm.size}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Net Quantity
-                </label>
-                <input
-                  type="text"
-                  name="netQuantity"
-                  value={productForm.netQuantity}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Category ID
-                </label>
-                <input
-                  type="text"
-                  name="category"
-                  value={productForm.category}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                  readOnly
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Subcategory ID
-                </label>
-                <input
-                  type="text"
-                  name="subcategory"
-                  value={productForm.subcategory}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                  readOnly
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormInput label="Type" name="type" value={productForm.type} onChange={handleChange} />
+              <FormInput label="Fabric" name="fabric" value={productForm.fabric} onChange={handleChange} />
+              <FormInput label="Ideal For" name="idealFor" value={productForm.idealFor} onChange={handleChange} />
+              <FormInput label="Size" name="size" value={productForm.size} onChange={handleChange} />
+              <FormInput label="Net Quantity" name="netQuantity" value={productForm.netQuantity} onChange={handleChange} />
+              <FormInput label="Category ID" name="category" value={productForm.category} onChange={handleChange} readOnly />
+              <FormInput label="Subcategory ID" name="subcategory" value={productForm.subcategory} onChange={handleChange} readOnly />
             </div>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                isSubmitting ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
-              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
-            >
-              {isSubmitting ? 'Saving...' : (
-                <>
-                  <Save className="mr-2" /> Save Changes
-                </>
-              )}
-            </button>
+            <PrimaryButton disabled={isSubmitting} loading={isSubmitting} icon={<Save />}>
+              Save Changes
+            </PrimaryButton>
           </form>
         )}
       </main>
     </div>
   );
 };
+
+// Components for form input fields with tooltip on label if provided
+const FormInput = ({ label, name, value, onChange, type="text", required=false, min, readOnly=false }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipTextMap = {
+    "Special Price": "Optional price lower than main price",
+    "Net Quantity": "Quantity in packaging",
+  };
+  const tooltipText = tooltipTextMap[label] || null;
+
+  return (
+    <div className="relative group">
+      <label
+        htmlFor={name}
+        className="inline-flex items-center mb-1 text-sm font-semibold text-gray-700 cursor-default"
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
+        {label}
+        {required && <span className="text-red-600 ml-1">*</span>}
+        {tooltipText && (
+          <Info className="ml-1 text-gray-400" size={14} />
+        )}
+      </label>
+      {showTooltip && tooltipText && (
+        <div className={TOOLTIP_STYLE}>{tooltipText}</div>
+      )}
+      <input
+        type={type}
+        id={name}
+        name={name}
+        value={value}
+        onChange={onChange}
+        min={min}
+        required={required}
+        readOnly={readOnly}
+        className={`w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 placeholder-gray-400 
+          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150
+          ${readOnly ? "bg-gray-100 cursor-not-allowed" : "bg-white"}`}
+      />
+    </div>
+  );
+};
+
+const FormTextarea = ({ label, name, value, onChange, rows=3, required=false }) => {
+  return (
+    <div>
+      <label htmlFor={name} className="block mb-1 text-sm font-semibold text-gray-700 select-none">
+        {label}
+        {required && <span className="text-red-600 ml-1">*</span>}
+      </label>
+      <textarea
+        id={name}
+        name={name}
+        value={value}
+        onChange={onChange}
+        rows={rows}
+        required={required}
+        className="w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 placeholder-gray-400
+          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 resize-y"
+      />
+    </div>
+  );
+};
+
+const PrimaryButton = ({ children, loading = false, icon, onClick, disabled }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={disabled || loading}
+    className={`inline-flex justify-center items-center gap-2 rounded-md px-5 py-3 text-white font-semibold shadow-md
+      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition duration-200
+      ${disabled || loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-700 hover:bg-blue-800"}`}
+  >
+    {loading ? (
+      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle
+          className="opacity-25"
+          cx="12" cy="12" r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        />
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+        />
+      </svg>
+    ) : icon ? icon : null}
+    {children}
+  </button>
+);
 
 export default UpdateProduct;
