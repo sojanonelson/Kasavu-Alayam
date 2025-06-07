@@ -13,13 +13,14 @@ import {
 } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import ScrolledNavbar from "../../components/ScrolledNavbar";
-import products from "../../Data/womens-collection";
+
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../../pages/Cart/cartSlice";
 import { Helmet } from "react-helmet";
 import ProductCard from "../ProductCard";
 import EmptyResults from "../ui/EmptyResults";
 import Pagination from "../ui/Pagination";
+import productService from "../../services/productservice";
 
 const FILTER_OPTIONS = {
   CATEGORIES: ["Dresses", "Tops", "Skirts", "Jackets"],
@@ -169,15 +170,15 @@ const FilterSidebar = ({
         <input
           type="range"
           name="price"
-          min="10"
-          max="100"
+          min="500"
+          max="3000"
           value={filters.price}
           onChange={handleFilterChange}
           className="w-full"
         />
         <div className="flex justify-between mt-1">
-          <span className="text-xs text-gray-500">₹10</span>
-          <span className="text-xs text-gray-500">₹100</span>
+          <span className="text-xs text-gray-500">₹500</span>
+          <span className="text-xs text-gray-500">₹3000</span>
         </div>
       </div>
 
@@ -240,7 +241,7 @@ const WomensCollection = () => {
     color: "",
     pattern: "",
     brand: "",
-    price: 100,
+    specialPrice: 3000,
     search: "",
   });
   const [isScrolled, setIsScrolled] = useState(false);
@@ -250,6 +251,7 @@ const WomensCollection = () => {
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [APiData , setApiData] = useState([])
 
   // Redux hooks
   const dispatch = useDispatch();
@@ -264,10 +266,23 @@ const WomensCollection = () => {
   const activeFilterCount = useMemo(
     () =>
       Object.entries(filters).filter(
-        ([key, value]) => value && key !== "price" && key !== "search"
-      ).length + (filters.price < 100 ? 1 : 0),
+        ([key, value]) => value && key !== "specialPrice" && key !== "search"
+      ).length + (filters.specialPrice < 1000 ? 1 : 0),
     [filters]
   );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await productService.getProducts();
+        setApiData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Scroll effect
   useEffect(() => {
@@ -303,7 +318,7 @@ const WomensCollection = () => {
       color: "",
       pattern: "",
       brand: "",
-      price: 100,
+      price: 1200,
       search: "",
     });
     setCurrentPage(1); // Reset to page 1 when filters are cleared
@@ -322,7 +337,7 @@ const WomensCollection = () => {
 
   const toggleCart = useCallback(
     (product) => {
-      const existingItem = cart.find((item) => item.id === product.id);
+      const existingItem = cart.find((item) => item.id === product._id);
       existingItem
         ? dispatch(removeFromCart(product))
         : dispatch(addToCart(product));
@@ -331,37 +346,32 @@ const WomensCollection = () => {
   );
 
   // Filtered products
-  const filteredProducts = useMemo(() => {
-    return products
+const filteredProducts = useMemo(() => {
+    return APiData
       .filter(
         (product) =>
-          (!filters.category || product.category === filters.category) &&
+          (!filters.category || product.category.name === filters.category) &&
           (!filters.color || product.color === filters.color) &&
           (!filters.pattern || product.pattern === filters.pattern) &&
           (!filters.brand || product.brand === filters.brand) &&
-          product.price <= filters.price &&
+          product.specialPrice <= filters.specialPrice &&
           (!filters.search ||
-            product.title
-              .toLowerCase()
-              .includes(filters.search.toLowerCase()) ||
-            product.category
-              .toLowerCase()
-              .includes(filters.search.toLowerCase()))
+            product.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+            product.category.name.toLowerCase().includes(filters.search.toLowerCase()))
       )
       .sort((a, b) => {
         switch (sortBy) {
           case "Price: Low to High":
-            return a.price - b.price;
+            return a.specialPrice - b.specialPrice;
           case "Price: High to Low":
-            return b.price - a.price;
+            return b.specialPrice - a.specialPrice;
           case "Newest First":
             return new Date(b.createdAt) - new Date(a.createdAt);
           default:
             return b.popularity - a.popularity;
         }
       });
-  }, [filters, sortBy]);
-
+  }, [APiData, filters, sortBy]);
   // Pagination calculations
   const productsPerPage = 12;
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
@@ -556,9 +566,10 @@ const WomensCollection = () => {
           <>
             {view === "grid" ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {paginatedProducts.map((product) => (
+                
+                {APiData.map((product) => (
                   <ProductCard
-                    key={product.id}
+                    key={product._id}
                     product={product}
                     isListView={false}
                     wishlist={wishlist}

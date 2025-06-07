@@ -4,12 +4,12 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product, isListView, wishlist, toggleWishlist, toggleCart }) => {
-  const discountPercent = product.originalPrice
-    ? Math.round((1 - product.price / product.originalPrice) * 100)
+  const discountPercent = product.price
+    ? Math.round((1 - product.specialPrice / product.price) * 100)
     : null;
 
   const colorDots = ['White', 'Black', 'Pink', 'Red']
-    .slice(0, product.id % 4 + 1)
+    .slice(0, product._id % 4 + 1)
     .map(color => (
       <span
         key={color}
@@ -101,31 +101,31 @@ const ProductCard = ({ product, isListView, wishlist, toggleWishlist, toggleCart
     >
       <div className="relative overflow-hidden">
         <img
-          src={product.image}
+          src={product.images[0].url}
           alt={product.title}
           className="w-full object-cover aspect-[3/4] transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-black bg-opacity-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         <button
-          onClick={() => toggleWishlist(product.id)}
+          onClick={() => toggleWishlist(product._id)}
           className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md z-10 transform transition-transform duration-300 hover:scale-110"
           aria-label="Add to wishlist"
         >
           <Heart
             size={16}
-            fill={wishlist.includes(product.id) ? "#f43f5e" : "none"}
-            stroke={wishlist.includes(product.id) ? "#f43f5e" : "currentColor"}
+            fill={wishlist.includes(product._id) ? "#f43f5e" : "none"}
+            stroke={wishlist.includes(product._id) ? "#f43f5e" : "currentColor"}
           />
         </button>
       </div>
       <div className="p-4">
-        <p className="text-xs text-gray-500 mb-1">{product.category}</p>
+        <p className="text-xs text-gray-500 mb-1">{product.category.name}</p>
         <h3 className="text-sm font-medium line-clamp-1">{product.title}</h3>
         <div className="flex items-baseline gap-2 mt-1">
-          <p className="text-sm font-bold">₹{product.price}</p>
-          {product.originalPrice && (
+          <p className="text-sm font-bold">₹{product.specialPrice}</p>
+          {product.price && (
             <>
-              <p className="text-xs text-gray-500 line-through">₹{product.originalPrice}</p>
+              <p className="text-xs text-gray-500 line-through">₹{product.price}</p>
               <p className="text-xs text-green-600">{discountPercent}% off</p>
             </>
           )}
@@ -143,7 +143,7 @@ const ProductCard = ({ product, isListView, wishlist, toggleWishlist, toggleCart
     Add to Cart
   </motion.button>
 
-  <Link className="flex-1" to={`/details/${product.id}`}>
+  <Link className="flex-1" to={`/details/${product._id}`}>
     <motion.button
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}

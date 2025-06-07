@@ -132,11 +132,11 @@ const ManageCategory = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-xl overflow-auto min-h-[80vh]">
+    <div className="w-full mx-auto mt pt-10 p-6 bg-white rounded-2xl shadow-xl overflow-auto min-h-[80vh]">
       <h2 className="text-3xl font-bold mb-8 text-gray-900 select-none">Manage Categories</h2>
 
       {/* Add Category */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-10">
+      <div className="flex flex-col sm:flex-row gap-4 mb-10 w-2/5">
         <input
           type="text"
           placeholder="New category name"
@@ -163,7 +163,7 @@ const ManageCategory = () => {
       </div>
 
       {/* Add Subcategory */}
-      <div className="mb-12">
+      <div className="mb-12 w-3/5 pb-10">
         <h3 className="text-xl font-semibold mb-4 text-gray-800 select-none">Add Subcategory</h3>
         <div className="flex flex-col sm:flex-row gap-4 items-center">
           <select
@@ -194,7 +194,7 @@ const ManageCategory = () => {
             type="button"
             onClick={handleAddSubCategory}
             disabled={loadingSubCategory}
-            className={`flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-green-700 transition focus:outline-none focus:ring-4 focus:ring-green-500 ${
+            className={`flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3  shadow-md hover:bg-green-700 transition focus:outline-none focus:ring-4 focus:ring-green-500 ${
               loadingSubCategory ? "cursor-not-allowed opacity-70" : ""
             }`}
             title="Add Subcategory"
@@ -208,13 +208,14 @@ const ManageCategory = () => {
 
       {/* Category List */}
       <ul className="space-y-8">
+        <h1>Available category</h1>
         {categories.map((cat) => (
           <li
             key={cat._id}
-            className="bg-gray-50 p-6 rounded-2xl shadow-md hover:shadow-lg transition cursor-default select-text"
+            className="bg-gray-50 p-6   transition cursor-default select-text"
             tabIndex={-1}
           >
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
               {editId === cat._id ? (
                 <input
                   type="text"
@@ -241,7 +242,7 @@ const ManageCategory = () => {
                 </h4>
               )}
 
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 {editId === cat._id ? (
                   <button
                     type="button"
@@ -281,7 +282,7 @@ const ManageCategory = () => {
             </div>
 
             {/* Subcategories */}
-            <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 select-text">
+            <ul className="mt-0 grid grid-cols-1 sm:grid-cols-2 gap-3 select-text">
               {cat.subcategories && cat.subcategories.length > 0 ? (
                 cat.subcategories.map((sub) => (
                   <li

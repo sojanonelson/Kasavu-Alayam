@@ -151,7 +151,7 @@ const CreateProduct = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center">
-      <div className="w-full max-w-5xl bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden relative">
+      <div className="w-full  bg-white  border border-gray-200 overflow-hidden relative">
         <header className="bg-red-600 text-white py-6 px-8 flex items-center space-x-3">
           <PlusCircle size={36} className="text-red-300" />
           <h1 className="text-3xl font-bold tracking-wider select-none">Add New Product</h1>
@@ -407,13 +407,13 @@ const CreateProduct = () => {
                   {images.map((file, index) => (
                     <div
                       key={index}
-                      className="relative rounded-lg overflow-hidden shadow hover:shadow-lg transform hover:scale-[1.05] transition cursor-pointer border border-gray-300"
+                      className="relative  overflow-hidden  transform hover:scale-[1.05] transition cursor-pointer border border-gray-300"
                       title={file.name}
                     >
                       <img
                         src={URL.createObjectURL(file)}
                         alt={`Preview ${index + 1}`}
-                        className="h-28 w-full object-cover select-none"
+                        className="h-64 w-full object-cover select-none"
                         draggable={false}
                       />
                       <button
@@ -439,7 +439,7 @@ const CreateProduct = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`${loading ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-black"} flex items-center gap-3 rounded-lg px-10 py-3 font-bold text-white shadow-lg transition-colors focus:outline-none focus:ring-4 focus:ring-green-400 select-none`}
+              className={`${loading ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-black"} flex items-center gap-3  px-10 py-3 font-bold text-white shadow-lg transition-colors focus:outline-none focus:ring-4 focus:ring-green-400 select-none`}
             >
               {loading ? (
                 <>

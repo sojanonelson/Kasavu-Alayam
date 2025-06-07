@@ -175,8 +175,8 @@ const UpdateProduct = () => {
   return (
     <div className="flex w-full min-h-screen bg-gray-50 text-gray-800">
       {/* Sidebar */}
-      <aside className="sticky top-4 h-[calc(100vh-1rem)] w-1/5 bg-white rounded-xl shadow-lg p-6 flex flex-col">
-        <h2 className="text-xl font-extrabold mb-6 tracking-wide text-blue-700 select-none">Edit Product</h2>
+      <aside className="sticky top-4 h-[calc(100vh-)]  border-r-2 w-1/5 bg-white p-6 flex flex-col">
+        <h2 className="text-xl font-extrabold mb-6 tracking-wide text-gray-700 select-none">Update Product</h2>
         <nav className="flex flex-col space-y-3">
           {sections.map(({ key, label, icon }) => (
             <button
@@ -198,16 +198,16 @@ const UpdateProduct = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-8 max-w-5xl mx-auto rounded-xl bg-white shadow-xl">
+      <main className="flex-1 p-8 w-full mx-auto rounded-xl bg-white ">
         {/* Header */}
-        <header className="flex items-center mb-8">
+        {/* <header className="flex items-center mb-8">
           <Edit size={32} className="text-blue-600 mr-3" />
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 select-none">Update Product</h1>
-        </header>
+        </header> */}
 
         {/* Sections */}
         {activeSection === "details" && (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 w-3/5 py-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormInput label="Title" name="title" value={productForm.title} onChange={handleChange} required />
               <FormInput label="Stock Quantity" name="stockQuantity" type="number" value={productForm.stockQuantity} onChange={handleChange} min="0" required />
@@ -223,14 +223,14 @@ const UpdateProduct = () => {
         )}
 
         {activeSection === "images" && (
-          <section className="space-y-8">
+          <section className="space-y-8  py-10">
             <div>
               <label className="block text-sm font-medium text-gray-800 mb-4">Product Images (Max 4)</label>
               <div className="flex flex-wrap gap-5">
                 {images.map((image, idx) => (
                   <div
                     key={idx}
-                    className="relative group rounded-xl overflow-hidden shadow-lg w-40 h-40 cursor-pointer transform transition-transform hover:scale-105"
+                    className="relative group  overflow-hidden w-auto h-64 cursor-pointer transform transition-transform "
                     onMouseEnter={() => setHoveredImageIndex(idx)}
                     onMouseLeave={() => {
                       setHoveredImageIndex(null);
@@ -303,7 +303,7 @@ const UpdateProduct = () => {
         )}
 
         {activeSection === "basic" && (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6  w-3/5  py-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormInput label="Type" name="type" value={productForm.type} onChange={handleChange} />
               <FormInput label="Fabric" name="fabric" value={productForm.fabric} onChange={handleChange} />

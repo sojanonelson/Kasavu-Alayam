@@ -77,7 +77,7 @@ const AppRoutes = () => {
           <Route path="/product" element={<SingleProductPage />} />
           <Route path="*" element={<AppNotFound />} />
           <Route path="/kids-collection" component={KidsCollection} />
-           <Route path="/details/:id" element={<SingleProductPage />} />
+           <Route path="/details/:productId" element={<SingleProductPage />} />
           <Route path="/my-account" element={<CustomerLayout />}>
           <Route index element={<Navigate to="profile" replace />} />
           <Route path="profile" element={<Profile />} />

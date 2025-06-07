@@ -73,7 +73,7 @@ const ProductOverview = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Product Overview</h1>
         <button
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition"
+          className="bg-blue-600 text-white px-4 py-2  shadow-md hover:bg-blue-700 transition"
           onClick={() => navigate("create")}
         >
           Add Product
@@ -85,24 +85,26 @@ const ProductOverview = () => {
         placeholder="Search products..."
         value={search}
         onChange={handleSearch}
-        className="border border-gray-300 p-3 rounded-lg w-full mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="border border-gray-300 p-3 rounded-lg w-2/5 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentItems.length > 0 ? (
           currentItems.map((p) => (
-            <div key={p._id} className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition p-4">
+            <div key={p._id} className="bg-white border border-gray-200   transition p-4">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="w-full md:w-1/3">
                   <img
                     src={p.images[0]?.url}
                     alt={p.title}
-                    className="w-full h-32 object-cover rounded-lg mb-2"
+                    className="w-full h-64 object-cover rounded-lg mb-2"
                   />
                 </div>
                 <div className="w-full md:w-2/3">
                   <h2 className="text-lg font-bold text-gray-800">SKU: {p.sku}</h2>
                   <h3 className="text-md font-semibold text-gray-700">{p.title}</h3>
+                   <h3 className="text-md  text-gray-700">Stock available:{p.stockQuantity}</h3>
+                  
                   <p className="text-sm text-gray-600">{p.description}</p>
                   <p className="text-sm text-gray-600">Color: {p.color}</p>
                   <p className="text-sm text-gray-600">Ideal For: {p.productDetails?.idealFor}</p>
@@ -110,13 +112,13 @@ const ProductOverview = () => {
                   <p className="text-sm text-gray-600">Subcategory: {p.subcategory?.name}</p>
                   <div className="mt-4 flex gap-2">
                     <button
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition"
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-sm transition"
                       onClick={() => navigate(`update/${p._id}`)}
                     >
                       Update
                     </button>
                     <button
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
+                      className=" hover:border-red-600 border text-red-600 px-4 py-2 rounded-md transition"
                       onClick={() => handleDelete(p._id)}
                     >
                       Delete
