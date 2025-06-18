@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import {
   PlusCircle, Upload, ListTree, Tag, BookOpen,
   Package, Palette, Ruler, Scissors, Users,
-  Loader2, CheckCircle, AlertCircle, X
+  Loader2, CheckCircle, AlertCircle, X,Info
 } from "lucide-react";
 import productService from "../../../services/productservice";
 import categoryService from "../../../services/categoryService";
+import collectionService from "../../../services/collectionService";
 
 const CreateProduct = () => {
   const [form, setForm] = useState({
@@ -27,43 +28,58 @@ const CreateProduct = () => {
       netQuantity: "",
     },
   });
-const collectionData = [
-  {
-    title: "Mens",
-    key: "mens"
-  },
-  {
-    title: "Womens",
-    key: "womens"
-  },
-  {
-    title: "Kids",
-    key: "kids"
-  }
-];
+// const collectionData = [
+//   {
+//     title: "Mens",
+//     key: "mens"
+//   },
+//   {
+//     title: "Womens",
+//     key: "womens"
+//   },
+//   {
+//     title: "Kids",
+//     key: "kids"
+//   }
+// ];
 
 
   const [images, setImages] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [collection, setSelectedCollection] = useState('');
+  const [collectionData,setCollectionData] = useState([])
   
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [imageError, setImageError] = useState("");
 
-  useEffect(() => {
-    categoryService.getAllCategoriesWithSubcategories()
-      .then(res => {
-        if (Array.isArray(res)) setCategories(res);
-        else setCategories([]);
-      })
-      .catch(err => {
-        console.error("Failed to fetch categories", err);
-        setCategories([]);
-      });
-  }, []);
+useEffect(() => {
+  // Fetch categories
+  categoryService.getAllCategoriesWithSubcategories()
+    .then(res => {
+      if (Array.isArray(res)) setCategories(res);
+      else setCategories([]);
+    })
+    .catch(err => {
+      console.error("Failed to fetch categories", err);
+      setCategories([]);
+    });
+
+  // Fetch collections
+  collectionService.getAllCollection()
+    .then(res => {
+      if (Array.isArray(res)) setCollectionData(res); // <- fixed here!
+      else setCollectionData([]);
+    })
+    .catch(err => {
+      console.error("Failed to fetch collections", err);
+      setCollectionData([]);
+    });
+
+}, []);
+
 
   useEffect(() => {
     const cat = categories.find(cat => cat._id === selectedCategoryId);
@@ -237,16 +253,32 @@ const collectionData = [
                 />
               </InputGroup>
 
-              <InputGroup label="SKU" icon={<Palette size={20} className="text-gray-500" />}>
-                <input
-                  type="text"
-                  name="sku"
-                  value={form.sku}
-                  onChange={handleChange}
-                  className={inputClass}
-                  autoComplete="off"
-                />
-              </InputGroup>
+              <InputGroup
+  label={
+    <div className="flex items-center gap-1">
+      SKU
+      <div className="relative group cursor-pointer">
+        <Info size={16} className="text-gray-500 group-hover:text-blue-500" />
+        <div className="absolute left-6 top-1/2 -translate-y-1/2 w-48 p-2 bg-black text-white text-xs rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+          SKU (Stock Keeping Unit) is a unique code to identify products. Leave blank to auto-generate.
+        </div>
+      </div>
+    </div>
+  }
+  icon={<Palette size={20} className="text-gray-500" />}
+>
+  <input
+    type="text"
+    name="sku"
+    value={form.sku}
+    onChange={handleChange}
+    className={inputClass}
+    autoComplete="off"
+  />
+  <p className="text-xs text-gray-500 poppins-regular">
+    The SKU will be automatically generated if you leave it blank.
+  </p>
+</InputGroup>
 
               <InputGroup label="Color" required icon={<Palette size={20} className="text-gray-500" />}>
                 <input
@@ -279,10 +311,14 @@ const collectionData = [
 
           {/* Category & Subcategory */}
           <section className="space-y-5">
-            <h2 className="flex items-center space-x-3 text-black text-2xl font-semibold tracking-tight border-b border-gray-300 pb-2 select-none">
-              <ListTree size={28} className="text-gray-700" />
-              <span>Category & Subcategory</span>
-            </h2>
+            <h2
+  className="flex items-center gap-3 text-2xl font-semibold text-black tracking-tight border-b border-gray-300 pb-2 select-none"
+  aria-label="Category, Subcategory, and Collection Section"
+>
+  <ListTree size={28} className="text-gray-700 shrink-0" />
+  <span className="truncate">Collection & Category & Subcategory </span>
+</h2>
+
 
             <div className="grid gap-8 md:grid-cols-2">
              <SelectGroup label="Collection" required>
@@ -301,7 +337,7 @@ const collectionData = [
   >
     <option value="" disabled>Choose a collection</option>
     {collectionData.map(cat => (
-      <option key={cat.key} value={cat.key}>{cat.title}</option>
+      <option key={cat._id} value={cat._id}>{cat.title}</option>
     ))}
   </select>
 </SelectGroup>

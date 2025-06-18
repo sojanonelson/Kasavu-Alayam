@@ -24,13 +24,7 @@ const createProduct = async (req, res) => {
       collection,
     } = req.body;
 
-    // Validate collection value
-    const validCollections = ["womens", "mens", "kids"];
-    if (!collection || !validCollections.includes(collection)) {
-      return res
-        .status(400)
-        .json({ message: "Invalid or missing collection value" });
-    }
+    
 
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No images uploaded" });

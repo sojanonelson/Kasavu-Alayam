@@ -1,12 +1,25 @@
 import { Outlet, NavLink } from 'react-router-dom';
-import {  LayoutDashboard,
-  Users,
 
+import { 
+  LayoutDashboard,
+  Users,
+  ShoppingBag,
   Boxes,
-  Tags,
+  Layers, // For Collections
+  Tag,    // For Categories
   Package,
-  PenTool,
-  LayoutGrid,User, Settings,ShoppingBag, FileText, HelpCircle, Bell, LogOut, ChevronDown, Search, Menu } from 'lucide-react';
+  Bell,
+  Settings,
+  LayoutGrid,
+  FileText, // For Reports
+  HelpCircle,
+  LogOut,
+  ChevronDown,
+  Search,
+  Menu,
+  Home,    // For Homepage Editor
+  ClipboardList // For Inventory (alternative)
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import AdminNavbar from '../components/AdminNavbar';
@@ -95,7 +108,7 @@ const AdminLayout = () => {
         {/* Sidebar */}
         <aside 
           className={`
-            ${sidebarOpen ? 'fixed inset-0 z-40 bg-black bg-opacity-50 lg:bg-transparent' : ''}
+            ${sidebarOpen ? 'fixed inset-0 z-40 bg-black bg-opacity-50  lg:bg-transparent' : ''}
             ${!sidebarOpen && isMobile ? 'hidden' : ''}
           `}
           onClick={() => isMobile && setSidebarOpen(false)}
@@ -192,20 +205,35 @@ const AdminLayout = () => {
                 <Boxes  size={18} className="flex-shrink-0" />
                 <span className="text-sm">Inventory</span>
               </NavLink>
+
                <NavLink 
-                to="category" 
-                className={({ isActive }) => 
-                  `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
-                    isActive 
-                      ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
-                      : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
-                  }`
-                }
-                onClick={() => isMobile && setSidebarOpen(false)}
-              >
-                <Tags  size={18} className="flex-shrink-0" />
-                <span className="text-sm">Category</span>
-              </NavLink>
+  to="collection" 
+  className={({ isActive }) => 
+    `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
+      isActive 
+        ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
+        : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
+    }`
+  }
+  onClick={() => isMobile && setSidebarOpen(false)}
+>
+  <Layers size={18} className="flex-shrink-0" />
+  <span className="text-sm">Collection</span>
+</NavLink>
+              <NavLink 
+  to="category" 
+  className={({ isActive }) => 
+    `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
+      isActive 
+        ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
+        : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
+    }`
+  }
+  onClick={() => isMobile && setSidebarOpen(false)}
+>
+  <Tag size={18} className="flex-shrink-0" />
+  <span className="text-sm">Category</span>
+</NavLink>
 
               {/* Reports */}
               <NavLink 
@@ -239,6 +267,7 @@ const AdminLayout = () => {
                 <Bell size={18} className="flex-shrink-0" />
                 <span className="text-sm">Notifications</span>
               </NavLink>
+             
 
               
 
@@ -283,7 +312,9 @@ const AdminLayout = () => {
                 <span>Log out</span>
               </button>
             </div>
+            
           </div>
+         
         </aside>
 
         {/* Main content */}

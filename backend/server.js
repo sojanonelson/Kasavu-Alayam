@@ -42,6 +42,11 @@ app.use('/api/categories', categoryRoutes);
 
 app.use('/api/subcategories', subcategoryRoutes);
 
+app.get('/', (req, res) => {
+  res.send('✅ Server running');
+});
+
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

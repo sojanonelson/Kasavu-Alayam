@@ -104,7 +104,7 @@ const CustomerLayout = () => {
         </main>
       </div>
 
-      {/* Full width footer outside the max-w container */}
+     
       <Footer />
     </div>
   );

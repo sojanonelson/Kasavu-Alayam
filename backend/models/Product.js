@@ -34,8 +34,8 @@ const productSchema = new mongoose.Schema({
   },
 
   collection: {
-    type: String,
-    enum: ['womens', 'kids', 'mens'],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Collection',
     required: true,
   },
 

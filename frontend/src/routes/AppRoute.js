@@ -35,6 +35,8 @@ import UpdateProduct from "../pages/Admin/Products/UpdateProduct";
 import Settings from "../pages/Admin/Settings";
 import HomepageEditor from "../pages/Admin/HomepageEditor";
 import CollectionProductsScreen from "../pages/Admin/Inventory/InventoryCollections";
+import CollectionManager from "../pages/Admin/Collections";
+import InventoryCollections from "../pages/Admin/Inventory/InventoryCollections";
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -94,12 +96,13 @@ const AppRoutes = () => {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="overview" replace />} />
           <Route path="overview" element={<OverviewPage />} />
+          <Route path="collection" element={<CollectionManager />} />
           <Route path="users" element={<Customers />} />
           <Route path="orders" element={<OrdersPage />} />
           <Route path="settings" element={<Settings />} />
           <Route path="homepage-editor" element={<HomepageEditor />} />
           <Route path="inventory" element={<InventoryManagement />} />
-          <Route path="inventory/collection" element={<CollectionProductsScreen />} />
+          <Route path="inventory/collection/:id" element={<InventoryCollections />} />
           <Route path="notifications" element={<NotificationsPage />} />
           <Route path="category" element={<ManageCategory />} />
           <Route path="products/create" element={<CreateProduct />} />
