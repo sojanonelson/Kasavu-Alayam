@@ -16,6 +16,7 @@ const CreateProduct = () => {
     category: "",
     subcategory: "",
     price: "",
+    collection:"",
     sku: "",
     specialPrice: "",
     productDetails: {
@@ -26,10 +27,27 @@ const CreateProduct = () => {
       netQuantity: "",
     },
   });
+const collectionData = [
+  {
+    title: "Mens",
+    key: "mens"
+  },
+  {
+    title: "Womens",
+    key: "womens"
+  },
+  {
+    title: "Kids",
+    key: "kids"
+  }
+];
+
 
   const [images, setImages] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [collection, setSelectedCollection] = useState('');
+  
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -125,6 +143,7 @@ const CreateProduct = () => {
         stockQuantity: "",
         color: "",
         category: "",
+        collection:"",
         subcategory: "",
         price: "",
         sku: "",
@@ -148,6 +167,8 @@ const CreateProduct = () => {
       setLoading(false);
     }
   };
+
+  console.log("Form:", form)
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center">
@@ -264,6 +285,27 @@ const CreateProduct = () => {
             </h2>
 
             <div className="grid gap-8 md:grid-cols-2">
+             <SelectGroup label="Collection" required>
+  <select
+    name="collection"
+    value={form.collection}
+    onChange={e => {
+      const value = e.target.value;
+      handleChange(e); // Make sure this updates `form.collection`
+      setSelectedCollection(value); // Optional: for other logic
+      setForm(prev => ({ ...prev, collection: value })); // Set correct value
+    }}
+    required
+    className={selectClass}
+    aria-label="Select Collection"
+  >
+    <option value="" disabled>Choose a collection</option>
+    {collectionData.map(cat => (
+      <option key={cat.key} value={cat.key}>{cat.title}</option>
+    ))}
+  </select>
+</SelectGroup>
+
               <SelectGroup label="Category" required>
                 <select
                   name="category"
@@ -332,16 +374,28 @@ const CreateProduct = () => {
                   autoComplete="off"
                 />
               </InputGroup>
-              <InputGroup label="Ideal For" icon={<Users size={20} className="text-gray-500" />}>
-                <input
-                  type="text"
-                  name="idealFor"
-                  value={form.productDetails.idealFor}
-                  onChange={handleChange}
-                  className={inputClass}
-                  autoComplete="off"
-                />
-              </InputGroup>
+          
+             
+<SelectGroup label="Ideal For" required>
+  <select
+    name="idealFor"
+    value={form.productDetails.idealFor}
+    onChange={handleChange}
+    required
+    className={selectClass}
+    aria-label="Select Ideal For"
+  >
+    <option value="">Select ideal</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Unisex">Unisex</option>
+    <option value="Kids">Kids</option>
+  </select>
+</SelectGroup>
+
+
+
+
               <InputGroup label="Size" icon={<Ruler size={20} className="text-gray-500" />}>
                 <input
                   type="text"

@@ -5,9 +5,9 @@ import Footer from '../../components/Footer';
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: 'Sojan',
-    lastName: 'Nelson',
-    email: 'sojannelson54@gmail.com',
+    firstName: 'Kasavu',
+    lastName: 'Aalayam',
+    email: 'kasavuaalayalam@gmail.com',
     phone: '+1 (555) 123-4567',
   });
   
@@ -43,7 +43,7 @@ const ProfilePage = () => {
   return (
     <div className="poppins-regular">
      <div>
-     <div className="flex justify-between items-center mb-8">
+     <div className="flex justify-between items-center mb-2">
         <h1 className="text-2xl font-semibold text-gray-800">Personal Information</h1>
         {!isEditing ? (
           <button 

@@ -80,7 +80,7 @@ const SideContactNavbar = () => {
   const isMobile = windowWidth < 640;
 
   return (
-    <div className="fixed top-1/2 -translate-y-1/2 right-5 z-50">
+    <div className="fixed top-1/2 -translate-y-1/2 right-5 z-50 hidden lg:block">
       {/* Contact Circles */}
       <div className="flex flex-col gap-2 items-center">
         {/* WhatsApp */}

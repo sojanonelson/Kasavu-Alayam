@@ -103,7 +103,7 @@ const ProductCard = ({ product, isListView, wishlist, toggleWishlist, toggleCart
         <img
           src={product.images[0].url}
           alt={product.title}
-          className="w-full object-cover aspect-[3/4] transition-transform duration-500 group-hover:scale-110"
+          className="w-full object-cover aspect-[4/4] transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-black bg-opacity-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         <button

@@ -34,16 +34,7 @@ import product1Image from '../assets/k-1.jpg';
 import product2Image from '../assets/k-4.jpg';
 import product3Image from '../assets/k-1.jpg';
 
-const heroImages = [ {
-    url: "https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    title: "Premium Silk Collection",
-    subtitle: "Elegance woven into every thread"
-  },
-  {
-    url: "https://kalyansilks.com/_next/image?url=https%3A%2F%2Fapi.kalyansilks.com%2Fmedia%2Fvegam%2Fhomepage%2Fimages%2F1920_x1040_-_Main_Banner_-_03_1.jpg&w=1920&q=75",
-    title: "Premium Silk Collection",
-    subtitle: "Elegance woven into every thread"
-  },
+const heroImages = [ 
   {
     url: "https://kalyansilks.com/_next/image?url=https%3A%2F%2Fapi.kalyansilks.com%2Fmedia%2Fvegam%2Fhomepage%2Fimages%2F1920_x1040_-_Main_Banner_-_01_1.jpg&w=1920&q=75",
     title: "Traditional Wear",
@@ -53,6 +44,10 @@ const heroImages = [ {
     url: "https://kalyansilks.com/_next/image?url=https%3A%2F%2Fapi.kalyansilks.com%2Fmedia%2Fvegam%2Fhomepage%2Fimages%2F1920_x1040_-_Main_Banner_-_03_1.jpg&w=1920&q=75",
     title: "Festive Collection",
     subtitle: "Adorn yourself in ceremonial splendor"
+  },{
+    url: "https://www.tata.com/content/dam/tata/images/newsroom/business/desktop/taneira_traditional_crafts_banner_desktop_1920x1080.jpg",
+    title: "Traditional Wear",
+    subtitle: "Celebrating heritage and culture"
   }
 ];
 
@@ -372,7 +367,7 @@ const HomePage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000); // Simulate loading for 2 seconds
+    }, 100); // Simulate loading for 2 seconds
 
     return () => clearTimeout(timer);
   }, []);
@@ -413,7 +408,8 @@ const HomePage = () => {
         <link rel="canonical" href="https://kasavuaalayam.com" />
       </Helmet>
 
-      {isScrolled ? <ScrolledNavbar /> : <Navbar onCartClick={() => setShowCart(true)} />}
+      
+      {/* <Navbar onCartClick={() => setShowCart(true)}/> */}
 
       {/* Hero Section with Enhanced Carousel */}
       <section className="relative" aria-label="Featured collections carousel">
@@ -439,31 +435,31 @@ const HomePage = () => {
           loop={true}
           spaceBetween={0}
           slidesPerView={1}
-          className="w-full h-screen"
+          className="w-full lg:h-screen"
           onSlideChange={handleSlideChange}
         >
           {heroImages.map((img, index) => (
             <SwiperSlide key={index}>
-              <div className="relative w-full h-screen overflow-hidden">
+              <div className="relative  w-full lg:h-screen overflow-hidden">
                 <img
                   src={img.url}
                   alt={`${img.title} - ${img.subtitle}`}
-                  className="w-full h-full object-cover"
+                  className="w-full lg:h-full h-[60vh] object-cover"
                   onLoad={() => handleImageLoad(`hero-${index}`)}
                 />
                 {!imagesLoaded[`hero-${index}`] && (
                   <div className="absolute inset-0 bg-gray-200 animate-pulse" />
                 )}
                 <div className="absolute inset-0 bg-black bg-opacity-20" />
-                <div className="absolute inset-0 flex flex-col justify-end items-center pb-32 text-center px-6">
+                <div className="absolute inset-0 flex flex-col justify-end items-center lg:pb-32 pb-[20%]  text-center px-6">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: currentSlide === index ? 1 : 0, y: currentSlide === index ? 0 : 30 }}
                     transition={{ duration: 0.8, delay: 0.3 }}
                     className="max-w-4xl "
                   >
-                    <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">{img.title}</h1>
-                    <p className="text-xl md:text-2xl text-white mb-8 poppins-regular">{img.subtitle}</p>
+                    <h1 className="lg:text-5xl text-2xl md:text-6xl font-bold custom-font2  text-white lg:mb-4">{img.title}</h1>
+                    <p className="lg:text-xl text-1xl text-white mb-8 poppins-regular">{img.subtitle}</p>
                  
                   </motion.div>
                 </div>
@@ -473,26 +469,24 @@ const HomePage = () => {
         </Swiper>
 
         {/* Custom Pagination Container */}
-        <div className="custom-pagination !bottom-12" />
+        <div className="custom-pagination !bottom-12 md:bottom-0 pb-10 " />
       </section>
 
-       <div className='flex justify-center items-center pt-10'>
-        <img draggable="false" src={border1} className='h-16' alt='border'></img>
+       <div className='flex justify-center items-center lg:pt-10 pt-10'>
+        <img draggable="false" src={border1} className='lg:h-16 h-10' alt='border'></img>
       </div>
 
       {/* Categories Section */}
       <section
         ref={categoriesRef}
-        className="py-16 px-6 md:px-20 bg-white"
+        className="lg:py-16 py-4 px-6 md:px-20 bg-white"
         aria-labelledby="categories-heading"
       >
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: categoriesInView ? 1 : 0, y: categoriesInView ? 0 : 40 }}
-          transition={{ duration: 0.7 }}
+        
         >
-          <h2 id="categories-heading" className="text-4xl font-semibold text-center mb-3 poppins-regular">Our Collections</h2>
-          <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">Discover our curated collections of traditional and contemporary Indian wear</p>
+          <h2 id="categories-heading" className="text-4xl font-semibold cutsom-font2 text-center mb-3 poppins-regular">Our Collections</h2>
+          <p className="text-center text-gray-600 max-w-2xl text-xs lg:text-lg mx-auto mb-12">Discover our curated collections of traditional and contemporary Indian wear</p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {categories.map((category, index) => (
@@ -532,12 +526,7 @@ const HomePage = () => {
           className="max-w-5xl mx-auto text-center"
         >
           <h2 id="about-heading" className="text-3xl poppins-bold mb-6">A Legacy of Tradition</h2>
-          <p className="text-gray-700 lg:text-lg text-sm mb-8 lg:leading-relaxed poppins-regular text-justify">
-          At <span className="font-semibold">Kasavu Aalayam</span>, we bring you the finest traditional wear rooted in the rich heritage of Indian craftsmanship.
-          Every thread tells a story of cultural significance, passed down through generations of skilled artisans.
-          From elegant kasavu sarees to premium wedding collections, we invite you to explore timeless fashion redefined for the modern era.
-        </p>
-
+        
           <div className="flex flex-row justify-center items-center pb-10 gap-5">
             {/* First Image */}
             <div className="w-2/6 text-center cursor-pointer">

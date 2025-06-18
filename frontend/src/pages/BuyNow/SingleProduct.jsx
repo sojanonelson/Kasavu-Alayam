@@ -157,6 +157,8 @@ const SingleProductPage = () => {
 
         <div className="md:w-1/2">
           <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
+          
+          <h1 className="text-3xl font-bold mb-2">{product.description}</h1>
           <div className="mb-6">
             <span className="text-2xl font-bold text-primary">₹{product.specialPrice}</span>
             {product.price > product.specialPrice && (
@@ -168,20 +170,29 @@ const SingleProductPage = () => {
               </>
             )}
           </div>
+<div className="mb-6">
+  <h3 className="text-lg font-medium mb-4">Color: <span className="font-normal">{product.color}</span></h3>
+  <div className="flex items-center gap-4">
+    <button
+      onClick={() => setSelectedColor(product.color)}
+      className={`w-12 h-12 rounded-full border-2 ${selectedColor === product.color ? 'border-primary ring-2 ring-primary ring-opacity-50' : 'border-gray-300'}`}
+      style={{ backgroundColor: product.color.toLowerCase() }}
+      aria-label={product.color}
+    >
+      {selectedColor === product.color && (
+        <Check className="text-primary w-4 h-4 mx-auto" />
+      )}
+    </button>
+   <span className="text-gray-700 text-sm">
+  {product.color.toUpperCase()}
+</span>
 
-          <div className="mb-6">
-            <h3 className="text-lg font-medium mb-2">Color</h3>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setSelectedColor(product.color)}
-                className={`w-10 h-10 rounded-full border-2 ${selectedColor === product.color ? 'border-primary' : 'border-gray-300'}`}
-                style={{ backgroundColor: product.color.toLowerCase() }}
-                aria-label={product.color}
-              />
-            </div>
-          </div>
+  </div>
+</div>
 
-          <div className="mb-6">
+
+              {product.productDetails.size && (
+                <div className="mb-6">
             <h3 className="text-lg font-medium mb-2">Size</h3>
             <div className="flex flex-wrap gap-2">
               <button
@@ -192,6 +203,9 @@ const SingleProductPage = () => {
               </button>
             </div>
           </div>
+
+              )}
+          
 
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-2">Delivery Options</h3>
@@ -229,17 +243,42 @@ const SingleProductPage = () => {
         </div>
       </div>
 
-      <div className="mb-12">
-        <div className="tabs">
-          <a className="tab tab-lifted tab-active">Product Details</a>
-          <a className="tab tab-lifted">Customer Reviews</a>
-        </div>
+     <div className="mb-12">
+  <div className="tabs">
+    <a className="tab tab-lifted tab-active">Product Details</a>
+    <a className="tab tab-lifted">Customer Reviews</a>
+  </div>
 
-        <div className="p-6 border border-t-0 rounded-b-lg">
-          <h3 className="text-xl font-medium mb-4">About this item</h3>
-          <p className="mb-6">{product.description}</p>
-        </div>
-      </div>
+  <div className="p-6 border border-t-0 rounded-b-lg">
+    <h3 className="text-xl font-medium mb-4">About this item</h3>
+    <p className="mb-6">{product.description}</p>
+
+    <div className="mb-4">
+      <h4 className="font-medium mb-2">Product Details</h4>
+      <ul className="list-disc pl-5">
+        <li><strong>Type:</strong> {product.productDetails.type}</li>
+        <li><strong>Fabric:</strong> {product.productDetails.fabric}</li>
+        <li><strong>Ideal For:</strong> {product.productDetails.idealFor}</li>
+        <li><strong>Net Quantity:</strong> {product.productDetails.netQuantity}</li>
+        {product.productDetails.size && (
+          <li><strong>Size:</strong> {product.productDetails.size}</li>
+        )}
+      </ul>
+    </div>
+
+    <div className="mb-4">
+      <h4 className="font-medium mb-2">Additional Information</h4>
+      <ul className="list-disc pl-5">
+        <li><strong>Color:</strong> {product.color}</li>
+        <li><strong>Category:</strong> {product.category.name}</li>
+        <li><strong>Subcategory:</strong> {product.subcategory.name}</li>
+        <li><strong>Collection:</strong> {product.collection}</li>
+        <li><strong>SKU:</strong> {product.sku}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 
       <div>
         <h2 className="text-2xl font-bold mb-6">Similar Products</h2>

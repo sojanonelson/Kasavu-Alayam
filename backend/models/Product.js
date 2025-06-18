@@ -5,8 +5,8 @@ const productSchema = new mongoose.Schema({
   description: { type: String, required: true },
   stockQuantity: { type: Number, required: true },
   color: { type: String, required: true },
-   price: { type: String, required: true },
-    specialPrice: { type: String, required: true },
+  price: { type: String, required: true },
+  specialPrice: { type: String, required: true },
 
   productDetails: {
     type: { type: String },
@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema({
     netQuantity: { type: String }
   },
 
-    category: {
+  category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
     required: true,
@@ -26,17 +26,25 @@ const productSchema = new mongoose.Schema({
     ref: 'Subcategory',
     required: true,
   },
+
   sku: {
-  type: String,
-  required: true,
-  unique: true,
-},
+    type: String,
+    required: true,
+    unique: true,
+  },
+
+  collection: {
+    type: String,
+    enum: ['womens', 'kids', 'mens'],
+    required: true,
+  },
+
   review: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
-  
-    images: [
+
+  images: [
     {
       url: String,
-      public_id: String, // needed for deletion
+      public_id: String,
     }
   ],
 }, { timestamps: true });

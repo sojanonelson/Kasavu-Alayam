@@ -2,16 +2,16 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShoppingBag, ChevronUp } from "lucide-react";
-import Navbar from "../../components/Navbar";
-import ScrolledNavbar from "../../components/ScrolledNavbar";
+import Navbar from "../components/Navbar";
+import ScrolledNavbar from "../components/ScrolledNavbar";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart } from "../../pages/Cart/cartSlice";
+import { addToCart, removeFromCart } from "../pages/Cart/cartSlice";
 import { Helmet } from "react-helmet";
-import ProductCard from "../ProductCard";
-import EmptyResults from "../ui/EmptyResults";
-import Pagination from "../ui/Pagination";
-import productService from "../../services/productservice";
-import collectionService from "../../services/collectionService";
+import ProductCard from "./ProductCard";
+import EmptyResults from "../components/ui/EmptyResults";
+import Pagination from "../components/ui/Pagination";
+import productService from "../services/productservice";
+import collectionService from "../services/collectionService";
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center py-20">
@@ -23,7 +23,7 @@ const LoadingSpinner = () => (
   </div>
 );
 
-const WomensCollection = () => {
+const Collections = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [view, setView] = useState("grid");
   const [wishlist, setWishlist] = useState([]);
@@ -48,6 +48,7 @@ const WomensCollection = () => {
         setApiData(data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+        // Consider adding user feedback here, such as a toast or alert
       } finally {
         setIsLoading(false);
       }
@@ -103,20 +104,36 @@ const WomensCollection = () => {
         />
       </Helmet>
 
-     
-      <div className="px-4  md:px-10  py-5">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mt-0 mb-6 gap-4">
+      {isScrolled ? <ScrolledNavbar /> : <Navbar />}
+
+      <div className="px-4 md:px-10 py-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mt-28 mb-6 gap-4">
           <div className="text-sm text-gray-600">
             <Link to="/" className="text-blue-600 hover:underline">
               Home
             </Link>{" "}
-            / <span>{collection} Collection</span>
+            / <span>Women's Collection</span>
           </div>
 
-          
+          <div className="top-4 right-4 z-10 flex items-center">
+            <Link to="/cart">
+              <button className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <ShoppingBag size={24} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+            </Link>
+          </div>
         </div>
 
-       
+        <div className="mb-6">
+          <p className="text-sm text-gray-500">
+            {apiData.length} results found
+          </p>
+        </div>
 
         {isLoading ? (
           <LoadingSpinner />
@@ -178,4 +195,4 @@ const WomensCollection = () => {
   );
 };
 
-export default WomensCollection;
+export default Collections;

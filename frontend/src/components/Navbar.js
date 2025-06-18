@@ -1,271 +1,157 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Menu, X, User, ShoppingCart } from 'lucide-react';
+import Logo from '../assets/logo.png'
 import { useSelector } from 'react-redux';
-import { selectCartTotalQuantity } from '../pages/Cart/cartSelector';
-import Logo from '../assets/black.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  const cartCount = useSelector(selectCartTotalQuantity);
-
-  // Handle navbar visibility on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Determine if user scrolled down or up
-      if (currentScrollY > lastScrollY) {
-        // Scrolling down - hide navbar
-        setIsVisible(false);
-      } else {
-        // Scrolling up - show navbar
-        setIsVisible(true);
-      }
-
-      // Add shadow when scrolled
-      if (currentScrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
-
-  // Close mobile menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isOpen && !event.target.closest('.mobile-menu-container')) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
-
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (isOpen || cartOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-    
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isOpen, cartOpen]);
+  const cartCount = 3; // Mock cart count
+  const navBar = useSelector((state) => state.general.showNavbar);
+  console.log("status:", navBar)
 
   return (
-    <header className={`fixed w-full top-0 left-0 z-50 transition-transform duration-300 ${
-      isVisible ? 'translate-y-0' : '-translate-y-full'
-    }`}>
+    <header className={`w-full  shadow-sm ${navBar ? 'z-50 absolute' : ''}`}>
       {/* Top Banner */}
-      <div className="bg-gray-900 text-white text-sm py-2 text-center">
+      <div className="bg-gray-900 text-white text-[8px] lg:text-sm py-2 text-center px-4">
         Order Available Worldwide | Free Shipping on Orders Above ₹2999
       </div>
 
       {/* Main Navbar */}
-      <nav className={`bg-white backdrop-blur-md items-center   lg:h-auto justify-center px-4 md:px-10 py-8 transition-all duration-300 ${
-        scrolled ? 'shadow-md py-4' : 'py-8'
-      }`}>
-        <div className="max-w-10xl mx-auto flex items-center justify-between">
-          {/* Left Links */}
-          <div className="hidden md:flex gap-8 text-gray-800 font-medium flex-1">
-            <Link to="/" className="nav-link relative hover:text-red-600 transition-colors duration-300">
+      <nav className={ `${navBar ? 'bg-white/10 shadow-lg' : 'bg-white'}  lg:py-3`}>
+        {/* Desktop Layout */}
+        <div className="hidden lg:flex items-center justify-between px-8 py-6">
+          {/* Left Navigation Links */}
+          <div className="flex items-center space-x-8">
+            <a href="/" className={` ${navBar ? 'text-white' : 'text-black'} custom-font2   transition-colors duration-300`} >
               Home
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link to="/mens" className="nav-link relative hover:text-red-600 transition-colors duration-300">
+            </a>
+            <a href="/collections/mens" className={` ${navBar ? 'text-white' : 'text-black'} custom-font2   transition-colors duration-300`} >
               Mens Collection
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link to="/womens" className="nav-link relative hover:text-red-600 transition-colors duration-300">
+            </a>
+            <a href="/collections/womens" className={` ${navBar ? 'text-white' : 'text-black'} custom-font2   transition-colors duration-300`} >
               Womens Collection
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link to="/sarees" className="nav-link relative hover:text-red-600 transition-colors duration-300">
+            </a>
+          </div>
+
+          {/* Center Logo */}
+          <div className="flex-shrink-0 absolute left-1/2 transform -translate-x-1/2 ">
+            <a href="/" className="block">
+              <div className="flex items-center justify-center text-white ">
+                <div className={`  ${navBar ? ' text-white ' : ' text-black'}  custom-font  flex items-center justify-center rounded  font-bold lg:text-5xl `}>
+                  Kasavu Aalayam
+                </div>
+              </div>
+            </a>
+          </div>
+
+          {/* Right Navigation Links and Icons */}
+          <div className="flex items-center space-x-8">
+            <a href="/collections/sarees" className={` ${navBar ? 'text-white' : 'text-black'} custom-font2   transition-colors duration-300`} >
               Sarees
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-             
-            <Link to="/kids" className="nav-link relative hover:text-red-600 transition-colors duration-300">
+            </a>
+            <a href="/collections/kids" className={` ${navBar ? 'text-white' : 'text-black'} custom-font2   transition-colors duration-300`} >
               Kids
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-          </div>
-
-          {/* Logo */}
-          <div className={`absolute left-1/2 transform -translate-x-1/2 transition-all duration-300 ${
-            scrolled ? 'scale-75' : 'scale-100'
-          }`}>
-            <Link to="/">
-              <img src={Logo} className="h-16 mb-2" alt="Kasavu Aalayam" />
-            </Link>
-          </div>
-
-          {/* Right Icons */}
-          <div className="hidden md:flex items-center gap-6 justify-end flex-1">
-            <button 
-              onClick={() => setCartOpen(!cartOpen)} 
-              className="relative hover:text-red-600 transition-colors duration-300"
-            >
+            </a>
+            
+            {/* Icons */}
+            <button className={` ${navBar ? "text-white" : "text-black"}  transition-colors duration-300 relative`}>
               <ShoppingCart size={24} />
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1 rounded-full animate-pulse">
-                  {cartCount}
-                </span>
-              )}
+             
             </button>
-
-            <Link to="/my-account" className="hover:text-red-600 transition-colors duration-300">
+            <a href="/my-account" className={` ${navBar ? "text-white" : "text-black"} transition-colors duration-300 `}>
               <User size={24} />
-            </Link>
+            </a>
           </div>
+        </div>
 
-          {/* Mobile Hamburger */}
-          <div className="md:hidden">
+        {/* Mobile/Tablet Layout */}
+        <div className="lg:hidden">
+          {/* Mobile Header */}
+          <div className="flex items-center justify-between px-4 py-4">
+            {/* Mobile Menu Button */}
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="transition-transform duration-300 hover:scale-110"
+              className="text-white  transition-colors duration-300 z-10"
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
+
+            {/* Center Logo - Absolutely positioned for perfect centering */}
+            <div className="absolute left-1/2 transform -translate-x-1/2">
+              <a href="/" className="flex-shrink-0">
+                <div className={`w-auto h-12  flex items-center justify-center  rounded ${navBar ? 'text-white':'text-black'} custom-font pr-1 text-1xl `}>
+                  Kasavu Aalayam
+                </div>
+              </a>
+            </div>
+
+            {/* Mobile Icons */}
+            <div className="flex items-center space-x-4 z-10">
+              <button className={` ${navBar ? 'text-white' : 'text-black'} justify-center items-center flex-row flex  transition-colors duration-300 relative`}>
+                <ShoppingCart size={20} />
+                {cartCount > 0 && (
+                  <span className="bg-red-600 text-white text-xs px-1 rounded-full ml-1">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+              <a href="/my-account" className={`${navBar ? 'text-white':'text-black'} transition-colors duration-300 `} >
+                <User size={20} />
+              </a>
+            </div>
           </div>
+
+          {/* Mobile Menu */}
+          {isOpen && (
+            <div className="bg-white border-t border-gray-200">
+              <div className="px-4 py-2 space-y-1">
+                <a 
+                  href="/" 
+                  className="block px-3 py-2 text-gray-800  custom-font2   rounded transition-colors duration-300"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Home
+                </a>
+                <a 
+                  href="/collections/mens" 
+                  className="block px-3 py-2 text-gray-800  custom-font2   rounded transition-colors duration-300"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Mens Collection
+                </a>
+                <a 
+                  href="/collections/womens" 
+                  className="block px-3 py-2 text-gray-800 custom-font2   rounded transition-colors duration-300"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Womens Collection
+                </a>
+                <a 
+                  href="/collections/sarees" 
+                  className="block px-3 py-2 text-gray-800  custom-font2   rounded transition-colors duration-300"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sarees
+                </a>
+                <a 
+                  href="/collections/kids" 
+                  className="block px-3 py-2 text-gray-800  custom-font2  rounded transition-colors duration-300"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Kids
+                </a>
+                <a 
+                  href="/contact" 
+                  className="block px-3 py-2 text-gray-800  custom-font2  hover:bg-gray-50 rounded transition-colors duration-300"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Contact
+                </a>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
-
-      {/* Mobile Menu */}
-      <div 
-        className={`md:hidden bg-white px-6 py-4 flex flex-col gap-4 shadow-lg mobile-menu-container
-          fixed left-0 w-64 h-screen top-0 z-50 transition-transform duration-300 ease-in-out
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
-      >
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-lg font-bold">Menu</h3>
-          <button 
-            onClick={() => setIsOpen(false)}
-            className="transition-transform duration-300 hover:rotate-90"
-          >
-            <X size={24} />
-          </button>
-        </div>
-        
-        <Link 
-          to="/" 
-          onClick={() => setIsOpen(false)}
-          className="relative group hover:pl-2 transition-all duration-200 hover:text-red-600"
-        >
-          Home
-          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-        </Link>
-        <Link 
-          to="/mens" 
-          onClick={() => setIsOpen(false)}
-          className="relative group hover:pl-2 transition-all duration-200 hover:text-red-600"
-        >
-          Mens
-          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-        </Link>
-        <Link 
-          to="/womens" 
-          onClick={() => setIsOpen(false)}
-          className="relative group hover:pl-2 transition-all duration-200 hover:text-red-600"
-        >
-          Womens
-          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-        </Link>
-        <Link 
-          to="/sarees" 
-          onClick={() => setIsOpen(false)}
-          className="relative group hover:pl-2 transition-all duration-200 hover:text-red-600"
-        >
-          Sarees
-          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-        </Link>
-        <Link 
-          to="/dresses" 
-          onClick={() => setIsOpen(false)}
-          className="relative group hover:pl-2 transition-all duration-200 hover:text-red-600"
-        >
-          Dresses
-          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-        </Link>
-        <Link 
-          to="/accessories" 
-          onClick={() => setIsOpen(false)}
-          className="relative group hover:pl-2 transition-all duration-200 hover:text-red-600"
-        >
-          Accessories
-          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-        </Link>
-        <Link 
-          to="/contact" 
-          onClick={() => setIsOpen(false)}
-          className="relative group hover:pl-2 transition-all duration-200 hover:text-red-600"
-        >
-          Contact
-          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-        </Link>
-        <Link 
-          to="/my-account" 
-          onClick={() => setIsOpen(false)} 
-          className="relative group flex items-center gap-2 hover:pl-2 transition-all duration-200 hover:text-red-600"
-        >
-          <User size={20} /> Account
-          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-        </Link>
-      </div>
-
-      {/* Overlay for mobile menu */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Cart Drawer */}
-      <div 
-        className={`fixed right-0 top-0 h-full w-80 bg-white shadow-lg z-50 p-4 h-screen transition-transform duration-300 ease-in-out ${
-          cartOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Your Cart</h3>
-       
-          <button 
-            onClick={() => setCartOpen(false)}
-            className="transition-transform duration-300 hover:rotate-90"
-          >
-            <X size={20} />
-          </button>
-        </div>
-        {/* You can import and use your <Cart /> component here */}
-      </div>
-
-      {/* Overlay for cart */}
-      {cartOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
-          onClick={() => setCartOpen(false)}
-        />
-      )}
     </header>
   );
 };

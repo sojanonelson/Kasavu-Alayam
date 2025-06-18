@@ -14,6 +14,12 @@ const getProductById = async (id) => {
   return response.data;
 };
 
+const getProductByIdeal = async (ideal) => {
+  const response = await axios.get(`${API_URL}/products/ideal/${ideal}`);
+  return response.data;
+};
+
+
 // POST new product
 const createProduct = async (productData) => {
   const response = await axios.post(`${API_URL}/products`, productData);
@@ -54,6 +60,7 @@ const productService = {
   getProducts,
   getProductById,
   createProduct,
+  getProductByIdeal,
   updateProduct,updateProductImages,
   deleteProduct,
 };

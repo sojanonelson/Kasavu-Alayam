@@ -7,7 +7,7 @@ const CustomerLayout = () => {
     <div className="flex flex-col min-h-screen poppins-regular">
       
       {/* Main content container */}
-      <div className="flex flex-1 max-w-7xl mx-auto w-full pb-2 px-4 lg:px-8 lg:pt-32 gap-8">
+      <div className="flex flex-1 max-w-7xl mx-auto w-full pb-2 px-4 lg:px-8 lg:pt-2 gap-8">
         
         {/* Sidebar */}
         <aside className="w-72 border-r-2 bg-white p-6  pt-10 ">

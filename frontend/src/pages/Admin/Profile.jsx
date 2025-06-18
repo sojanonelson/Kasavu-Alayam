@@ -7,7 +7,7 @@ const ProfilePage = () => {
   const [formData, setFormData] = useState({
     firstName: 'Admin',
     lastName: 'Admin',
-    email: 'sojannelson54@gmail.com',
+    email: 'kasavuaalayalam@gmail.com',
     phone: '+1 (555) 123-4567',
   });
   

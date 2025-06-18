@@ -7,22 +7,26 @@ const upload = require('../middleware/upload');
 router.post('/', upload.array('images', 4), productController.createProduct);
 router.post('/test', upload.array('images', 4), productController.TestcreateProduct);
 
-// ✅ Update Product - now handles new image uploads
+// Update Product
 router.put('/:id', productController.updateProduct);
-
-router.put('/:id/images', upload.array('images',4), productController.updateProductImages);
-
+router.put('/:id/images', upload.array('images', 4), productController.updateProductImages);
 
 // Delete Product
 router.delete('/:id', productController.deleteProduct);
 
-// Get All Products
-router.get('/', productController.getAllProducts);
+// Get Products by Collection (specific route must come before dynamic `:id`)
+router.get('/collection/:collection', productController.getProductsByCollection);
+
+// Get Products by Ideal For
+router.get('/ideal/:idealFor', productController.getProductsByIdeal);
 
 // Search by Name
 router.get('/search', productController.getProductByName);
 
-// Get by ID
+// Get All Products
+router.get('/', productController.getAllProducts);
+
+// Get Product by ID (keep at the bottom to prevent route conflicts)
 router.get('/:id', productController.getProductById);
 
 module.exports = router;

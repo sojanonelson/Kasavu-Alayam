@@ -89,51 +89,73 @@ const ProductOverview = () => {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {currentItems.length > 0 ? (
-          currentItems.map((p) => (
-            <div key={p._id} className="bg-white border border-gray-200   transition p-4">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="w-full md:w-1/3">
-                  <img
-                    src={p.images[0]?.url}
-                    alt={p.title}
-                    className="w-full h-64 object-cover rounded-lg mb-2"
-                  />
-                </div>
-                <div className="w-full md:w-2/3">
-                  <h2 className="text-lg font-bold text-gray-800">SKU: {p.sku}</h2>
-                  <h3 className="text-md font-semibold text-gray-700">{p.title}</h3>
-                   <h3 className="text-md  text-gray-700">Stock available:{p.stockQuantity}</h3>
-                  
-                  <p className="text-sm text-gray-600">{p.description}</p>
-                  <p className="text-sm text-gray-600">Color: {p.color}</p>
-                  <p className="text-sm text-gray-600">Ideal For: {p.productDetails?.idealFor}</p>
-                  <p className="text-sm text-gray-600">Category: {p.category?.name}</p>
-                  <p className="text-sm text-gray-600">Subcategory: {p.subcategory?.name}</p>
-                  <div className="mt-4 flex gap-2">
-                    <button
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-sm transition"
-                      onClick={() => navigate(`update/${p._id}`)}
-                    >
-                      Update
-                    </button>
-                    <button
-                      className=" hover:border-red-600 border text-red-600 px-4 py-2 rounded-md transition"
-                      onClick={() => handleDelete(p._id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
+  {currentItems.length > 0 ? (
+    currentItems.map((p) => (
+      <div key={p._id} className="bg-white border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all duration-200 p-6 rounded-xl">
+        <div className="flex gap-4">
+          <div className="w-1/3 flex-shrink-0">
+            <img
+              src={p.images[0]?.url}
+              alt={p.title}
+              className="w-auto lg:h-64 object-cover rounded-lg shadow-sm"
+            />
+          </div>
+          <div className="w-2/3 flex flex-col">
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-2">
+                <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                  {p.sku}
+                </span>
+                <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
+                  p.stockQuantity > 10 
+                    ? 'bg-green-100 text-green-800' 
+                    : 'bg-red-100 text-red-800'
+                }`}>
+                  Stock: {p.stockQuantity}
+                </span>
+              </div>
+              
+              <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2">{p.title}</h3>
+              <p className="text-xs text-gray-600 mb-2 line-clamp-2">{p.description}</p>
+              
+              <div className="space-y-1 text-xs text-gray-500">
+                <p><span className="font-medium">Color:</span> {p.color}</p>
+                <p><span className="font-medium">For:</span> {p.productDetails?.idealFor}</p>
+                <p><span className="font-medium">Category:</span> {p.category?.name}</p>
+                <p><span className="font-medium">Sub:</span> {p.subcategory?.name}</p>
               </div>
             </div>
-          ))
-        ) : (
-          <div className="col-span-1 md:col-span-2 lg:col-span-3 text-center text-gray-600">
-            <p>No products found.</p>
+            
+            <div className="flex gap-2 mt-3 pt-2 border-t border-gray-100">
+              <button
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium py-2 px-3 rounded-lg transition-colors duration-200"
+                onClick={() => navigate(`update/${p._id}`)}
+              >
+                Update
+              </button>
+              <button
+                className="flex-1 bg-white border border-red-300 hover:border-red-400 hover:bg-red-50 text-red-600 text-xs font-medium py-2 px-3 rounded-lg transition-colors duration-200"
+                onClick={() => handleDelete(p._id)}
+              >
+                Delete
+              </button>
+            </div>
           </div>
-        )}
+        </div>
       </div>
+    ))
+  ) : (
+    <div className="col-span-1 md:col-span-2 lg:col-span-3 text-center text-gray-600 py-12">
+      <div className="text-gray-400 mb-4">
+        <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-6a2 2 0 00-2 2v3" />
+        </svg>
+      </div>
+      <p className="text-lg font-medium text-gray-700">No products found.</p>
+      <p className="text-sm text-gray-500 mt-1">Try adjusting your search or filters.</p>
+    </div>
+  )}
+</div>
 
       {/* Pagination Controls */}
       <div className="mt-6 flex justify-center gap-2">
