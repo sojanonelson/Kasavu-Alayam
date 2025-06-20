@@ -37,6 +37,7 @@ import HomepageEditor from "../pages/Admin/HomepageEditor";
 import CollectionProductsScreen from "../pages/Admin/Inventory/InventoryCollections";
 import CollectionManager from "../pages/Admin/Collections";
 import InventoryCollections from "../pages/Admin/Inventory/InventoryCollections";
+import CollectionsShowCase from "../pages/Collections";
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -75,7 +76,7 @@ const AppRoutes = () => {
           <Route path="/" element={<SideContactNavbar />} />
           <Route path="/" element={<MensCollection />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/collections/:collection" element={<WomensCollection />} />
+          <Route path="/collections/:collection" element={<CollectionsShowCase />} />
           <Route path="/womens" element={<WomensCollection />} />
           <Route path="/kids" element={<KidsCollection />} />
           <Route path="/mens" element={<MensCollection />} />

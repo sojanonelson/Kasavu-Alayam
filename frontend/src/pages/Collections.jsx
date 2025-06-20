@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingBag, ChevronUp } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import Navbar from "../components/Navbar";
 import ScrolledNavbar from "../components/ScrolledNavbar";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,6 @@ import { Helmet } from "react-helmet";
 import ProductCard from "./ProductCard";
 import EmptyResults from "../components/ui/EmptyResults";
 import Pagination from "../components/ui/Pagination";
-import productService from "../services/productservice";
 import collectionService from "../services/collectionService";
 
 const LoadingSpinner = () => (
@@ -23,7 +22,7 @@ const LoadingSpinner = () => (
   </div>
 );
 
-const Collections = () => {
+const CollectionsShowCase = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [view, setView] = useState("grid");
   const [wishlist, setWishlist] = useState([]);
@@ -42,13 +41,31 @@ const Collections = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
+
+      const lowerParam = collection?.toLowerCase() || "";
+      let collectionId = "";
+
+      if (lowerParam.startsWith("mens")) {
+        collectionId = "6855a746cd5b892bfbd0b0bf";
+      } else if (lowerParam.startsWith("womens")) {
+        collectionId = "6855a771cd5b892bfbd0b0cd";
+      } else if (lowerParam.startsWith("kids")) {
+        collectionId = "6855a746cd5b892bfb3434";
+      } else {
+        console.warn("Unknown collection route param:", collection);
+        setApiData([]);
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        setIsLoading(true);
-        const data = await collectionService.getProductByCollection(collection);
-        setApiData(data.data);
+        const res = await collectionService.getProductByCollectionId(collectionId);
+        const groupedData = res;
+        const allProducts = Object.values(groupedData).flat();
+        setApiData(allProducts);
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Consider adding user feedback here, such as a toast or alert
       } finally {
         setIsLoading(false);
       }
@@ -64,13 +81,14 @@ const Collections = () => {
   }, []);
 
   const toggleWishlist = (id) => {
+    if (!id) return;
     setWishlist((prev) =>
-      prev.includes(id)
-        ? prev.filter((itemId) => itemId !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
     );
   };
 
+
+  console.log("jjj")
   const toggleCart = (product) => {
     const existingItem = cart.find((item) => item.id === product._id);
     existingItem
@@ -89,7 +107,7 @@ const Collections = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       <Helmet>
-        <title>Kasavu Aalayam | Women's Collection</title>
+        <title>Kasavu Aalayam | {collection?.toUpperCase()} Collection</title>
         <meta
           name="description"
           content="Discover the finest traditional Indian wear at Kasavu Aalayam. Explore premium silk sarees, ethnic wear collections for women, and exquisite bridal wear."
@@ -100,39 +118,24 @@ const Collections = () => {
         />
         <link
           rel="canonical"
-          href="https://kasavuaalayam.com/collections/women"
+          href={`https://kasavuaalayam.com/collections/${collection}`}
         />
       </Helmet>
 
-      {isScrolled ? <ScrolledNavbar /> : <Navbar />}
+     
 
       <div className="px-4 md:px-10 py-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mt-28 mb-6 gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mt-2 mb-6 gap-4">
           <div className="text-sm text-gray-600">
             <Link to="/" className="text-blue-600 hover:underline">
               Home
             </Link>{" "}
-            / <span>Women's Collection</span>
-          </div>
-
-          <div className="top-4 right-4 z-10 flex items-center">
-            <Link to="/cart">
-              <button className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <ShoppingBag size={24} />
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-            </Link>
+            / <span>{collection?.toUpperCase()} COLLECTIONS </span>
           </div>
         </div>
 
         <div className="mb-6">
-          <p className="text-sm text-gray-500">
-            {apiData.length} results found
-          </p>
+          <p className="text-sm text-gray-500">{apiData.length} results found</p>
         </div>
 
         {isLoading ? (
@@ -140,7 +143,7 @@ const Collections = () => {
         ) : apiData.length > 0 ? (
           <>
             {view === "grid" ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
                 {paginatedProducts.map((product) => (
                   <ProductCard
                     key={product._id}
@@ -195,4 +198,4 @@ const Collections = () => {
   );
 };
 
-export default Collections;
+export default CollectionsShowCase;

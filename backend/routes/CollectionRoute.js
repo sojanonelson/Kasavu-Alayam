@@ -8,6 +8,7 @@ const collectionController = require('../controllers/collectionController.js');
 
 router.post('/', collectionController.createCollection);
 router.get('/', collectionController.getAllCollections);
+router.get('/:id', collectionController.getAllCollectionsOfId);
 router.get('/:id/products', collectionController.getCollectionProducts);
 router.put('/:id', collectionController.updateCollection);
 router.delete('/:id', collectionController.deleteCollection);

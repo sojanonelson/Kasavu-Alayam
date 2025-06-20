@@ -33,6 +33,11 @@ const ProductCard = ({
     e.stopPropagation();
     toggleWishlist(product.id);
   };
+  const getDiscountPercent = (price, specialPrice) => {
+  if (!price || !specialPrice || price <= specialPrice) return 0;
+  return Math.round(((price - specialPrice) / price) * 100);
+};
+
 
   if (isListView) {
     return (
@@ -41,7 +46,7 @@ const ProductCard = ({
           <div className="relative md:w-1/3">
             <Link to={`/product/${product.id}`}>
               <img
-                src={product.image}
+                src={product.images[0].url}
                 alt={product.title}
                 className="w-full h-48 md:h-full object-cover"
               />
@@ -67,7 +72,7 @@ const ProductCard = ({
                     {product.title}
                   </h3>
                 </Link>
-                <p className="text-gray-500 text-sm">{product.category}</p>
+                {/* <p className="text-gray-500 text-sm">{product.category}</p> */}
               </div>
               <div className="text-right">
                 <div className="text-xl font-semibold">₹{product.price}</div>
@@ -79,7 +84,7 @@ const ProductCard = ({
                 {product.brand}
               </span>
               <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                {product.pattern}
+                {product.productDetails.fabric}
               </span>
               {product.color && (
                 <div className="flex items-center text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
@@ -127,7 +132,7 @@ const ProductCard = ({
       <div className="relative">
         <Link to={`/product/${product.id}`}>
           <img
-            src={product.image}
+            src={product.images[0].url || product.images}
             alt={product.title}
             className="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
           />
@@ -160,12 +165,12 @@ const ProductCard = ({
               {product.title}
             </h3>
           </Link>
-          <p className="text-gray-500 text-xs sm:text-sm">{product.category}</p>
+          <p className="text-gray-500 text-xs sm:text-sm">{product.productDetails.fabric}</p>
         </div>
         
         <div className="flex flex-wrap gap-1 mb-3">
           <span className="text-[10px] sm:text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-            {product.brand}
+            {product.sku}
           </span>
           {product.color && (
             <div className="flex items-center text-[10px] sm:text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
@@ -178,14 +183,27 @@ const ProductCard = ({
           )}
         </div>
         
-        <div className="flex justify-between items-center mb-3">
-          <div className="text-lg font-semibold">₹{product.price}</div>
-          {product.sizes && (
-            <div className="text-xs text-gray-500">
-              Sizes: {product.sizes.join(', ')}
-            </div>
-          )}
-        </div>
+       <div className="flex justify-between items-center mb-3">
+  <div>
+    <div className="text-lg font-semibold flex items-center gap-2">
+      ₹{product.specialPrice}
+      <span className="text-gray-400 text-sm line-through">₹{product.price}</span>
+     {getDiscountPercent(product.price, product.specialPrice) > 0 && (
+  <span className="text-green-600 text-xs bg-green-100 px-2 py-0.5 rounded-md">
+    {getDiscountPercent(product.price, product.specialPrice)}% OFF
+  </span>
+)}
+
+    </div>
+
+    {product.sizes && (
+      <div className="text-xs text-gray-500 mt-1">
+        Sizes: {product.sizes.join(', ')}
+      </div>
+    )}
+  </div>
+</div>
+
         
         <div className="space-y-2">
           <button

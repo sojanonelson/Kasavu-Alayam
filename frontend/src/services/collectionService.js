@@ -3,12 +3,10 @@ import axios from 'axios';
 const API_URL = process.env.REACT_APP_BACKEND_API;
 
 
-// const getProductByCollection = async (collection) => {
-//   const response = await axios.post(`${API_URL}/collections`, {
-//     collection: collection
-//   });
-//   return response.data;
-// };
+const getProductByCollectionId = async (collectionId) => {
+  const response = await axios.get(`${API_URL}/collections/${collectionId}/products`);
+  return response.data;
+};
 
 const getAllCollection = async () => {
   const response = await axios.get(`${API_URL}/collections`);
@@ -34,6 +32,7 @@ const updateCollection = async (id, data) => {
 
 
 const collectionService  = {
+  getProductByCollectionId,
   getAllCollection,
   createCollection,
   deleteCollection,

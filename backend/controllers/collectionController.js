@@ -20,6 +20,24 @@ exports.getAllCollections = async (req, res) => {
   }
 };
 
+exports.getAllCollectionsOfId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const collection = await Collection.findById(id)
+      .select('title categories')
+      .populate('categories', 'name');
+
+    if (!collection) {
+      return res.status(404).json({ message: 'Collection not found' });
+    }
+
+    res.status(200).json(collection);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
 exports.getCollectionProducts = async (req, res) => {
   try {
     const collectionId = req.params.id;
