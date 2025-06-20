@@ -98,6 +98,8 @@ const categories = [
 const FeaturedCard = ({ title, description, link, image }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+   const [showCart, setShowCart] = useState(false);
+   
 
   return (
     <Link
@@ -328,12 +330,37 @@ const ScrollToTopButton = () => {
 };
 
 const HomePage = () => {
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // State to control loading
 
   const swiperRef = useRef(null);
+
+
+  
+
+    const [carouselImages, setCarouselImages] = useState([]); // Add this state
+  
+
+
+    useEffect(() => {
+    const fetchCarouselImages = async () => {
+      try {
+        const images = await websiteSettingService.getCarouselImages();
+        setCarouselImages(images);
+      } catch (error) {
+        console.error('Failed to fetch carousel images:', error);
+        // Fallback to static images if API fails
+        setCarouselImages(heroImages);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCarouselImages();
+  }, []);
 
   // Animation refs
   const [categoriesRef, categoriesInView] = useInView({
@@ -413,64 +440,73 @@ const HomePage = () => {
       {/* <Navbar onCartClick={() => setShowCart(true)}/> */}
 
       {/* Hero Section with Enhanced Carousel */}
-      <section className="relative" aria-label="Featured collections carousel">
-        <Swiper
-          ref={swiperRef}
-          modules={[Autoplay, EffectFade, Pagination]}
-          effect="fade"
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-          }}
-          pagination={{
-            clickable: true,
-            el: '.custom-pagination',
-            bulletClass: 'custom-bullet',
-            bulletActiveClass: 'custom-bullet-active',
-            renderBullet: (index, className) => {
-              return `<span class="${className}" aria-label="Go to slide ${index + 1}"></span>`;
-            }
-          }}
-          speed={1000}
-          loop={true}
-          spaceBetween={0}
-          slidesPerView={1}
-          className="w-full lg:h-screen"
-          onSlideChange={handleSlideChange}
-        >
-          {heroImages.map((img, index) => (
-            <SwiperSlide key={index}>
-              <div className="relative  w-full lg:h-screen overflow-hidden">
-                <img
-                  src={img.url}
-                  alt={`${img.title} - ${img.subtitle}`}
-                  className="w-full lg:h-full h-[60vh] object-cover"
-                  onLoad={() => handleImageLoad(`hero-${index}`)}
-                />
-                {!imagesLoaded[`hero-${index}`] && (
-                  <div className="absolute inset-0 bg-gray-200 animate-pulse" />
-                )}
-                <div className="absolute inset-0 bg-black bg-opacity-20" />
-                <div className="absolute inset-0 flex flex-col justify-end items-center lg:pb-32 pb-[20%]  text-center px-6">
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: currentSlide === index ? 1 : 0, y: currentSlide === index ? 0 : 30 }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                    className="max-w-4xl "
-                  >
-                    <h1 className="lg:text-5xl text-2xl md:text-6xl font-bold custom-font2  text-white lg:mb-4">{img.title}</h1>
-                    <p className="lg:text-xl text-1xl text-white mb-8 poppins-regular">{img.subtitle}</p>
-                 
-                  </motion.div>
+       <section className="relative" aria-label="Featured collections carousel">
+        {carouselImages.length > 0 ? (
+          <Swiper
+            ref={swiperRef}
+            modules={[Autoplay, EffectFade, Pagination]}
+            effect="fade"
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true
+            }}
+            pagination={{
+              clickable: true,
+              el: '.custom-pagination',
+              bulletClass: 'custom-bullet',
+              bulletActiveClass: 'custom-bullet-active',
+              renderBullet: (index, className) => {
+                return `<span class="${className}" aria-label="Go to slide ${index + 1}"></span>`;
+              }
+            }}
+            speed={1000}
+            loop={true}
+            spaceBetween={0}
+            slidesPerView={1}
+            className="w-full lg:h-screen"
+            onSlideChange={handleSlideChange}
+          >
+            {carouselImages.map((img, index) => (
+              <SwiperSlide key={index}>
+                <div className="relative w-full lg:h-screen overflow-hidden">
+                  <img
+                    src={img.url}
+                    alt={`${img.title || 'Carousel Image'} - ${img.subtitle || ''}`}
+                    className="w-full lg:h-full h-[60vh] object-cover"
+                    onLoad={() => handleImageLoad(`hero-${index}`)}
+                  />
+                  {!imagesLoaded[`hero-${index}`] && (
+                    <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+                  )}
+                  <div className="absolute inset-0 bg-black bg-opacity-20" />
+                  <div className="absolute inset-0 flex flex-col justify-end items-center lg:pb-32 pb-[20%] text-center px-6">
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: currentSlide === index ? 1 : 0, y: currentSlide === index ? 0 : 30 }}
+                      transition={{ duration: 0.8, delay: 0.3 }}
+                      className="max-w-4xl"
+                    >
+                      <h1 className="lg:text-5xl text-2xl md:text-6xl font-bold custom-font2 text-white lg:mb-4">
+                        {img.title || 'Premium Collection'}
+                      </h1>
+                      <p className="lg:text-xl text-1xl text-white mb-8 poppins-regular">
+                        {img.subtitle || 'Discover our exquisite range'}
+                      </p>
+                    </motion.div>
+                  </div>
                 </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <div className="w-full lg:h-screen h-[60vh] bg-gray-200 flex items-center justify-center">
+            <p>Loading carousel...</p>
+          </div>
+        )}
 
         {/* Custom Pagination Container */}
-        <div className="custom-pagination !bottom-12 md:bottom-0 pb-10 " />
+        <div className="custom-pagination !bottom-12 md:bottom-0 pb-10" />
       </section>
 
        <div className='flex justify-center items-center lg:pt-10 pt-10'>

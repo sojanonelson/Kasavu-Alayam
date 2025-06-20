@@ -1,145 +1,128 @@
-const WebsiteSetting = require('../models/WebsiteSetting');
-const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
+const WebsiteSetting = require("../models/WebsiteSetting");
+const cloudinary = require("../config/cloudinary");
+const fs = require("fs");
 
-
-
-
-
-exports.updateContactInfo = async (req, res) => {
+exports.uploadCarouselImages = async (req, res) => {
   try {
-    const { phone, email, location } = req.body;
-    const setting = await WebsiteSetting.findOne();
-    const updated = setting
-      ? await WebsiteSetting.findByIdAndUpdate(setting._id, { contact: { phone, email, location } }, { new: true })
-      : await WebsiteSetting.create({ contact: { phone, email, location } });
-    res.status(200).json(updated);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to update contact info' });
-  }
-};
+    const { title = "", subtitle = "" } = req.body;
+    const file = req.file;
 
-
-
-
-exports.updateMaintenanceStatus = async (req, res) => {
-  try {
-    const { underMaintenance, maintenanceTimeStart, maintenanceTimeEnd } = req.body;
-    console.log(maintenanceTimeStart)
-    const setting = await WebsiteSetting.findOne();
-    const updated = setting
-      ? await WebsiteSetting.findByIdAndUpdate(
-          setting._id,
-          {
-            underMaintenance,
-            maintenanceTime: {
-              start: maintenanceTimeStart,
-              end: maintenanceTimeEnd,
-            },
-          },
-          { new: true }
-        )
-      : await WebsiteSetting.create({
-          underMaintenance,
-          maintenanceTime: {
-            start: maintenanceTimeStart,
-            end: maintenanceTimeEnd,
-          },
-        });
-    res.status(200).json(updated);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to update maintenance status' });
-  }
-};
-
-
-exports.updateCarouselImages = async (req, res) => {
-  try {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ error: 'No images provided' });
+    if (!file) {
+      return res.status(400).json({ message: "No image uploaded" });
     }
 
-    const uploadPromises = req.files.map((file, index) =>
-      cloudinary.uploader.upload(file.path, {
-        folder: "carousel",
-        quality: "auto:good",
-      }).then((result) => {
-        fs.unlinkSync(file.path);
-        return {
-          public_id: result.public_id,
-          url: result.secure_url,
-          title: req.body.titles?.[index] || "",
-          subtitle: req.body.subtitles?.[index] || ""
-        };
-      })
-    );
+    const result = await cloudinary.uploader.upload(file.path, {
+      folder: "carousel",
+      quality: "auto:good",
+    });
 
-    const images = await Promise.all(uploadPromises);
+    fs.unlinkSync(file.path);
+
+    const image = {
+      url: result.secure_url,
+      public_id: result.public_id,
+      title,
+      subtitle,
+    };
+
     const setting = await WebsiteSetting.findOneAndUpdate(
       {},
-      { carouselImages: images }, // Replace all images
+      { $push: { carouselImages: image } },
       { upsert: true, new: true }
     );
 
-    res.status(200).json(setting);
-  } catch (err) {
-    console.error("Error updating carousel images:", err);
-    res.status(500).json({ error: 'Failed to update carousel images' });
-  }
-};
-
-exports.deleteMaintenanceStatus = async (req, res) => {
-  try {
-    const setting = await WebsiteSetting.findOneAndUpdate(
-      {},
-      { 
-        underMaintenance: false,
-        maintenanceTime: {
-          start: null,
-          end: null,
-          alertAll: false
-        }
-      },
-      { new: true }
-    );
-    
-    if (!setting) {
-      return res.status(404).json({ error: "Website settings not found" });
-    }
-
-    res.status(200).json(setting);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to update maintenance status' });
+    res.status(200).json({
+      message: "Image uploaded successfully",
+      image,
+      setting,
+    });
+  } catch (error) {
+    console.error("Upload Error:", error);
+    if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+    res.status(500).json({ message: "Upload failed", error: error.message });
   }
 };
 
 
-exports.getWebsiteSettings = async (req, res) => {
-  try {
-    const setting = await WebsiteSetting.findOne();
-    if (!setting) {
-      return res.status(404).json({ message: 'Website settings not found' });
-    }
-    res.status(200).json(setting);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to fetch website settings' });
-  }
-};
-
+// Get all carousel images
 exports.getCarouselImages = async (req, res) => {
   try {
-    const setting = await WebsiteSetting.findOne();
-    if (!setting || !setting.carouselImages) {
-      return res.status(404).json({ message: 'No carousel images found' });
-    }
-    res.status(200).json({ images: setting.carouselImages });
+    const setting = await WebsiteSetting.findOne({}, { carouselImages: 1 });
+    res.status(200).json(setting?.carouselImages || []);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to fetch carousel images' });
+    res.status(500).json({ message: "Failed to fetch carousel images", error: err.message });
   }
 };
 
+// Delete specific carousel image by public_id
+exports.deleteCarouselImage = async (req, res) => {
+  try {
+    const { publicId } = req.body;
+    if (!publicId) return res.status(400).json({ message: "Missing publicId" });
+
+    await cloudinary.uploader.destroy(publicId);
+
+    const updatedSetting = await WebsiteSetting.findOneAndUpdate(
+      {},
+      { $pull: { carouselImages: { public_id: publicId } } },
+      { new: true }
+    );
+
+    res.status(200).json({ message: "Image deleted successfully", updatedSetting });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting carousel image", error: error.message });
+  }
+};
+
+
+exports.reorderCarouselImages = async (req, res) => {
+  try {
+    const { orderedPublicIds } = req.body;
+    
+    // Validate input
+    if (!Array.isArray(orderedPublicIds) ){
+      return res.status(400).json({ message: "orderedPublicIds must be an array" });
+    }
+
+    const setting = await WebsiteSetting.findOne({});
+    if (!setting) {
+      return res.status(404).json({ message: "Settings not found" });
+    }
+
+    // Create a map for quick lookup
+    const imageMap = new Map();
+    setting.carouselImages.forEach(img => imageMap.set(img.public_id, img));
+
+    // Rebuild the array in the new order, preserving only valid IDs
+    const orderedImages = orderedPublicIds
+      .map(id => imageMap.get(id))
+      .filter(img => img !== undefined);
+
+    // Verify we have all images
+    if (orderedImages.length !== setting.carouselImages.length) {
+      return res.status(400).json({
+        message: "Some image IDs don't exist in current carousel",
+        missingIds: setting.carouselImages
+          .filter(img => !orderedPublicIds.includes(img.public_id))
+          .map(img => img.public_id)
+      });
+    }
+
+    // Update the setting
+    setting.carouselImages = orderedImages;
+    await setting.save();
+
+    res.status(200).json({ 
+      success: true,
+      message: "Carousel images reordered successfully",
+      images: setting.carouselImages 
+    });
+  } catch (err) {
+    console.error("Reorder Error:", err);
+    res.status(500).json({ 
+      success: false,
+      message: "Failed to reorder images", 
+      error: err.message 
+    });
+  }
+};
