@@ -7,6 +7,7 @@ const productRoutes = require('./routes/ProductRoute');
 const customerRoutes = require('./routes/CustomerRoute');
 const subcategoryRoutes = require('./routes/subcategoryRoutes');
 const categoryRoutes =require('./routes/CategoryRoute')
+const websettingRoutes =require('./routes/websiteSettingRoutes')
 const collectionRoutes =require('./routes/CollectionRoute')
 const connectDB = require('./config/DB');
 
@@ -38,6 +39,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/customer', customerRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/websetting', websettingRoutes);
 
 
 app.use('/api/subcategories', subcategoryRoutes);

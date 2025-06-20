@@ -18,6 +18,7 @@ import border2 from '../assets/elements/border1.png';
 import Cart from './Admin/Cart';
 import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
 import HomePageSkeleton from './HomePageSkeleton'; // Import the skeleton component
+import websiteSettingService from '../services/websiteSettingService';
 
 // Import featured collection images
 import weddingSilksImage from '../assets/ka women-4.jpg';
