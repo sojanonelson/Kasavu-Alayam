@@ -105,7 +105,7 @@ const CollectionsShowCase = () => {
   }, [apiData, currentPage]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen lg:px-28">
       <Helmet>
         <title>Kasavu Aalayam | {collection?.toUpperCase()} Collection</title>
         <meta

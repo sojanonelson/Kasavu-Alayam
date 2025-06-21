@@ -468,40 +468,50 @@ const HomePage = () => {
             onSlideChange={handleSlideChange}
           >
             {carouselImages.map((img, index) => (
-              <SwiperSlide key={index}>
-                <div className="relative w-full lg:h-screen overflow-hidden">
-                  <img
-                    src={img.url}
-                    alt={`${img.title || 'Carousel Image'} - ${img.subtitle || ''}`}
-                    className="w-full lg:h-full h-[60vh] object-cover"
-                    onLoad={() => handleImageLoad(`hero-${index}`)}
-                  />
-                  {!imagesLoaded[`hero-${index}`] && (
-                    <div className="absolute inset-0 bg-gray-200 animate-pulse" />
-                  )}
-                  <div className="absolute inset-0 bg-black bg-opacity-20" />
-                  <div className="absolute inset-0 flex flex-col justify-end items-center lg:pb-32 pb-[20%] text-center px-6">
-                    <motion.div
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: currentSlide === index ? 1 : 0, y: currentSlide === index ? 0 : 30 }}
-                      transition={{ duration: 0.8, delay: 0.3 }}
-                      className="max-w-4xl"
-                    >
-                      <h1 className="lg:text-5xl text-2xl md:text-6xl font-bold custom-font2 text-white lg:mb-4">
-                        {img.title || 'Premium Collection'}
-                      </h1>
-                      <p className="lg:text-xl text-1xl text-white mb-8 poppins-regular">
-                        {img.subtitle || 'Discover our exquisite range'}
-                      </p>
-                    </motion.div>
-                  </div>
-                </div>
-              </SwiperSlide>
+             <SwiperSlide key={index}>
+  <div className="relative w-full lg:h-screen overflow-hidden">
+    <img
+      src={img.url}
+      alt={`${img.title || 'Carousel Image'} - ${img.subtitle || ''}`}
+      className="w-full lg:h-full h-[60vh] object-cover"
+      onLoad={() => handleImageLoad(`hero-${index}`)}
+    />
+
+    {/* Skeleton loader */}
+    {!imagesLoaded[`hero-${index}`] && (
+      <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+    )}
+
+    {/* Gradient Overlay */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/0 z-10" />
+
+    {/* Optional white overlay (you can remove if not needed) */}
+    {/* <div className="absolute inset-0 bg-white bg-opacity-20 z-10" /> */}
+
+    {/* Text content */}
+    <div className="absolute inset-0 flex flex-col justify-end items-center lg:pb-32 pb-[20%] text-center px-6 z-20">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: currentSlide === index ? 1 : 0, y: currentSlide === index ? 0 : 30 }}
+        transition={{ duration: 0.8, delay: 0.3 }}
+        className="max-w-4xl"
+      >
+        <h1 className="lg:text-5xl text-2xl md:text-6xl font-bold custom-font2 text-white lg:mb-4">
+          {img.title || 'Premium Collection'}
+        </h1>
+        <p className="lg:text-xl text-1xl text-white mb-8 poppins-regular">
+          {img.subtitle || 'Discover our exquisite range'}
+        </p>
+      </motion.div>
+    </div>
+  </div>
+</SwiperSlide>
+
             ))}
           </Swiper>
         ) : (
           <div className="w-full lg:h-screen h-[60vh] bg-gray-200 flex items-center justify-center">
-            <p>Loading carousel...</p>
+            <p className='custom-font'>Kasavu Aalayam</p>
           </div>
         )}
 

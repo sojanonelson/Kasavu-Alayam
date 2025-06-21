@@ -41,7 +41,7 @@ const ProductCard = ({
 
   if (isListView) {
     return (
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+      <div className="bg-red-600 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
         <div className="flex flex-col md:flex-row">
           <div className="relative md:w-1/3">
             <Link to={`/product/${product.id}`}>
@@ -114,7 +114,7 @@ const ProductCard = ({
               >
                 {isInCart ? 'In Cart' : 'Add to Cart'}
               </button>
-              <Link to={`/product/${product.id}`}>
+              <Link to={`/product/${product._id}`}>
                 <button className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
                   <Eye size={16} />
                 </button>
@@ -128,40 +128,42 @@ const ProductCard = ({
 
   // Grid view (default)
   return (
-    <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
-      <div className="relative">
-        <Link to={`/product/${product.id}`}>
-          <img
-            src={product.images[0].url || product.images}
-            alt={product.title}
-            className="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        </Link>
-        
-        <button
-          onClick={handleToggleWishlist}
-          className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-            isWishlisted
-              ? 'bg-red-100 text-red-500'
-              : 'bg-white/80 text-gray-600 hover:bg-white hover:text-red-500'
-          }`}
-          aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-        >
-          <Heart size={16} fill={isWishlisted ? 'currentColor' : 'none'} />
-        </button>
-        
-        {/* Quick view button on hover */}
-        <Link to={`/product/${product.id}`}>
-          <button className="absolute top-3 left-3 w-8 h-8 rounded-full bg-white/80 text-gray-600 hover:bg-white hover:text-black flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
-            <Eye size={16} />
-          </button>
-        </Link>
-      </div>
+    <div className="bg-white overflow-hidden transition-shadow group">
+     <div className="relative w-full h-64 group"> {/* Fixed height container */}
+  <Link to={`/product/${product._id}`} className="block w-full h-full">
+    <img
+      src={product.images[0]?.url || product.images}
+      alt={product.title}
+      className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+    />
+  </Link>
+
+  {/* Wishlist Button */}
+  <button
+    onClick={handleToggleWishlist}
+    className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+      isWishlisted
+        ? 'bg-red-100 text-red-500'
+        : 'bg-white/80 text-gray-600 hover:bg-white hover:text-red-500'
+    }`}
+    aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+  >
+    <Heart size={16} fill={isWishlisted ? 'currentColor' : 'none'} />
+  </button>
+
+  {/* Quick View Button */}
+  <Link to={`/product/${product._id}`}>
+    <button className="absolute top-3 left-3 w-8 h-8 rounded-full bg-white/80 text-gray-600 hover:bg-white hover:text-black flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
+      <Eye size={16} />
+    </button>
+  </Link>
+</div>
+
       
       <div className="p-4">
         <div className="mb-2">
-          <Link to={`/product/${product.id}`}>
-            <h3 className="font-medium text-sm sm:text-base hover:text-gray-600 transition-colors line-clamp-2">
+          <Link to={`/product/${product._id}`}>
+            <h3 className="font-medium text-xs poppins-regular hover:text-gray-600 transition-colors line-clamp-2">
               {product.title}
             </h3>
           </Link>
@@ -205,24 +207,25 @@ const ProductCard = ({
 </div>
 
         
-        <div className="space-y-2">
-          <button
-            onClick={handleBuyNow}
-            className="w-full bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium"
-          >
-            Buy Now
-          </button>
-          <button
-            onClick={handleAddToCart}
-            className={`w-full px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              isInCart
-                ? 'bg-green-100 text-green-700 border border-green-300'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
-            }`}
-          >
-            {isInCart ? 'In Cart' : 'Add to Cart'}
-          </button>
-        </div>
+       <div className="flex lg:flex-row flex-col gap-2">
+  <button
+    onClick={handleBuyNow}
+    className="lg:flex-1 bg-black text-white lg:px-2 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium"
+  >
+    Buy Now
+  </button>
+  <button
+    onClick={handleAddToCart}
+    className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors border ${
+      isInCart
+        ? 'bg-green-100 text-green-700 border-green-300'
+        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-300'
+    }`}
+  >
+    {isInCart ? 'In Cart' : 'Add to Cart'}
+  </button>
+</div>
+
       </div>
     </div>
   );

@@ -131,7 +131,7 @@ const ProductCard = ({ product, isListView, wishlist, toggleWishlist, toggleCart
           )}
         </div>
         <div className="flex mt-2 gap-1">{colorDots}</div>
-       <div className="flex gap-2 mt-3">
+       <div className="flex flex-row gap-2 mt-3">
   <motion.button
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}

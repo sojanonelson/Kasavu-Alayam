@@ -97,8 +97,8 @@ const EcommerceLoading = () => {
 
         {/* Brand name */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-black mb-2 tracking-wide">
-            KASAVU AALAYAM
+          <h1 className="text-3xl font-bold custom-font text-black mb-2 tracking-wide">
+            Kasavu Aalayam
           </h1>
           <p className="text-gray-600 text-sm font-medium tracking-wider uppercase">
             Premium Handlooms
