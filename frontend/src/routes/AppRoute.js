@@ -1,13 +1,12 @@
-// src/AppRoutes.js
 import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleNavbar } from "../redux/features/general/general"; // Update this path to match your structure
+import { toggleNavbar } from "../redux/features/general/general";
 
 // Pages and components
 import HomeScreen from "../pages/Home";
 import WomensCollection from "../components/collections/Womens-collection";
-import RegisterForm from "../components/RegisterForm";
+
 import SareesSection from "../pages/sarees-collection";
 import SideContactNavbar from "../pages/sidecontactbar";
 import CustomerLayout from "../Layouts/CustomerLayout";
@@ -25,19 +24,19 @@ import Customers from "../pages/Admin/Customers";
 import OrdersPage from "../pages/Admin/Order";
 import NotificationsPage from "../pages/Admin/Notificaton";
 import InventoryManagement from "../pages/Admin/Inventory";
-import Register from "../pages/Register";
-import KidsCollection from '../components/collections/Kids-collection'; 
-import MyAccount from "../pages/MyAccount/MyAccount";
+import KidsCollection from '../components/collections/Kids-collection';
+
 import ManageCategory from "../pages/Admin/ManageCategory";
 import CreateProduct from "../pages/Admin/Products/CreateProduct";
 import ProductOverview from "../pages/Admin/ProductOverview";
 import UpdateProduct from "../pages/Admin/Products/UpdateProduct";
 import Settings from "../pages/Admin/Settings";
 import HomepageEditor from "../pages/Admin/HomepageEditor";
-import CollectionProductsScreen from "../pages/Admin/Inventory/InventoryCollections";
+
 import CollectionManager from "../pages/Admin/Collections";
 import InventoryCollections from "../pages/Admin/Inventory/InventoryCollections";
 import CollectionsShowCase from "../pages/Collections";
+import Login from "../pages/Login";
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -54,10 +53,13 @@ const AppRoutes = () => {
   }, [location.pathname, dispatch]);
 
   const loading = useSelector((state) => state.general.showNavbar);
-  console.log("REDUX:", loading)
+  const loginModel = useSelector((state) => state.general.loginModel);
+
+  console.log("REDUX:", loading);
+  console.log("LoginModel:", loginModel);
 
   return (
-    <>
+    <div >
       {showCart && (
         <>
           <div
@@ -75,12 +77,12 @@ const AppRoutes = () => {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/" element={<SideContactNavbar />} />
           <Route path="/" element={<MensCollection />} />
-          <Route path="/register" element={<Register />} />
+          
+          <Route path="/login" element={<Login />} />
           <Route path="/collections/:collection" element={<CollectionsShowCase />} />
           <Route path="/womens" element={<WomensCollection />} />
           <Route path="/kids" element={<KidsCollection />} />
           <Route path="/mens" element={<MensCollection />} />
-          <Route path="/components" element={<RegisterForm />} />
           <Route path="/sarees" element={<SareesSection />} />
           <Route path="/shopping-cart" element={<Cart />} />
           <Route path="/product" element={<SingleProductPage />} />
@@ -112,14 +114,14 @@ const AppRoutes = () => {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-    </>
+    </div>
   );
 };
 
 const WithNavbar = () => {
   return (
     <>
-      <Navbar  />
+      <Navbar />
       <Outlet />
     </>
   );

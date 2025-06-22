@@ -1,20 +1,20 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/orders';
+const API_URL = rocess.env.REACT_APP_BACKEND_API// Adjust the URL as necessary
 
-const getOrders = async () => {
-  const response = await axios.get(API_URL);
+const getUserByPhone = async (phone) => {
+  const response = await axios.get(`${API_URL}/user/?phone=${phone}`);
   return response.data;
 };
 
-const createOrder = async (orderData) => {
-  const response = await axios.post(API_URL, orderData);
+const createOrUpdateUser = async (userData) => {
+  const response = await axios.post(`${API_URL}/user/create`, userData);
   return response.data;
 };
 
-const orderService = {
-  getOrders,
-  createOrder,
+const userService = {
+  getUserByPhone,
+  createOrUpdateUser,
 };
 
-export default orderService;
+export default userService;

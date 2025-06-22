@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
-import { Menu, X, User, ShoppingCart } from 'lucide-react';
+import { Menu, X, User, ShoppingCart, LogInIcon, LogIn } from 'lucide-react';
 import Logo from '../assets/logo.png'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import LoginWithOTP from '../pages/Login';
+import { toggleLoginModel } from "../redux/features/general/general"; 
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const cartCount = 3; // Mock cart count
   const navBar = useSelector((state) => state.general.showNavbar);
+  const dispatch = useDispatch();
   console.log("status:", navBar)
+    const [showLogin, setShowLogin] = useState(false);
+
+    const handleLogin =()=>{
+      setShowLogin(true)
+
+      dispatch(toggleLoginModel(true))
+
+    }
+    
 
   return (
     <header className={`w-full shadow-sm ${navBar ? 'z-50 absolute' : ''}`}>
@@ -107,8 +119,13 @@ const Navbar = () => {
             <a href="/my-account" className={`${navBar ? "text-white" : "text-black"} transition-colors duration-300`}>
               <User size={24} />
             </a>
+             <a  onClick={() => handleLogin()} className={`${navBar ? "text-white" : "text-black"} transition-colors cursor-pointer duration-300`}>
+              <LogIn size={24} />
+            </a>
           </div>
         </div>
+
+         {showLogin && <LoginWithOTP onClose={() => setShowLogin(false)} />}
 
         {/* Mobile/Tablet Layout */}
         <div className="lg:hidden">

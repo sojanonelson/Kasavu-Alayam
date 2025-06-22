@@ -34,6 +34,7 @@ import mensCollectionsImage from '../assets/ka men-1.webp';
 import product1Image from '../assets/k-1.jpg';
 import product2Image from '../assets/k-4.jpg';
 import product3Image from '../assets/k-1.jpg';
+import { useSelector } from 'react-redux';
 
 const heroImages = [ 
   {
@@ -99,6 +100,7 @@ const FeaturedCard = ({ title, description, link, image }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
    const [showCart, setShowCart] = useState(false);
+  
    
 
   return (
@@ -205,7 +207,7 @@ const ScrollToTopButton = () => {
         stiffness: 260,
         damping: 20
       }}
-      className="fixed bottom-8 right-8 z-50"
+      className="fixed  bottom-8 right-8 z-50"
     >
       <motion.button
         onClick={scrollToTop}
@@ -335,6 +337,7 @@ const HomePage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // State to control loading
+  
 
   const swiperRef = useRef(null);
 
@@ -428,7 +431,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className="font-sans">
+    <div className={ ` font-sans `}>
       <Helmet>
         <title>Kasavu Aalayam | Home of Traditional Indian Wear</title>
         <meta name="description" content="Discover the finest traditional Indian wear at Kasavu Aalayam. Explore premium silk sarees, ethnic wear collections for men and women, and exquisite bridal wear." />

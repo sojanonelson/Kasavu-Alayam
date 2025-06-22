@@ -6,7 +6,8 @@ const initialState = {
   appLoading: false,
   showNavbar: true,         // Navbar visibility on home screen
   theme: 'light',           // 'light' or 'dark'
-  userData: null            // User object or null if not logged in
+  userData: null ,
+  loginModel: false           // User object or null if not logged in
 };
 
 const generalSlice = createSlice({
@@ -18,6 +19,9 @@ const generalSlice = createSlice({
     },
     toggleNavbar: (state, action) => {
       state.showNavbar = action.payload;
+    },
+     toggleLoginModel: (state, action) => {
+      state.loginModel = action.payload;
     },
     setTheme: (state, action) => {
       state.theme = action.payload;
@@ -34,6 +38,7 @@ const generalSlice = createSlice({
 export const {
   setAppLoading,
   toggleNavbar,
+  toggleLoginModel,
   setTheme,
   setUserData,
   clearUserData

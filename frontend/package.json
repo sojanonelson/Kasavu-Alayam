@@ -18,6 +18,7 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.8.4",
+    "firebase": "^11.9.1",
     "framer-motion": "^12.6.3",
     "lucide-react": "^0.487.0",
     "react": "^18.3.1",
@@ -33,6 +34,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.30.0",
     "react-scripts": "5.0.1",
+    "reactjs-otp-input": "^2.0.10",
     "recharts": "^2.15.3",
     "swiper": "^11.2.6",
     "web-vitals": "^2.1.4"
