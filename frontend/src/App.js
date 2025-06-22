@@ -10,10 +10,14 @@ function App() {
     <Provider store={store}>
       <ToastProvider>
         <div className="App">
+         
+
+         
         
           <AppRoutes />
           {/* <Footer /> */}
           <DevelopmentBadge />
+         
         </div>
       </ToastProvider>
     </Provider>
