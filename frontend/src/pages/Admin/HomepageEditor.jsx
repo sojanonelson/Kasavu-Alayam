@@ -23,7 +23,7 @@ const WebsiteSettings = () => {
   return (
     <Paper elevation={3} sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Website Settings
+        <span>Kasavu Aalayam Website Settings</span>
       </Typography>
       
       <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 3 }}>

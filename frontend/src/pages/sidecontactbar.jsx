@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, memo, useRef } from "react";
-import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
+import React, { useState, useEffect, useCallback, memo } from "react";
+import { Mail, Phone, MessageSquare, Navigation } from "lucide-react";
 
 // Individual Contact Circle Component
 const ContactCircle = memo(({ icon: Icon, title, onClick, bgColor, hoverColor, iconColor }) => (
@@ -9,13 +9,13 @@ const ContactCircle = memo(({ icon: Icon, title, onClick, bgColor, hoverColor, i
     title={title}
   >
     <Icon className={`w-4 h-4 ${iconColor} transition-transform duration-300 group-hover:scale-110`} />
-    
+
     {/* Tooltip */}
     <div className="absolute right-10 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
       {title}
       <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-800"></div>
     </div>
-    
+
     {/* Ripple effect */}
     <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
       <div className="absolute inset-0 rounded-full bg-white opacity-20 scale-0 group-active:scale-100 transition-transform duration-150"></div>
@@ -58,11 +58,11 @@ const SideContactNavbar = () => {
     const baseCount = 2500;
     const randomIncrement = Math.floor(Math.random() * 100);
     setVisitorCount(baseCount + randomIncrement);
-    
+
     const interval = setInterval(() => {
       setVisitorCount(prev => prev + 1);
     }, 60000);
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -80,12 +80,12 @@ const SideContactNavbar = () => {
   const isMobile = windowWidth < 640;
 
   return (
-    <div className="fixed top-1/2 -translate-y-1/2 right-5 z-50 hidden lg:block">
+    <div className="fixed bottom-12 right-0 z-50 mb-4 mr-4 lg:block">
       {/* Contact Circles */}
       <div className="flex flex-col gap-2 items-center">
         {/* WhatsApp */}
         <ContactCircle
-          icon={MessageCircle}
+          icon={MessageSquare}
           title="WhatsApp Chat"
           onClick={handleWhatsApp}
           bgColor="bg-green-500"
@@ -98,8 +98,8 @@ const SideContactNavbar = () => {
           icon={Mail}
           title="Send Email"
           onClick={handleEmail}
-          bgColor="bg-blue-500"
-          hoverColor="hover:bg-blue-600"
+          bgColor="bg-blue-600"
+          hoverColor="hover:bg-blue-700"
           iconColor="text-white"
         />
 
@@ -108,18 +108,18 @@ const SideContactNavbar = () => {
           icon={Phone}
           title="Call Us"
           onClick={handleCall}
-          bgColor="bg-orange-500"
-          hoverColor="hover:bg-orange-600"
+          bgColor="bg-green-600"
+          hoverColor="hover:bg-green-700"
           iconColor="text-white"
         />
 
         {/* Location */}
         <ContactCircle
-          icon={MapPin}
+          icon={Navigation}
           title="Find Location"
           onClick={handleLocation}
-          bgColor="bg-purple-500"
-          hoverColor="hover:bg-purple-600"
+          bgColor="bg-red-500"
+          hoverColor="hover:bg-red-600"
           iconColor="text-white"
         />
       </div>
@@ -135,16 +135,13 @@ export default function Demo() {
   const handleExploreCollection = () => {
     // You can customize this function based on your needs
     window.open('https://kasavuaalayam.com/collections', '_blank');
-    // Or navigate to a different section: 
-    // document.getElementById('products-section')?.scrollIntoView({ behavior: 'smooth' });
-    // Or show a modal, etc.
   };
 
   return (
     <div className="h-[70vh] relative overflow-hidden">
       {/* Hero Image Section */}
       <div className="absolute inset-0">
-        <img 
+        <img
           src={handloomImage}
           alt="Premium Silk Collection"
           className="w-full h-full object-cover"
@@ -162,7 +159,7 @@ export default function Demo() {
             <div className="mx-4 w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
             <div className="h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent w-24"></div>
           </div>
-          
+
           {/* Main Title with Creative Typography */}
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-wide">
             <span className="inline-block transform hover:scale-105 transition-transform duration-300">
@@ -177,7 +174,7 @@ export default function Demo() {
               Treasures
             </span>
           </h1>
-          
+
           {/* Subtitle with Enhanced Styling */}
           <div className="max-w-3xl mx-auto mb-8">
             <p className="text-base md:text-lg lg:text-xl text-gray-200 font-light leading-relaxed">
@@ -186,24 +183,24 @@ export default function Demo() {
               crafted with <span className="text-amber-300 font-medium">love</span> and <span className="text-amber-300 font-medium">heritage</span>
             </p>
           </div>
-          
+
           {/* Mesh Blur Button */}
           <div className="flex justify-center">
-            <button 
+            <button
               onClick={handleExploreCollection}
               className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-transparent backdrop-blur-md rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden border border-white/30 hover:border-white/50"
             >
-              
+
               {/* Image-based Mesh Blur Background Effects */}
               <div className="absolute inset-0 rounded-full overflow-hidden">
-                <img 
+                <img
                   src={handloomImage}
                   alt=""
                   className="w-full h-full object-cover opacity-20 scale-150 blur-sm group-hover:opacity-30 group-hover:blur-none transition-all duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-500/60 via-orange-400/50 to-yellow-500/60 mix-blend-overlay"></div>
               </div>
-              
+
               {/* Additional Mesh Blur Effects */}
               <div className="absolute inset-0 opacity-30 rounded-full">
                 <div className="absolute -top-2 -left-2 w-12 h-12 bg-amber-400/40 rounded-full filter blur-xl animate-pulse"></div>
@@ -211,26 +208,26 @@ export default function Demo() {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-6 bg-yellow-500/40 rounded-full filter blur-2xl animate-pulse" style={{animationDelay: '0.5s'}}></div>
                 <div className="absolute top-0 right-0 w-6 h-6 bg-amber-300/30 rounded-full filter blur-md animate-pulse" style={{animationDelay: '2s'}}></div>
               </div>
-              
+
               {/* Dynamic Color Mesh Effects */}
               <div className="absolute inset-0 opacity-20 rounded-full">
                 <div className="absolute top-1 left-1 w-10 h-10 bg-gradient-to-br from-red-400/50 to-orange-500/50 rounded-full filter blur-lg animate-pulse" style={{animationDelay: '0.3s'}}></div>
                 <div className="absolute bottom-1 right-1 w-8 h-8 bg-gradient-to-tl from-yellow-400/40 to-amber-500/40 rounded-full filter blur-md animate-pulse" style={{animationDelay: '1.2s'}}></div>
                 <div className="absolute top-3 right-3 w-6 h-6 bg-gradient-to-bl from-orange-300/60 to-red-400/30 rounded-full filter blur-sm animate-pulse" style={{animationDelay: '2.1s'}}></div>
               </div>
-              
+
               <span className="relative z-10 flex items-center gap-2 font-medium">
                 Explore Collection
                 <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </span>
-              
+
               {/* Button shine effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 rounded-full"></div>
             </button>
           </div>
-          
+
           {/* Decorative Elements */}
           <div className="mt-8 flex justify-center items-center space-x-4 text-amber-300">
             <div className="w-8 h-px bg-amber-300"></div>
@@ -241,7 +238,7 @@ export default function Demo() {
             </div>
             <div className="w-8 h-px bg-amber-300"></div>
           </div>
-          
+
           {/* Heritage Badge */}
           <div className="mt-6 inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
             <div className="w-2 h-2 bg-amber-400 rounded-full mr-2 animate-pulse"></div>
