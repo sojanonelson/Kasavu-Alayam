@@ -4,12 +4,14 @@ import Logo from '../assets/logo.png'
 import { useDispatch, useSelector } from 'react-redux';
 import LoginWithOTP from '../pages/Login';
 import { toggleLoginModel } from "../redux/features/general/general"; 
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const cartCount = 3; // Mock cart count
   const navBar = useSelector((state) => state.general.showNavbar);
   const dispatch = useDispatch();
+  const naviagte = useNavigate()
   console.log("status:", navBar)
     const [showLogin, setShowLogin] = useState(false);
 
@@ -119,13 +121,13 @@ const Navbar = () => {
             <a href="/my-account" className={`${navBar ? "text-white" : "text-black"} transition-colors duration-300`}>
               <User size={24} />
             </a>
-             <a  onClick={() => handleLogin()} className={`${navBar ? "text-white" : "text-black"} transition-colors cursor-pointer duration-300`}>
+             <a  href='/login' className={`${navBar ? "text-white" : "text-black"} transition-colors cursor-pointer duration-300`}>
               <LogIn size={24} />
             </a>
           </div>
         </div>
 
-         {showLogin && <LoginWithOTP onClose={() => setShowLogin(false)} />}
+         
 
         {/* Mobile/Tablet Layout */}
         <div className="lg:hidden">

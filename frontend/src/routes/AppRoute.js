@@ -37,6 +37,7 @@ import CollectionManager from "../pages/Admin/Collections";
 import InventoryCollections from "../pages/Admin/Inventory/InventoryCollections";
 import CollectionsShowCase from "../pages/Collections";
 import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -79,6 +80,8 @@ const AppRoutes = () => {
           <Route path="/" element={<MensCollection />} />
           
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
           <Route path="/collections/:collection" element={<CollectionsShowCase />} />
           <Route path="/womens" element={<WomensCollection />} />
           <Route path="/kids" element={<KidsCollection />} />
