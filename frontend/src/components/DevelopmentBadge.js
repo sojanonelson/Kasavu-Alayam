@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle, Settings, ExternalLink, Code, Users, X, Settings2 } from 'lucide-react';
 import devSound from '../assets/dev.mp3'; // Adjust the path as necessary
@@ -7,6 +7,7 @@ const DevelopmentBadge = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const audioRef = useRef(null);
+   const [latestCommit, setLatestCommit] = useState(null);
 
   const handleClick = () => {
     setIsPopupOpen(!isPopupOpen);
@@ -16,6 +17,17 @@ const DevelopmentBadge = () => {
       });
     }
   };
+
+    useEffect(() => {
+    fetch(`https://api.github.com/repos/sojanonelson/Kasavu-Alayam/commits?sha=main&per_page=1`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setLatestCommit(data[0]);
+        }
+      })
+      .catch(console.error);
+  }, []);
 
   const handleClose = () => {
     setIsPopupOpen(false);
@@ -221,6 +233,24 @@ const DevelopmentBadge = () => {
                     />
                   </motion.div>
                 </div>
+
+                 {latestCommit && (
+                <div className="mt-4 p-2 bg-gray-100 rounded-lg text-sm text-gray-800">
+                  <strong>Latest commit:</strong><br />
+                  {latestCommit.commit.message.split('\n')[0]}<br/>
+                  <code className="text-xs font-mono">{latestCommit.sha.substring(0,7)}</code><br/>
+                  <a
+                    href={latestCommit.html_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 hover:underline text-xs"
+                  >
+                    View on GitHub
+                  </a>
+                </div>
+              )}
+
+                
               </div>
 
               {/* Contact Info */}
