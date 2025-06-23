@@ -12,6 +12,7 @@ const Navbar = () => {
   const navBar = useSelector((state) => state.general.showNavbar);
   const dispatch = useDispatch();
   const [showLogin, setShowLogin] = useState(false);
+  const navigate = useNavigate()
 
   const handleLogin = () => {
     setShowLogin(true);
@@ -31,7 +32,7 @@ const Navbar = () => {
 
   return (
     <header className={`w-full transition-all duration-500 ${
-      navBar ? 'z-50 fixed' : 'sticky top-0 z-50'
+      navBar ? 'z-50 fixed' : ' top-0 z-50'
     } ${isScrolled ? 'shadow-2xl' : 'shadow-sm'}`}>
       
       {/* Top Banner */}
@@ -64,16 +65,16 @@ const Navbar = () => {
                 <span className={`absolute left-0 -bottom-1 w-0 h-0.5 ${navBar ? (isScrolled ? 'bg-black' : 'bg-white') : 'bg-black'} transition-all duration-500 group-hover:w-full`}></span>
               </a>
               <div className="absolute left-0 top-full mt-2 w-96 bg-white shadow-lg rounded-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50 grid grid-cols-2 gap-1 p-4">
-                <div className="col-span-2 font-medium px-3 py-2 text-gray-700 border-b text-sm">Casual Wear</div>
+                <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b text-sm">Casual Wear</div>
                 <a href="/collections/mens/casual-shirts" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Casual Shirts</a>
                 <a href="/collections/mens/casual-pants" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Casual Pants</a>
                 <a href="/collections/mens/t-shirts" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">T-Shirts</a>
                 
-                <div className="col-span-2 font-medium px-3 py-2 text-gray-700 border-b mt-2 text-sm">Formal Wear</div>
+                <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b mt-2 text-sm">Formal Wear</div>
                 <a href="/collections/mens/formal-shirts" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Formal Shirts</a>
                 <a href="/collections/mens/formal-pants" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Formal Pants</a>
                 
-                <div className="col-span-2 font-medium px-3 py-2 text-gray-700 border-b mt-2 text-sm">Traditional</div>
+                <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b mt-2 text-sm">Traditional</div>
                 <a href="/collections/mens/dhotis" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Dhotis</a>
                 <a href="/collections/mens/mundu" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Mundu</a>
               </div>
@@ -86,17 +87,17 @@ const Navbar = () => {
                 <span className={`absolute left-0 -bottom-1 w-0 h-0.5 ${navBar ? (isScrolled ? 'bg-black' : 'bg-white') : 'bg-black'} transition-all duration-500 group-hover:w-full`}></span>
               </a>
               <div className="absolute left-0 top-full mt-2 w-96 bg-white shadow-lg rounded-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50 grid grid-cols-2 gap-1 p-4">
-                <div className="col-span-2 font-medium px-3 py-2 text-gray-700 border-b text-sm">Traditional</div>
+                <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b text-sm">Traditional</div>
                 <a href="/collections/womens/sarees" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Sarees</a>
                 <a href="/collections/womens/salwars" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Salwars</a>
                 <a href="/collections/womens/lehengas" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Lehengas</a>
                 <a href="/collections/womens/blouses" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Blouses</a>
                 
-                <div className="col-span-2 font-medium px-3 py-2 text-gray-700 border-b mt-2 text-sm">Casual Wear</div>
+                <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b mt-2 text-sm">Casual Wear</div>
                 <a href="/collections/womens/kurtis" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Kurtis</a>
                 <a href="/collections/womens/tops" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Tops</a>
                 
-                <div className="col-span-2 font-medium px-3 py-2 text-gray-700 border-b mt-2 text-sm">Party Wear</div>
+                <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b mt-2 text-sm">Party Wear</div>
                 <a href="/collections/womens/party-gowns" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Gowns</a>
               </div>
             </div>
@@ -127,12 +128,26 @@ const Navbar = () => {
             <button className={`${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors duration-500 hover:scale-110 transform`}>
               <ShoppingCart size={22} />
             </button>
-            <a href="/my-account" className={`${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors duration-500 hover:scale-110 transform`}>
-              <User size={22} />
-            </a>
-            <button onClick={handleLogin} className={`${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors duration-500 hover:scale-110 transform`}>
+           <button
+  onClick={() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      navigate("/my-account");
+    } else {
+      navigate("/login");
+    }
+  }}
+  className={`${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors duration-500 hover:scale-110 transform`}
+>
+  <User size={22} />
+</button>
+             {
+              localStorage.getItem("user") && ( <button onClick={()=> navigate('/login')} className={`${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors duration-500 hover:scale-110 transform`}>
               <LogIn size={22} />
-            </button>
+            </button>)
+
+             }
+           
           </div>
         </div>
 
@@ -173,7 +188,7 @@ const Navbar = () => {
               <a href="/my-account" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} transition-all duration-500 p-1`}>
                 <User size={18} />
               </a>
-              <button onClick={handleLogin} className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} transition-all duration-500 p-1`}>
+              <button onClick={()=> navigate('/login')} className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} transition-all duration-500 p-1`}>
                 <LogIn size={18} />
               </button>
             </div>
@@ -210,7 +225,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {showLogin && <LoginWithOTP onClose={() => setShowLogin(false)} />}
+     
     </header>
   );
 };

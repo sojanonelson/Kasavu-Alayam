@@ -1,68 +1,114 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
 
-const Login = ({ switchToRegister }) => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [keepSignedIn, setKeepSignedIn] = useState(false); // New state for the checkbox
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setIsLoading(true);
-    // Simulate loading
+
+    // Simulate loading and login logic
     setTimeout(() => {
       setIsLoading(false);
-      console.log('Login form submitted');
+      console.log('Login form submitted', { email, keepSignedIn });
+      // Navigate to the home page or dashboard after successful login
+      navigate('/');
     }, 2000);
   };
 
+  const navigateToRegister = () => {
+    navigate('/register');
+  };
+
   return (
-    <div className="w-full max-h- mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-center mb-6 text-red-600">Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2" htmlFor="login-email">
-            <Mail className="inline-block mr-2" /> Email
-          </label>
-          <input
-            type="email"
-            id="login-email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-3 py-2 border rounded-lg"
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 mb-2" htmlFor="login-password">
-            <Lock className="inline-block mr-2" /> Password
-          </label>
-          <input
-            type="password"
-            id="login-password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-3 py-2 border rounded-lg"
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className={`w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 flex items-center justify-center ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          {isLoading ? <Loader2 className="animate-spin mr-2" /> : null}
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-      <p className="mt-4 text-center">
-        Don't have an account?{' '}
-        <button onClick={switchToRegister} className="text-orange-500 hover:underline">
-          Register
-        </button>
-      </p>
+    <div className=" bg-white mt-10 lg:mt-0">
+      <div className=' flex justify-center lg:my-32 items-center'>
+         <div className="w-full max-w-md p-8 bg-white">
+        <h2 className="text-3xl font-bold text-center mb-8 text-red-600">Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="login-email">
+              <Mail className="inline-block mr-2" /> Email
+            </label>
+            <input
+              type="email"
+              id="login-email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="login-password">
+              <Lock className="inline-block mr-2" /> Password
+            </label>
+            <input
+              type="password"
+              id="login-password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <div className="text-right mt-2">
+              <button
+                type="button"
+                onClick={() => navigate('/reset-password')}
+                className="text-sm text-blue-600 hover:underline"
+              >
+                Forgot Password?
+              </button>
+            </div>
+          </div>
+          <div className="mb-6 flex items-center">
+            <input
+              type="checkbox"
+              id="keep-signed-in"
+              name="keepSignedIn"
+              checked={keepSignedIn}
+              onChange={(e) => setKeepSignedIn(e.target.checked)}
+              className="mr-2"
+            />
+            <label htmlFor="keep-signed-in" className="text-sm text-gray-700">
+              Keep me signed in
+            </label>
+          </div>
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={`w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 flex items-center justify-center text-sm font-bold ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {isLoading ? <Loader2 className="animate-spin mr-2" /> : null}
+            {isLoading ? 'Logging in...' : 'Login'}
+          </button>
+        </form>
+        <p className="mt-6 text-center text-gray-600">
+          Don't have an account?{' '}
+          <button
+            type="button"
+            onClick={navigateToRegister}
+            className="text-orange-500 hover:underline font-bold"
+          >
+            Register
+          </button>
+        </p>
+      </div>
+
+      </div>
+      
+     
+
+      <Footer/>
     </div>
   );
 };

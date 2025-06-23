@@ -88,7 +88,7 @@ const CollectionsShowCase = () => {
   };
 
 
-  console.log("jjj")
+ 
   const toggleCart = (product) => {
     const existingItem = cart.find((item) => item.id === product._id);
     existingItem

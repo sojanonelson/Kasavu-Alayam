@@ -1,174 +1,292 @@
 import React, { useState } from 'react';
-import { User, Mail, Calendar, Lock, Loader2 } from 'lucide-react';
+import { Mail, User, Calendar, Phone, MapPin, Loader2, CheckSquare, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-const Register = ({ switchToLogin }) => {
+const Register = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
+    email: '',
+    acceptTerms: false,
     firstName: '',
     lastName: '',
-    email: '',
-    dob: '',
+    age: '',
+    phoneNumber: '',
     gender: '',
-    password: '',
-    confirmPassword: '',
+    address: '',
+    state: '',
+    city: '',
+    pincode: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prevState => ({
       ...prevState,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
   const handleNext = () => {
-    setStep(2);
+    setStep(step + 1);
+  };
+
+  const handleBack = () => {
+    setStep(step - 1);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setIsLoading(true);
-    // Simulate loading
+    // Simulate loading and form submission
     setTimeout(() => {
       setIsLoading(false);
       console.log('Registration form submitted', formData);
+      navigate('/dashboard'); // Redirect to a dashboard or home page after registration
     }, 2000);
   };
 
+  const navigateToLogin = () => {
+    navigate('/login');
+  };
+
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-center mb-6 text-red-600">Register</h2>
-      {step === 1 ? (
-        <form>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="first-name">
-              <User className="inline-block mr-2" /> First Name
-            </label>
-            <input
-              type="text"
-              id="first-name"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="last-name">
-              <User className="inline-block mr-2" /> Last Name
-            </label>
-            <input
-              type="text"
-              id="last-name"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="register-email">
-              <Mail className="inline-block mr-2" /> Email
-            </label>
-            <input
-              type="email"
-              id="register-email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="dob">
-              <Calendar className="inline-block mr-2" /> Date of Birth
-            </label>
-            <input
-              type="date"
-              id="dob"
-              name="dob"
-              value={formData.dob}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-2" htmlFor="gender">
-              Gender
-            </label>
-            <select
-              id="gender"
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border rounded-lg"
+    <div className="flex justify-center items-center lg:h-[80vh] bg-white mt-10 lg:mt-0 pb-10">
+      <div className="w-full max-w-md p-8 bg-white rounded-lg ">
+        <h2 className="text-3xl font-bold text-center mb-8 text-red-600">Register</h2>
+
+        {step === 1 && (
+          <form>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                <Mail className="inline-block mr-2" /> Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div className="mb-6 flex items-center">
+              <input
+                type="checkbox"
+                id="acceptTerms"
+                name="acceptTerms"
+                checked={formData.acceptTerms}
+                onChange={handleChange}
+                required
+                className="mr-2"
+              />
+            <p className="text-sm text-gray-600 text-center">
+  By continuing, I agree to the{' '}
+  <a href="#" className="text-blue-600 underline hover:text-blue-800">Terms of Use</a> &{' '}
+  <a href="#" className="text-blue-600 underline hover:text-blue-800">Privacy Policy</a>.
+</p>
+
+
+            </div>
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={!formData.acceptTerms}
+              className={`w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 font-bold ${!formData.acceptTerms ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
+              Next
+            </button>
+          </form>
+        )}
+
+        {step === 2 && (
+          <form>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="firstName">
+                <User className="inline-block mr-2" /> First Name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="lastName">
+                <User className="inline-block mr-2" /> Last Name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
+                <Calendar className="inline-block mr-2" /> Age
+              </label>
+              <input
+                type="number"
+                id="age"
+                name="age"
+                value={formData.age}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phoneNumber">
+                <Phone className="inline-block mr-2" /> Phone Number
+              </label>
+              <input
+                type="tel"
+                id="phoneNumber"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="gender">
+                Gender
+              </label>
+              <select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div className="flex justify-between">
+              <button
+                type="button"
+                onClick={handleBack}
+                className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 font-bold flex items-center"
+              >
+                <ArrowLeft className="mr-2" /> Go Back
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                className="bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600 font-bold"
+              >
+                Next
+              </button>
+            </div>
+          </form>
+        )}
+
+        {step === 3 && (
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
+                <MapPin className="inline-block mr-2" /> Address Line
+              </label>
+              <textarea
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="state">
+                <MapPin className="inline-block mr-2" /> State
+              </label>
+              <input
+                type="text"
+                id="state"
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="city">
+                <MapPin className="inline-block mr-2" /> City
+              </label>
+              <input
+                type="text"
+                id="city"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="pincode">
+                <MapPin className="inline-block mr-2" /> Pincode
+              </label>
+              <input
+                type="text"
+                id="pincode"
+                name="pincode"
+                value={formData.pincode}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <p className="text-sm text-gray-500 mb-4">
+              This address will be used for order delivery.
+            </p>
+            <div className="flex justify-between">
+              <button
+                type="button"
+                onClick={handleBack}
+                className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 font-bold flex items-center"
+              >
+                <ArrowLeft className="mr-2" /> Go Back
+              </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600 flex items-center justify-center font-bold ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {isLoading ? <Loader2 className="animate-spin mr-2" /> : null}
+                {isLoading ? 'Registering...' : 'Submit'}
+              </button>
+            </div>
+          </form>
+        )}
+
+        <p className="mt-6 text-center text-gray-600">
+          Already have an account?{' '}
           <button
             type="button"
-            onClick={handleNext}
-            className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600"
+            onClick={navigateToLogin}
+            className="text-orange-500 hover:underline font-bold"
           >
-            Next
+            Login
           </button>
-        </form>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="register-password">
-              <Lock className="inline-block mr-2" /> Password
-            </label>
-            <input
-              type="password"
-              id="register-password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-2" htmlFor="confirm-password">
-              <Lock className="inline-block mr-2" /> Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirm-password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 flex items-center justify-center ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            {isLoading ? <Loader2 className="animate-spin mr-2" /> : null}
-            {isLoading ? 'Registering...' : 'Submit'}
-          </button>
-        </form>
-      )}
-      <p className="mt-4 text-center">
-        Already have an account?{' '}
-        <button onClick={switchToLogin} className="text-orange-500 hover:underline">
-          Login
-        </button>
-      </p>
+        </p>
+      </div>
     </div>
   );
 };

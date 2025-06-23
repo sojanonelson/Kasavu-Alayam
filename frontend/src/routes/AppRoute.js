@@ -38,6 +38,7 @@ import InventoryCollections from "../pages/Admin/Inventory/InventoryCollections"
 import CollectionsShowCase from "../pages/Collections";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import ResetPassword from "../pages/ResetPassword";
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -53,10 +54,10 @@ const AppRoutes = () => {
     }
   }, [location.pathname, dispatch]);
 
-  const loading = useSelector((state) => state.general.showNavbar);
+  const navbar = useSelector((state) => state.general.showNavbar);
   const loginModel = useSelector((state) => state.general.loginModel);
 
-  console.log("REDUX:", loading);
+  console.log("REDUX:", navbar);
   console.log("LoginModel:", loginModel);
 
   return (
@@ -81,6 +82,7 @@ const AppRoutes = () => {
           
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           <Route path="/collections/:collection" element={<CollectionsShowCase />} />
           <Route path="/womens" element={<WomensCollection />} />
