@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toggleNavbar } from "../redux/features/general/general";
 
-// Pages and components
+// Pages and Components
 import HomeScreen from "../pages/Home";
 import WomensCollection from "../components/collections/Womens-collection";
-
 import SareesSection from "../pages/sarees-collection";
 import SideContactNavbar from "../pages/sidecontactbar";
 import CustomerLayout from "../Layouts/CustomerLayout";
@@ -16,7 +15,7 @@ import NotFound from "../pages/NotFound";
 import AppNotFound from "../pages/AppNotFound";
 import SingleProductPage from "../pages/BuyNow/SingleProduct";
 import MensCollection from "../components/collections/Mens-collection";
-import Cart from "../pages/Admin/Cart";
+import KidsCollection from "../components/collections/Kids-collection";
 import AdminLayout from "../Layouts/AdminLayout";
 import Navbar from "../components/Navbar";
 import OverviewPage from "../pages/Admin/Overview";
@@ -24,26 +23,24 @@ import Customers from "../pages/Admin/Customers";
 import OrdersPage from "../pages/Admin/Order";
 import NotificationsPage from "../pages/Admin/Notificaton";
 import InventoryManagement from "../pages/Admin/Inventory";
-import KidsCollection from '../components/collections/Kids-collection';
-
 import ManageCategory from "../pages/Admin/ManageCategory";
 import CreateProduct from "../pages/Admin/Products/CreateProduct";
 import ProductOverview from "../pages/Admin/ProductOverview";
 import UpdateProduct from "../pages/Admin/Products/UpdateProduct";
 import Settings from "../pages/Admin/Settings";
 import HomepageEditor from "../pages/Admin/HomepageEditor";
-
 import CollectionManager from "../pages/Admin/Collections";
 import InventoryCollections from "../pages/Admin/Inventory/InventoryCollections";
 import CollectionsShowCase from "../pages/Collections";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ResetPassword from "../pages/ResetPassword";
-
+import CheckoutCart from "../pages/CheckoutCart";
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
   const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
   const location = useLocation();
   const dispatch = useDispatch();
 
@@ -56,11 +53,20 @@ const AppRoutes = () => {
 
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      console.log("USER:", parsedUser);
     }
+    setLoadingUser(false);
   }, [location.pathname, dispatch]);
 
-  const isAdmin = user?.role === "admin";
+  if (loadingUser) {
+    return (
+      <div className="h-screen flex justify-center items-center text-xl font-semibold">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -71,7 +77,7 @@ const AppRoutes = () => {
             onClick={() => setShowCart(false)}
           />
           <div className="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white z-50 shadow-xl transition-transform duration-300">
-            <Cart onClose={() => setShowCart(false)} />
+            <CheckoutCart onClose={() => setShowCart(false)} />
           </div>
         </>
       )}
@@ -82,19 +88,17 @@ const AppRoutes = () => {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/" element={<SideContactNavbar />} />
           <Route path="/" element={<MensCollection />} />
-
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-
           <Route path="/collections/:collection" element={<CollectionsShowCase />} />
           <Route path="/womens" element={<WomensCollection />} />
           <Route path="/kids" element={<KidsCollection />} />
           <Route path="/mens" element={<MensCollection />} />
           <Route path="/sarees" element={<SareesSection />} />
-          <Route path="/shopping-cart" element={<Cart />} />
+          <Route path="/checkout/cart" element={<CheckoutCart />} />
           <Route path="/product" element={<SingleProductPage />} />
-          <Route path="/details/:productId" element={<SingleProductPage />} />
+          <Route path="/product/:productId" element={<SingleProductPage />} />
           <Route path="*" element={<AppNotFound />} />
 
           {/* Protected Customer Routes */}
@@ -106,7 +110,7 @@ const AppRoutes = () => {
           </Route>
         </Route>
 
-        {/* Admin Routes */}
+        {/* Protected Admin Routes */}
         <Route
           path="/admin"
           element={
@@ -136,7 +140,7 @@ const AppRoutes = () => {
   );
 };
 
-// Navbar Wrapper
+// Navbar Wrapper Layout
 const WithNavbar = () => (
   <>
     <Navbar />
@@ -144,22 +148,17 @@ const WithNavbar = () => (
   </>
 );
 
-// ✳️ Route Guard for Logged-In Users (like Customer)
+// Route Guard for Logged-In Users
 const ProtectedRoute = ({ user, children }) => {
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+  if (!user) return <Navigate to="/login" replace />;
   return children;
 };
 
-// ✳️ Route Guard for Admin Only
+// Route Guard for Admin Only
 const ProtectedAdminRoute = ({ user, children }) => {
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-  if (user.role !== "admin") {
-    return <Navigate to="/" replace />;
-  }
+  console.log("US:", user);
+  if (!user) return <Navigate to="/login" replace />;
+  if (user.role !== "admin") return <Navigate to="/" replace />;
   return children;
 };
 

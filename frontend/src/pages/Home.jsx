@@ -15,7 +15,7 @@ import { useInView } from 'react-intersection-observer';
 import SideContactNavbar from '../pages/sidecontactbar';
 import border1 from '../assets/elements/border2.png';
 import border2 from '../assets/elements/border1.png';
-import Cart from './Admin/Cart';
+import CheckoutCart from './CheckoutCart';
 import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
 import HomePageSkeleton from './HomePageSkeleton';
 import websiteSettingService from '../services/websiteSettingService';

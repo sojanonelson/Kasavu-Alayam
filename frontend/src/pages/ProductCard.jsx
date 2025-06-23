@@ -22,11 +22,11 @@ const ProductCard = ({
     navigate(`/buy-now/${product.id}`);
   };
 
-  const handleAddToCart = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toggleCart(product);
-  };
+const handleAddToCart = (e, productData) => {
+  e.preventDefault();
+  e.stopPropagation();
+  toggleCart(productData);
+};
 
   const handleToggleWishlist = (e) => {
     e.preventDefault();
@@ -127,50 +127,50 @@ const ProductCard = ({
   }
 
   // Grid view (default)
-  return (
-    <div className="bg-white overflow-hidden transition-shadow group">
-     <div className="relative w-full h-64 group"> {/* Fixed height container */}
-  <Link to={`/product/${product._id}`} className="block w-full h-full">
-    <img
-      src={product.images[0]?.url || product.images}
-      alt={product.title}
-      className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-    />
-  </Link>
+return (
+  <div className="bg-white overflow-hidden transition-shadow group flex flex-col h-full border rounded-lg shadow-sm">
+    {/* Image */}
+    <div className="relative w-full h-64">
+      <Link to={`/product/${product._id}`} className="block w-full h-full">
+        <img
+          src={product.images[0]?.url || product.images}
+          alt={product.title}
+          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+        />
+      </Link>
 
-  {/* Wishlist Button */}
-  <button
-    onClick={handleToggleWishlist}
-    className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-      isWishlisted
-        ? 'bg-red-100 text-red-500'
-        : 'bg-white/80 text-gray-600 hover:bg-white hover:text-red-500'
-    }`}
-    aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-  >
-    <Heart size={16} fill={isWishlisted ? 'currentColor' : 'none'} />
-  </button>
+      {/* Wishlist Button */}
+      <button
+        onClick={handleToggleWishlist}
+        className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+          isWishlisted
+            ? 'bg-red-100 text-red-500'
+            : 'bg-white/80 text-gray-600 hover:bg-white hover:text-red-500'
+        }`}
+        aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+      >
+        <Heart size={16} fill={isWishlisted ? 'currentColor' : 'none'} />
+      </button>
 
-  {/* Quick View Button */}
-  <Link to={`/product/${product._id}`}>
-    <button className="absolute top-3 left-3 w-8 h-8 rounded-full bg-white/80 text-gray-600 hover:bg-white hover:text-black flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
-      <Eye size={16} />
-    </button>
-  </Link>
-</div>
+      {/* Quick View */}
+      <Link to={`/product/${product._id}`}>
+        <button className="absolute top-3 left-3 w-8 h-8 rounded-full bg-white/80 text-gray-600 hover:bg-white hover:text-black flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
+          <Eye size={16} />
+        </button>
+      </Link>
+    </div>
 
-      
-      <div className="p-4">
-        <div className="mb-2">
-          <Link to={`/product/${product._id}`}>
-            <h3 className="font-medium text-xs poppins-regular hover:text-gray-600 transition-colors line-clamp-2">
-              {product.title}
-            </h3>
-          </Link>
-          <p className="text-gray-500 text-xs sm:text-sm">{product.productDetails.fabric}</p>
-        </div>
-        
-        <div className="flex flex-wrap gap-1 mb-3">
+    {/* Info Section */}
+    <div className="p-4 flex-1 flex flex-col justify-between">
+      <div>
+        <Link to={`/product/${product._id}`}>
+          <h3 className="font-medium text-xs poppins-regular hover:text-gray-600 transition-colors line-clamp-2">
+            {product.title}
+          </h3>
+        </Link>
+        <p className="text-gray-500 text-xs sm:text-sm">{product.productDetails.fabric}</p>
+
+        <div className="flex flex-wrap gap-1 mt-1">
           <span className="text-[10px] sm:text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
             {product.sku}
           </span>
@@ -184,51 +184,30 @@ const ProductCard = ({
             </div>
           )}
         </div>
-        
-       <div className="flex justify-between items-center mb-3">
-  <div>
-    <div className="text-lg font-semibold flex items-center gap-2">
-      ₹{product.specialPrice}
-      <span className="text-gray-400 text-sm line-through">₹{product.price}</span>
-     {getDiscountPercent(product.price, product.specialPrice) > 0 && (
-  <span className="text-green-600 text-xs bg-green-100 px-2 py-0.5 rounded-md">
-    {getDiscountPercent(product.price, product.specialPrice)}% OFF
-  </span>
-)}
 
-    </div>
-
-    {product.sizes && (
-      <div className="text-xs text-gray-500 mt-1">
-        Sizes: {product.sizes.join(', ')}
+        {/* Price */}
+        <div className="flex gap-2 mt-1">
+          <p className="text-sm font-semibold text-black">₹{product.specialPrice}</p>
+          <p className="text-sm text-gray-500 line-through">₹{product.price}</p>
+        </div>
       </div>
-    )}
+
+      {/* Add to Cart */}
+      <button
+       onClick={(e) => handleAddToCart(e, product)}
+
+        className={`w-full mt-4 py-2 rounded-md text-sm font-medium transition-colors ${
+          isInCart
+            ? 'bg-green-100 text-green-700 border border-green-300'
+            : 'bg-black text-white hover:bg-gray-800'
+        }`}
+      >
+        {isInCart ? 'In Cart' : 'Add to Cart'}
+      </button>
+    </div>
   </div>
-</div>
+);
 
-        
-       <div className="flex lg:flex-row flex-col gap-2">
-  <button
-    onClick={handleBuyNow}
-    className="lg:flex-1 bg-black text-white lg:px-2 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium"
-  >
-    Buy Now
-  </button>
-  <button
-    onClick={handleAddToCart}
-    className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors border ${
-      isInCart
-        ? 'bg-green-100 text-green-700 border-green-300'
-        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-300'
-    }`}
-  >
-    {isInCart ? 'In Cart' : 'Add to Cart'}
-  </button>
-</div>
-
-      </div>
-    </div>
-  );
 };
 
 export default ProductCard;

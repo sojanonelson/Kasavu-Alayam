@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoginWithOTP from '../pages/Login';
 import { toggleLoginModel } from "../redux/features/general/general"; 
 import { useNavigate } from 'react-router-dom';
+import CheckoutCart from '../pages/CheckoutCart';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const cartCount = 3; // Mock cart count
   const navBar = useSelector((state) => state.general.showNavbar);
+  const checkoutCart = useSelector((state) => state.general.showCart);
   const dispatch = useDispatch();
   const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate()
@@ -125,7 +127,7 @@ const Navbar = () => {
               <span className={`absolute left-0 -bottom-1 w-0 h-0.5 ${navBar ? (isScrolled ? 'bg-black' : 'bg-white') : 'bg-black'} transition-all duration-500 group-hover:w-full`}></span>
             </a>
             
-            <button className={`${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors duration-500 hover:scale-110 transform`}>
+            <button onClick={()=> navigate('/checkout/cart')}  className={`${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors duration-500 hover:scale-110 transform`}>
               <ShoppingCart size={22} />
             </button>
            <button
@@ -177,7 +179,7 @@ const Navbar = () => {
 
             {/* Right Icons */}
             <div className="flex items-center space-x-2">
-              <button className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} transition-all duration-500 relative p-1`}>
+              <button onClick={()=> navigate('/checkout/cart')}  className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} transition-all duration-500 relative p-1`}>
                 <ShoppingCart size={18} />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs px-1 py-0.5 rounded-full min-w-[16px] text-center leading-none">
@@ -193,6 +195,11 @@ const Navbar = () => {
               </button>
             </div>
           </div>
+
+         
+
+          
+          
 
           {/* Mobile Menu */}
           <div className={`transition-all duration-300 ease-in-out ${
