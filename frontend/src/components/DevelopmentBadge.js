@@ -8,6 +8,7 @@ const DevelopmentBadge = () => {
   const [isHovered, setIsHovered] = useState(false);
   const audioRef = useRef(null);
    const [latestCommit, setLatestCommit] = useState(null);
+   const [progress, setProgress] = useState(78);
 
   const handleClick = () => {
     setIsPopupOpen(!isPopupOpen);
@@ -207,34 +208,40 @@ const DevelopmentBadge = () => {
             {/* Content */}
             <div className="p-4 w-80">
               {/* Progress Bar */}
-              <div className="mb-4">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium text-gray-700">Progress</span>
-                  <span className="text-sm font-bold text-blue-600">76%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                  <motion.div
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 h-full rounded-full relative"
-                    variants={progressVariants}
-                    initial="hidden"
-                    animate="visible"
-                  >
-                    <motion.div
-                      className="absolute inset-0 bg-white opacity-30"
-                      animate={{
-                        x: ["-100%", "100%"]
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 1.8
-                      }}
-                    />
-                  </motion.div>
-                </div>
+             <div className="mb-4">
+  <div className="flex justify-between items-center mb-2">
+    <span className="text-sm font-medium text-gray-700">Progress</span>
+    <span className="text-sm font-bold text-blue-600">{progress}%</span> {/* Updated here */}
+  </div>
 
-                 {latestCommit && (
+  <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+    <motion.div
+      className="bg-gradient-to-r from-blue-500 to-purple-500 h-full rounded-full relative"
+      style={{ width: `${progress}%` }} // Dynamically set width
+      initial={{ width: 0 }}
+      animate={{ width: `${progress}%` }}
+      transition={{
+        duration: 1.5,
+        ease: "easeOut",
+        delay: 0.3,
+      }}
+    >
+      <motion.div
+        className="absolute inset-0 bg-white opacity-30"
+        animate={{
+          x: ["-100%", "100%"]
+        }}
+        transition={{
+          duration: 1.5,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1.8
+        }}
+      />
+    </motion.div>
+  </div>
+
+   {latestCommit && (
                 <div className="mt-4 p-2 bg-gray-100 rounded-lg text-sm text-gray-800">
                   <strong>Latest commit:</strong><br />
                   {latestCommit.commit.message.split('\n')[0]}<br/>
@@ -249,9 +256,7 @@ const DevelopmentBadge = () => {
                   </a>
                 </div>
               )}
-
-                
-              </div>
+</div>
 
               {/* Contact Info */}
               <motion.div

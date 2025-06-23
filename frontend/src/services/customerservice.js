@@ -3,19 +3,32 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_BACKEND_API
 
-const getCustomers = async () => {
-  const response = await axios.get(API_URL);
+const getAllCustomers = async () => {
+  const response = await axios.get(`${API_URL}/user`);
   return response.data;
 };
 
-const createCustomer = async (customerData) => {
-  const response = await axios.post(`${API_URL}/customers`, customerData);
+const getUserById = async (id) => {
+  const response = await axios.get(`${API_URL}/user/${id}`);
   return response.data;
 };
 
-const customerService = {
-  getCustomers,
-  createCustomer,
+
+
+const updateUser = async (id,data) => {
+  console.log("ID:", id)
+  console.log("Data:", data)
+  const response = await axios.put(`${API_URL}/user/${id}`,data);
+  return response.data;
 };
 
-export default customerService;
+
+
+const userService = {
+  getAllCustomers,
+  getUserById,
+  updateUser
+  
+};
+
+export default userService;

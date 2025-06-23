@@ -5,10 +5,10 @@ import Footer from '../../components/Footer';
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: 'Admin',
-    lastName: 'Admin',
-    email: 'kasavuaalayalam@gmail.com',
-    phone: '+1 (555) 123-4567',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
   });
   
   const [originalData, setOriginalData] = useState({...formData});

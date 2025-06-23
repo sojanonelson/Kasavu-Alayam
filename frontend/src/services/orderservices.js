@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = rocess.env.REACT_APP_BACKEND_API// Adjust the URL as necessary
+const API_URL = process.env.REACT_APP_BACKEND_API// Adjust the URL as necessary
 
 const getUserByPhone = async (phone) => {
   const response = await axios.get(`${API_URL}/user/?phone=${phone}`);
@@ -12,9 +12,9 @@ const createOrUpdateUser = async (userData) => {
   return response.data;
 };
 
-const userService = {
+const orderService = {
   getUserByPhone,
   createOrUpdateUser,
 };
 
-export default userService;
+export default orderService;

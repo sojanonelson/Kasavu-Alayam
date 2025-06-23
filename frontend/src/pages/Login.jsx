@@ -2,26 +2,42 @@ import React, { useState } from 'react';
 import { Mail, Lock, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import authService from '../services/authService';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error,setError] = useState('')
   const [keepSignedIn, setKeepSignedIn] = useState(false); // New state for the checkbox
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setIsLoading(true);
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  setIsLoading(true);
+  setError(''); // Clear previous error
 
-    // Simulate loading and login logic
-    setTimeout(() => {
-      setIsLoading(false);
-      console.log('Login form submitted', { email, keepSignedIn });
-      // Navigate to the home page or dashboard after successful login
+  try {
+    const loginRes = await authService.LoginAccount(email, password);
+
+    if (loginRes.user) {
+      // Save user and token correctly
+      localStorage.setItem('user', JSON.stringify(loginRes.user));
+      localStorage.setItem('token', loginRes.token);
+
       navigate('/');
-    }, 2000);
-  };
+    } else {
+      setError(loginRes.message || 'Login failed. Please try again.');
+    }
+  } catch (err) {
+    console.error('Login error:', err);
+    setError('Something went wrong. Please try again later.');
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
 
   const navigateToRegister = () => {
     navigate('/register');
@@ -69,6 +85,10 @@ const Login = () => {
                 Forgot Password?
               </button>
             </div>
+           {error && (
+  <p className="text-red-500 text-sm mt-2">{error}</p>
+)}
+
           </div>
           <div className="mb-6 flex items-center">
             <input

@@ -24,7 +24,16 @@ const userSchema = new mongoose.Schema({
     default: 'customer'
   },
   dob: Date,
-  address: String,
+  address: {
+    place: { type: String },
+    city: { type: String },
+    state: { type: String },
+    pincode: { type: String }
+  },
+  password: {
+    type: String,
+    required: true
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

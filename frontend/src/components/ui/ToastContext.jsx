@@ -154,7 +154,7 @@ export const ToastProvider = ({ children }) => {
       {children}
       
       {/* Toast Container */}
-      <div className="fixed top-6 right-6 z-50 flex flex-col gap-3 pointer-events-none">
+      <div className="fixed top-10 right-6 z-50 flex flex-col gap-3 pointer-events-none">
         <AnimatePresence mode="popLayout">
           {toasts.map((toast) => (
             <div key={toast.id} className="pointer-events-auto">
@@ -167,72 +167,4 @@ export const ToastProvider = ({ children }) => {
   );
 };
 
-// Demo Component
-const ToastDemo = () => {
-  const { showToast } = useToast();
-
-  const handleShowToast = (type) => {
-    const messages = {
-      success: "Operation completed successfully! 🎉",
-      error: "Something went wrong. Please try again.",
-      warning: "Please check your input and try again.",
-      info: "Here's some important information for you."
-    };
-    
-    showToast(messages[type], type);
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-8">
-      <div className="text-center space-y-8">
-        <div className="space-y-4">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Enhanced Toast System
-          </h1>
-          <p className="text-slate-300 text-lg max-w-md mx-auto">
-            Beautiful, animated toast notifications with Framer Motion
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
-          <motion.button
-            onClick={() => handleShowToast("success")}
-            className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Success Toast
-          </motion.button>
-          
-          <motion.button
-            onClick={() => handleShowToast("error")}
-            className="px-6 py-3 bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Error Toast
-          </motion.button>
-          
-          <motion.button
-            onClick={() => handleShowToast("warning")}
-            className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Warning Toast
-          </motion.button>
-          
-          <motion.button
-            onClick={() => handleShowToast("info")}
-            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Info Toast
-          </motion.button>
-        </div>
-      </div>
-    </div>
-  );
-};
 

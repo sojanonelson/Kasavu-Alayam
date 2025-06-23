@@ -9,7 +9,8 @@ const subcategoryRoutes = require('./routes/subcategoryRoutes');
 const categoryRoutes =require('./routes/CategoryRoute')
 const websettingRoutes =require('./routes/websiteSettingRoutes')
 const collectionRoutes =require('./routes/CollectionRoute')
-const authRoutes = require('./routes/authRoutes')
+const otpRoutes = require('./routes/otpRoute')
+
 const connectDB = require('./config/DB');
 
 // Load environment variables
@@ -41,7 +42,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/websetting', websettingRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/otp',otpRoutes)
 
 
 app.use('/api/subcategories', subcategoryRoutes);

@@ -1,7 +1,7 @@
 const express = require('express');
 const {
   register,
-  getUserByPhone,
+  loginUser,
   deleteAccount,
   updateAccount,
   getAccountById,
@@ -14,18 +14,18 @@ const router = express.Router();
 
 // Route to create a new account
 router.post('/register', register);
+router.post('/login', loginUser);
 
-// Route to look up a user by phone number
-router.get('/lookup', getUserByPhone);
+
 
 // Route to delete an account by ID
-router.delete('/:id', protect, deleteAccount);
+router.delete('/:id', deleteAccount);
 
 // Route to update an account by ID
-router.put('/:id', protect, updateAccount);
+router.put('/:id', updateAccount);
 
 // Route to get an account by ID
-router.get('/:id', protect, getAccountById);
+router.get('/:id', getAccountById);
 
 // Route to get all user accounts (only accessible by admin)
 router.get('/', protect, isAdmin, getAllAccounts);

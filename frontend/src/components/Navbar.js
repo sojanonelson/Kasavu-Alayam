@@ -14,9 +14,9 @@ const Navbar = () => {
   const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate()
 
-  const handleLogin = () => {
-    setShowLogin(true);
-    dispatch(toggleLoginModel(true));
+  const handleLogout = () => {
+    localStorage.clear()
+    navigate('/')
   }
 
   // Handle scroll effect
@@ -142,7 +142,7 @@ const Navbar = () => {
   <User size={22} />
 </button>
              {
-              localStorage.getItem("user") && ( <button onClick={()=> navigate('/login')} className={`${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors duration-500 hover:scale-110 transform`}>
+              localStorage.getItem("user") && ( <button onClick={()=> handleLogout()} className={`${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors duration-500 hover:scale-110 transform`}>
               <LogIn size={22} />
             </button>)
 

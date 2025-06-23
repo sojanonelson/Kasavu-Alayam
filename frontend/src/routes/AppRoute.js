@@ -40,28 +40,30 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ResetPassword from "../pages/ResetPassword";
 
+
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
+  const [user, setUser] = useState(null);
   const location = useLocation();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Show navbar only on homepage
     if (location.pathname === "/") {
       dispatch(toggleNavbar(true));
     } else {
       dispatch(toggleNavbar(false));
     }
+
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, [location.pathname, dispatch]);
 
-  const navbar = useSelector((state) => state.general.showNavbar);
-  const loginModel = useSelector((state) => state.general.loginModel);
-
-  console.log("REDUX:", navbar);
-  console.log("LoginModel:", loginModel);
+  const isAdmin = user?.role === "admin";
 
   return (
-    <div >
+    <div>
       {showCart && (
         <>
           <div
@@ -75,11 +77,12 @@ const AppRoutes = () => {
       )}
 
       <Routes>
+        {/* Public Routes */}
         <Route element={<WithNavbar />}>
           <Route path="/" element={<HomeScreen />} />
           <Route path="/" element={<SideContactNavbar />} />
           <Route path="/" element={<MensCollection />} />
-          
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
@@ -91,9 +94,11 @@ const AppRoutes = () => {
           <Route path="/sarees" element={<SareesSection />} />
           <Route path="/shopping-cart" element={<Cart />} />
           <Route path="/product" element={<SingleProductPage />} />
-          <Route path="*" element={<AppNotFound />} />
           <Route path="/details/:productId" element={<SingleProductPage />} />
-          <Route path="/my-account" element={<CustomerLayout />}>
+          <Route path="*" element={<AppNotFound />} />
+
+          {/* Protected Customer Routes */}
+          <Route path="/my-account" element={<ProtectedRoute user={user}><CustomerLayout /></ProtectedRoute>}>
             <Route index element={<Navigate to="profile" replace />} />
             <Route path="profile" element={<Profile />} />
             <Route path="orders" element={<Orders />} />
@@ -101,7 +106,15 @@ const AppRoutes = () => {
           </Route>
         </Route>
 
-        <Route path="/admin" element={<AdminLayout />}>
+        {/* Admin Routes */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedAdminRoute user={user}>
+              <AdminLayout />
+            </ProtectedAdminRoute>
+          }
+        >
           <Route index element={<Navigate to="overview" replace />} />
           <Route path="overview" element={<OverviewPage />} />
           <Route path="collection" element={<CollectionManager />} />
@@ -123,13 +136,31 @@ const AppRoutes = () => {
   );
 };
 
-const WithNavbar = () => {
-  return (
-    <>
-      <Navbar />
-      <Outlet />
-    </>
-  );
+// Navbar Wrapper
+const WithNavbar = () => (
+  <>
+    <Navbar />
+    <Outlet />
+  </>
+);
+
+// ✳️ Route Guard for Logged-In Users (like Customer)
+const ProtectedRoute = ({ user, children }) => {
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
+// ✳️ Route Guard for Admin Only
+const ProtectedAdminRoute = ({ user, children }) => {
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  if (user.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
+  return children;
 };
 
 export default AppRoutes;
