@@ -8,7 +8,7 @@ const DevelopmentBadge = () => {
   const [isHovered, setIsHovered] = useState(false);
   const audioRef = useRef(null);
    const [latestCommit, setLatestCommit] = useState(null);
-   const [progress, setProgress] = useState(78);
+   const [progress, setProgress] = useState(80);
 
   const handleClick = () => {
     setIsPopupOpen(!isPopupOpen);
