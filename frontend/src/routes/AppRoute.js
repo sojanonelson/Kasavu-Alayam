@@ -6,7 +6,7 @@ import { toggleNavbar } from "../redux/features/general/general";
 // Pages and Components
 import HomeScreen from "../pages/Home";
 import WomensCollection from "../components/collections/Womens-collection";
-import SareesSection from "../pages/sarees-collection";
+
 import SideContactNavbar from "../pages/sidecontactbar";
 import CustomerLayout from "../Layouts/CustomerLayout";
 import Profile from "../pages/Customer/Profile";
@@ -95,7 +95,7 @@ const AppRoutes = () => {
           <Route path="/womens" element={<WomensCollection />} />
           <Route path="/kids" element={<KidsCollection />} />
           <Route path="/mens" element={<MensCollection />} />
-          <Route path="/sarees" element={<SareesSection />} />
+          
           <Route path="/checkout/cart" element={<CheckoutCart />} />
           <Route path="/product" element={<SingleProductPage />} />
           <Route path="/product/:productId" element={<SingleProductPage />} />

@@ -1,33 +1,65 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, Settings, ExternalLink, Code, Users, X, Settings2 } from 'lucide-react';
-import devSound from '../assets/dev.mp3'; // Adjust the path as necessary
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  AlertCircle,
+  Settings,
+  ExternalLink,
+  Code,
+  Users,
+  X,
+  Settings2,
+} from "lucide-react";
+import devSound from "../assets/dev.mp3"; // Adjust the path as necessary
 
 const DevelopmentBadge = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const audioRef = useRef(null);
-   const [latestCommit, setLatestCommit] = useState(null);
-   const [progress, setProgress] = useState(85);
+  const [latestCommit, setLatestCommit] = useState(null);
+  const [progress, setProgress] = useState(85);
+  const [backendStatus, setBackendStatus] = useState("Checking...");
+  const [duration,setDuration]= useState('')
+  const [uptimeData, setUptimeData] = useState(null);
 
   const handleClick = () => {
     setIsPopupOpen(!isPopupOpen);
     if (audioRef.current) {
-      audioRef.current.play().catch(error => {
+      audioRef.current.play().catch((error) => {
         console.error("Error playing audio:", error);
       });
     }
   };
 
-    useEffect(() => {
-    fetch(`https://api.github.com/repos/sojanonelson/Kasavu-Alayam/commits?sha=main&per_page=1`)
-      .then(res => res.json())
-      .then(data => {
+  useEffect(() => {
+    // Fetch latest GitHub commit
+    fetch(
+      `https://api.github.com/repos/sojanonelson/Kasavu-Alayam/commits?sha=main&per_page=1`
+    )
+      .then((res) => res.json())
+      .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           setLatestCommit(data[0]);
         }
       })
       .catch(console.error);
+
+    // Check backend status
+    const start = performance.now();
+
+    fetch("https://kasavu-alayam.onrender.com/")
+      .then((res) => res.text())
+      .then((text) => {
+         const duration = Math.round(performance.now() - start);
+         setDuration(duration)
+        if (text.includes("✅ Server running")) {
+          setBackendStatus("🟢 Online");
+        } else {
+          setBackendStatus("🟠 Unknown");
+        }
+      })
+      .catch(() => {
+        setBackendStatus("🔴 Offline");
+      });
   }, []);
 
   const handleClose = () => {
@@ -37,7 +69,7 @@ const DevelopmentBadge = () => {
   const badgeVariants = {
     initial: {
       scale: 1,
-      rotate: 0
+      rotate: 0,
     },
     hover: {
       scale: 1.05,
@@ -45,19 +77,19 @@ const DevelopmentBadge = () => {
       transition: {
         rotate: {
           duration: 0.5,
-          ease: "easeInOut"
+          ease: "easeInOut",
         },
         scale: {
-          duration: 0.2
-        }
-      }
+          duration: 0.2,
+        },
+      },
     },
     tap: {
       scale: 0.95,
       transition: {
-        duration: 0.1
-      }
-    }
+        duration: 0.1,
+      },
+    },
   };
 
   const popupVariants = {
@@ -66,8 +98,8 @@ const DevelopmentBadge = () => {
       y: 50,
       scale: 0.8,
       transition: {
-        duration: 0.2
-      }
+        duration: 0.2,
+      },
     },
     visible: {
       opacity: 1,
@@ -77,8 +109,8 @@ const DevelopmentBadge = () => {
         type: "spring",
         stiffness: 300,
         damping: 25,
-        duration: 0.4
-      }
+        duration: 0.4,
+      },
     },
     exit: {
       opacity: 0,
@@ -86,9 +118,9 @@ const DevelopmentBadge = () => {
       scale: 0.9,
       transition: {
         duration: 0.2,
-        ease: "easeIn"
-      }
-    }
+        ease: "easeIn",
+      },
+    },
   };
 
   const progressVariants = {
@@ -98,9 +130,9 @@ const DevelopmentBadge = () => {
       transition: {
         duration: 1.5,
         ease: "easeOut",
-        delay: 0.3
-      }
-    }
+        delay: 0.3,
+      },
+    },
   };
 
   const iconVariants = {
@@ -109,9 +141,9 @@ const DevelopmentBadge = () => {
       transition: {
         duration: 2,
         repeat: Infinity,
-        ease: "linear"
-      }
-    }
+        ease: "linear",
+      },
+    },
   };
 
   return (
@@ -152,12 +184,12 @@ const DevelopmentBadge = () => {
             className="ml-2 w-2 h-2 bg-orange-400 rounded-full"
             animate={{
               scale: [1, 1.2, 1],
-              opacity: [1, 0.7, 1]
+              opacity: [1, 0.7, 1],
             }}
             transition={{
               duration: 1.5,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut",
             }}
           />
         </div>
@@ -208,55 +240,69 @@ const DevelopmentBadge = () => {
             {/* Content */}
             <div className="p-4 w-80">
               {/* Progress Bar */}
-             <div className="mb-4">
-  <div className="flex justify-between items-center mb-2">
-    <span className="text-sm font-medium text-gray-700">Progress</span>
-    <span className="text-sm font-bold text-blue-600">{progress}%</span> {/* Updated here */}
-  </div>
-
-  <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-    <motion.div
-      className="bg-gradient-to-r from-blue-500 to-purple-500 h-full rounded-full relative"
-      style={{ width: `${progress}%` }} // Dynamically set width
-      initial={{ width: 0 }}
-      animate={{ width: `${progress}%` }}
-      transition={{
-        duration: 1.5,
-        ease: "easeOut",
-        delay: 0.3,
-      }}
-    >
-      <motion.div
-        className="absolute inset-0 bg-white opacity-30"
-        animate={{
-          x: ["-100%", "100%"]
-        }}
-        transition={{
-          duration: 1.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1.8
-        }}
-      />
-    </motion.div>
-  </div>
-
-   {latestCommit && (
-                <div className="mt-4 p-2 bg-gray-100 rounded-lg text-sm text-gray-800">
-                  <strong>Latest commit:</strong><br />
-                  {latestCommit.commit.message.split('\n')[0]}<br/>
-                  <code className="text-xs font-mono">{latestCommit.sha.substring(0,7)}</code><br/>
-                  <a
-                    href={latestCommit.html_url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-blue-600 hover:underline text-xs"
-                  >
-                    View on GitHub
-                  </a>
+              <div className="mb-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-medium text-gray-700">
+                    Progress
+                  </span>
+                  <span className="text-sm font-bold text-blue-600">
+                    {progress}%
+                  </span>{" "}
+                  {/* Updated here */}
                 </div>
-              )}
-</div>
+
+                <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                  <motion.div
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 h-full rounded-full relative"
+                    style={{ width: `${progress}%` }} // Dynamically set width
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
+                    transition={{
+                      duration: 1.5,
+                      ease: "easeOut",
+                      delay: 0.3,
+                    }}
+                  >
+                    <motion.div
+                      className="absolute inset-0 bg-white opacity-30"
+                      animate={{
+                        x: ["-100%", "100%"],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 1.8,
+                      }}
+                    />
+                  </motion.div>
+                </div>
+
+                {latestCommit && (
+                  <div className="mt-4 p-2 bg-gray-100 rounded-lg text-sm text-gray-800">
+                    <strong>Latest commit:</strong>
+                    <br />
+                    {latestCommit.commit.message.split("\n")[0]}
+                    <br />
+                    <code className="text-xs font-mono">
+                      {latestCommit.sha.substring(0, 7)}
+                    </code>
+                    <br />
+                    <a
+                      href={latestCommit.html_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-600 hover:underline text-xs"
+                    >
+                      View on GitHub
+                    </a>
+                  </div>
+                )}
+              </div>
+              <div className="mt-3 p-2 bg-gray-100 rounded-lg text-sm text-gray-800">
+                <strong>Backend Status:</strong> <span>{backendStatus} </span><br></br>
+                <strong>Response:</strong> <span>{duration}ms</span>
+              </div>
 
               {/* Contact Info */}
               <motion.div
@@ -267,10 +313,13 @@ const DevelopmentBadge = () => {
               >
                 <div className="flex items-center mb-2">
                   <Users className="mr-2 text-blue-600" size={16} />
-                  <span className="font-medium text-gray-800">Contact TechHike Team</span>
+                  <span className="font-medium text-gray-800">
+                    Contact TechHike Team
+                  </span>
                 </div>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Get the latest updates on our development progress and be the first to know about new features!
+                  Get the latest updates on our development progress and be the
+                  first to know about new features!
                 </p>
               </motion.div>
 
