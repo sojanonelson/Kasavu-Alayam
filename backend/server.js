@@ -26,21 +26,19 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Middleware
-const allowedOrigins = ['http://localhost:3000', 'https://kasavualayam.vercel.app'];
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://kasavualayam.vercel.app'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
+
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", "true");
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Credentials', 'true');
   next();
 });
 
