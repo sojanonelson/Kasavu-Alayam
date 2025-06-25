@@ -1,4 +1,4 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 
 import { 
   LayoutDashboard,
@@ -29,6 +29,7 @@ const AdminLayout = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileAlert, setShowMobileAlert] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -52,6 +53,11 @@ const AdminLayout = () => {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+    const handleLogout = () => {
+    localStorage.clear()
+    navigate('/')
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -307,7 +313,7 @@ const AdminLayout = () => {
 
             {/* Logout Button */}
             <div className="mt-4 rounded-lg shadow-sm p-2">
-              <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-red-500 hover:bg-red-50 transition-colors text-sm">
+              <button onClick={()=> handleLogout()} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-red-500 hover:bg-red-50 transition-colors text-sm">
                 <LogOut size={18} className="flex-shrink-0" />
                 <span>Log out</span>
               </button>

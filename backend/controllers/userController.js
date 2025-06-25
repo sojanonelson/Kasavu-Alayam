@@ -2,6 +2,18 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+
+
+// Cookie setup
+const setRefreshTokenCookie = (res, token) => {
+  res.cookie('refreshToken', token, {
+    httpOnly: true,
+    secure: true, // set to false if not using HTTPS in dev
+    sameSite: 'Strict',
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  });
+};
+
 // Create a new user account
 const register = async (req, res) => {
   try {
@@ -16,8 +28,7 @@ const register = async (req, res) => {
       return res.status(409).json({ message: "User already exists" });
     }
 
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({
       phone,
@@ -38,7 +49,7 @@ const register = async (req, res) => {
   }
 };
 
-// Login a user and return JWT token
+// Login a user and return tokens
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -57,26 +68,35 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    // Create JWT token
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
+    const accessToken = jwt.sign(
+      { id: user._id, email: user.email ,role: user.role  },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      { expiresIn: '15m' }
     );
+
+  
+
+    const refreshToken = jwt.sign(
+      { id: user._id ,role: user.role },
+      process.env.REFRESH_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    // Set HttpOnly cookie for refresh token
+    setRefreshTokenCookie(res, refreshToken);
 
     res.status(200).json({
       message: "Login successful",
-      token,
+      accessToken,
       user: {
         id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         phone: user.phone,
-        dob:user.dob,
-        gender:user.gender,
-        role:user.role
-
+        dob: user.dob,
+        gender: user.gender,
+        role: user.role
       }
     });
 
@@ -84,6 +104,26 @@ const loginUser = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+// Endpoint to refresh access token
+const refreshAccessToken = (req, res) => {
+  const token = req.cookies.refreshToken;
+  if (!token) return res.status(401).json({ message: "Refresh token missing" });
+
+  try {
+    const decoded = jwt.verify(token, process.env.REFRESH_SECRET);
+    const accessToken = jwt.sign(
+      { id: decoded.id },
+      process.env.JWT_SECRET,
+      { expiresIn: '15m' }
+    );
+    res.json({ accessToken });
+  } catch (error) {
+    res.status(403).json({ message: "Invalid refresh token" });
+  }
+};
+
+
 
 
 // Delete a user account by ID
@@ -149,5 +189,7 @@ module.exports = {
   deleteAccount,
   updateAccount,
   getAccountById,
-  getAllAccounts
+  getAllAccounts,
+    refreshAccessToken,
+    setRefreshTokenCookie
 };

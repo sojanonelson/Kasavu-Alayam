@@ -16,27 +16,29 @@ const ProfilePage = () => {
   const [originalData, setOriginalData] = useState({ ...formData });
 
   // 🌀 Fetch user on mount
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userStr = localStorage.getItem('user');
-        if (!userStr) return;
-        const user = JSON.parse(userStr);
-        const userData = await customerService.getUserById(user._id || user.id);
-        if (userData && userData._id) {
-          setFormData(userData);
-          setOriginalData(userData);
-        }
-      } catch (error) {
-        console.error('Failed to load user:', error);
-      } finally {
-        setLoading(false); // 🔚 Done loading
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const userStr = localStorage.getItem('user');
+      const token = localStorage.getItem('token'); // 👈 Get token from storage
+
+      if (!userStr || !token) return;
+
+      const user = JSON.parse(userStr);
+      const userData = await customerService.getUserById(user._id || user.id, token); // 👈 Pass token
+      if (userData && userData._id) {
+        setFormData(userData);
+        setOriginalData(userData);
       }
-    };
+    } catch (error) {
+      console.error('Failed to load user:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchUser();
-  }, []);
-
+  fetchUser();
+}, []);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({

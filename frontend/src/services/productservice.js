@@ -1,4 +1,5 @@
 import axios from 'axios';
+import API from './axiosInstance';
 
 const API_URL = process.env.REACT_APP_BACKEND_API;
 
@@ -22,14 +23,14 @@ const getProductByIdeal = async (ideal) => {
 
 // POST new product
 const createProduct = async (productData) => {
-  const response = await axios.post(`${API_URL}/products`, productData);
+  const response = await API.post(`${API_URL}/products`, productData);
   return response.data;
 };
 
 // PUT update product by ID
 const updateProduct = async (id, formData) => {
   console.log("PD:", formData)
-  const response = await axios.put(`${API_URL}/products/${id}`, formData);
+  const response = await API.put(`${API_URL}/products/${id}`, formData);
   return response.data;
 };
 
@@ -37,7 +38,7 @@ const updateProductImages = async (id, formData) => {
   try {
     console.log("FormData Payload:", formData);
 
-    const response = await axios.put(`${API_URL}/products/${id}/images`, formData, {
+    const response = await API.put(`${API_URL}/products/${id}/images`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -52,7 +53,7 @@ const updateProductImages = async (id, formData) => {
 
 // DELETE product by ID
 const deleteProduct = async (id) => {
-  const response = await axios.delete(`${API_URL}/products/${id}`);
+  const response = await API.delete(`${API_URL}/products/${id}`);
   return response.data;
 };
 

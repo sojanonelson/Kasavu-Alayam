@@ -2,17 +2,17 @@ const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
 const upload = require('../middleware/upload');
+const { isAdmin, protect } = require('../middleware/auth');
 
 // Create Product
-router.post('/', upload.array('images', 4), productController.createProduct);
-router.post('/test', upload.array('images', 4), productController.TestcreateProduct);
+router.post('/',protect, upload.array('images', 4), productController.createProduct);
 
 // Update Product
-router.put('/:id', productController.updateProduct);
-router.put('/:id/images', upload.array('images', 4), productController.updateProductImages);
+router.put('/:id',protect, isAdmin,  productController.updateProduct);
+router.put('/:id/images',protect, isAdmin,  upload.array('images', 4), productController.updateProductImages);
 
 // Delete Product
-router.delete('/:id', productController.deleteProduct);
+router.delete('/:id',protect, isAdmin,  productController.deleteProduct);
 
 // Get Products by Collection (specific route must come before dynamic `:id`)
 router.get('/collection/:collection', productController.getProductsByCollection);

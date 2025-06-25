@@ -1,3 +1,4 @@
+// routes/userRoutes.js
 const express = require('express');
 const {
   register,
@@ -5,29 +6,25 @@ const {
   deleteAccount,
   updateAccount,
   getAccountById,
-  getAllAccounts
+  getAllAccounts,
+  refreshAccessToken, // ✅ Add this
 } = require('../controllers/userController');
 
 const { protect, isAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Route to create a new account
+// 🔐 Auth Routes
 router.post('/register', register);
 router.post('/login', loginUser);
+router.get('/refresh', refreshAccessToken); // ✅ Refresh Token Route
 
+// 👤 User Routes
+router.delete('/:id', protect, deleteAccount);
+router.put('/:id', protect, updateAccount);
+router.get('/:id', protect, getAccountById);
 
-
-// Route to delete an account by ID
-router.delete('/:id', deleteAccount);
-
-// Route to update an account by ID
-router.put('/:id', updateAccount);
-
-// Route to get an account by ID
-router.get('/:id', getAccountById);
-
-// Route to get all user accounts (only accessible by admin)
+// 🛡️ Admin Routes
 router.get('/', protect, isAdmin, getAllAccounts);
 
 module.exports = router;
