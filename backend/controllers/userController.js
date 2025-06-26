@@ -107,6 +107,7 @@ const loginUser = async (req, res) => {
 
 const refreshAccessToken = (req, res) => {
   const token = req.cookies.refreshToken;
+  console.log("Token:",token)
   if (!token) return res.status(401).json({ message: "Refresh token missing" });
 
   try {
