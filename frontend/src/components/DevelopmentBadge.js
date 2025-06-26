@@ -192,6 +192,7 @@ const DevelopmentBadge = () => {
               ease: "easeInOut",
             }}
           />
+          
         </div>
       </motion.div>
 
