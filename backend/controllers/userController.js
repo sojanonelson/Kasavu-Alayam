@@ -6,7 +6,7 @@ const generateAccessToken = (user) => {
   return jwt.sign(
     { id: user._id, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: '59m' }
+    { expiresIn: '15s' }
   );
 };
 
@@ -15,7 +15,7 @@ const setRefreshTokenCookie = (res, token) => {
     httpOnly: true,
     secure: true,
     sameSite: 'Strict',
-    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    maxAge: 7 * 24 * 60 * 60 * 1000
   });
 };
 
@@ -120,7 +120,7 @@ const refreshAccessToken = (req, res) => {
     const accessToken = jwt.sign(
       { id: decoded.id, role: decoded.role },
       process.env.JWT_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '15s' }
     );
     res.json({ accessToken });
   } catch (error) {
