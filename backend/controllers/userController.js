@@ -6,7 +6,7 @@ const generateAccessToken = (user) => {
   return jwt.sign(
     { id: user._id, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: '15s' }
+    { expiresIn: '15m' }
   );
 };
 
@@ -121,7 +121,7 @@ const refreshAccessToken = (req, res) => {
     const accessToken = jwt.sign(
       { id: decoded.id, role: decoded.role },
       process.env.JWT_SECRET,
-      { expiresIn: '15s' }
+      { expiresIn: '7d' }
     );
     res.json({ accessToken });
   } catch (error) {
@@ -135,7 +135,7 @@ const logout = (req, res) => {
   res.clearCookie('refreshToken', {
     httpOnly: true,
     secure: true,
-    sameSite: 'Strict'
+    sameSite: 'None'
   });
   res.json({ message: "Logged out successfully" });
 };
