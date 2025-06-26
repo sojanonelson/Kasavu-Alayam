@@ -26,14 +26,12 @@ const SortableItem = ({ id, children, disabled }) => {
     transition,
     isDragging,
   } = useSortable({ id, disabled });
-
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
     cursor: disabled ? "default" : "grab",
   };
-
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {children}
@@ -48,7 +46,10 @@ const CarouselManager = () => {
   const [carouselImages, setCarouselImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDraggingEnabled, setIsDraggingEnabled] = useState(false); // State to track if dragging is enabled
+  const [isDragging,setIsDragging]=useState(false)
+
+
   const isDraggingRef = useRef(false);
 
   const sensors = useSensors(
@@ -84,16 +85,12 @@ const CarouselManager = () => {
       formData.append("image", image);
       formData.append("title", title);
       formData.append("subtitle", subtitle);
-
       await websiteSettingService.uploadCarouselImage(formData);
-
       setImage(null);
       setTitle("");
       setSubtitle("");
-
       const fileInput = document.querySelector('input[type="file"]');
       if (fileInput) fileInput.value = "";
-
       await fetchCarouselImages();
     } catch (err) {
       setError("Failed to upload image");
@@ -105,6 +102,9 @@ const CarouselManager = () => {
   const handleDelete = async (publicId) => {
     if (isDraggingRef.current) return;
 
+    if (!window.confirm("Are you sure you want to delete this image?")) {
+      return;
+    }
     try {
       await websiteSettingService.deleteCarouselImage(publicId);
       await fetchCarouselImages();
@@ -121,16 +121,12 @@ const CarouselManager = () => {
   const handleDragEnd = async (event) => {
     setIsDragging(false);
     isDraggingRef.current = false;
-
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-
     const oldIndex = carouselImages.findIndex((img) => img.public_id === active.id);
     const newIndex = carouselImages.findIndex((img) => img.public_id === over.id);
-
     const newImages = arrayMove(carouselImages, oldIndex, newIndex);
     setCarouselImages(newImages);
-
     try {
       const orderedPublicIds = newImages.map((img) => img.public_id);
       const response = await websiteSettingService.reorderCarouselImages(orderedPublicIds);
@@ -142,13 +138,17 @@ const CarouselManager = () => {
     }
   };
 
+  const toggleDragEnabled = () => {
+    setIsDraggingEnabled(!isDraggingEnabled);
+  };
+
   return (
-    <div className="min-h-screen w-full bg-red-50 p-6">
+    <div className="lg:h-[70vh] select-none w-full bg-white p-6">
       <div className="max-w-screen-xl mx-auto">
         <h1 className="text-4xl font-bold text-red-800 mb-8 text-center">Carousel Manager</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Upload Form */}
-          <div className="lg:col-span-1 bg-white border border-red-200 rounded-xl p-6 shadow-md">
+          <div className="lg:col-span-1 bg-white border border-red-200 rounded-xl p-6 ">
             <h2 className="text-2xl font-bold text-red-700 mb-4">Upload Image</h2>
             {error && (
               <div className="mb-4 text-red-800 bg-red-100 p-3 rounded-md">
@@ -185,14 +185,21 @@ const CarouselManager = () => {
               {loading ? "Uploading..." : "Upload Image"}
             </button>
           </div>
-
           {/* Carousel Images */}
-          <div className="lg:col-span-2 bg-white border border-red-200 rounded-xl p-6 shadow-md">
+          <div className="lg:col-span-2 bg-white border border-red-200 rounded-xl p-6 ">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-red-700">Carousel Images</h2>
-              {carouselImages.length > 1 && (
-                <p className="text-sm text-red-500">Drag to reorder</p>
-              )}
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={toggleDragEnabled}
+                  className={`px-4 py-2 rounded-lg font-semibold transition-colors ${isDraggingEnabled ? "bg-green-500 hover:bg-green-600 text-white" : "bg-gray-300 hover:bg-gray-400 text-gray-700"}`}
+                >
+                  {isDraggingEnabled ? "Disable Drag" : "Enable Drag"}
+                </button>
+                {carouselImages.length > 1 && isDraggingEnabled && (
+                  <p className="text-sm text-red-500">Drag to reorder</p>
+                )}
+              </div>
             </div>
             <div className="overflow-y-auto max-h-[60vh]">
               {carouselImages.length === 0 ? (
@@ -215,7 +222,7 @@ const CarouselManager = () => {
                         <SortableItem
                           key={img.public_id}
                           id={img.public_id}
-                          disabled={carouselImages.length < 2}
+                          disabled={!isDraggingEnabled || carouselImages.length < 2}
                         >
                           <div className="flex items-center gap-4 p-4 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 shadow transition-all">
                             <img
@@ -232,8 +239,12 @@ const CarouselManager = () => {
                               </p>
                             </div>
                             <button
-                              onClick={() => handleDelete(img.public_id)}
-                              disabled={isDragging}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(img.public_id);
+                              }}
+                              disabled={isDraggingEnabled}
+                              aria-label={`Delete ${img.title || 'image'}`}
                               className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition-colors font-semibold shadow hover:shadow-md"
                             >
                               Delete

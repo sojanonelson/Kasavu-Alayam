@@ -15,30 +15,25 @@ const Login = () => {
 const handleSubmit = async (event) => {
   event.preventDefault();
   setIsLoading(true);
-  setError(''); // Clear previous error
+  setError('');
 
   try {
-    const loginRes = await authService.LoginAccount(email, password);
-
-    if (loginRes.user) {
-      // Save user and token correctly
-      localStorage.setItem('user', JSON.stringify(loginRes.user));
-      localStorage.setItem('token', loginRes.accessToken);
-
+    const response = await authService.LoginAccount(email, password);
+    
+    if (response.accessToken && response.user) {
+      localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem('token', response.accessToken);
       window.location.href = '/';
-
     } else {
-      setError(loginRes.message || 'Login failed. Please try again.');
+      setError(response.message || 'Login failed. Please try again.');
     }
   } catch (err) {
     console.error('Login error:', err);
-    setError('Something went wrong. Please try again later.');
+    setError(err.response?.data?.message || 'Something went wrong. Please try again later.');
   } finally {
     setIsLoading(false);
   }
 };
-
-
 
   const navigateToRegister = () => {
     navigate('/register');

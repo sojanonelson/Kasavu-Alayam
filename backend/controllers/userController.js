@@ -2,19 +2,23 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+const generateAccessToken = (user) => {
+  return jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: '15s' }
+  );
+};
 
-
-// Cookie setup
 const setRefreshTokenCookie = (res, token) => {
   res.cookie('refreshToken', token, {
     httpOnly: true,
-    secure: true, // set to false if not using HTTPS in dev
+    secure: true,
     sameSite: 'Strict',
     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
   });
 };
 
-// Create a new user account
 const register = async (req, res) => {
   try {
     const { phone, firstName, lastName, email, gender, dob, password, address } = req.body;
@@ -49,7 +53,6 @@ const register = async (req, res) => {
   }
 };
 
-// Login a user and return tokens
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -68,16 +71,11 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    // ✅ Add login timestamp
     const now = new Date();
-    user.loginHistory = [now, ...user.loginHistory].slice(0, 2); // Only keep last 2
+    user.loginHistory = [now, ...user.loginHistory].slice(0, 2);
     await user.save();
 
-    const accessToken = jwt.sign(
-      { id: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '15m' }
-    );
+    const accessToken = generateAccessToken(user);
 
     const refreshToken = jwt.sign(
       { id: user._id, role: user.role },
@@ -99,38 +97,48 @@ const loginUser = async (req, res) => {
         dob: user.dob,
         gender: user.gender,
         role: user.role,
-        loginHistory: user.loginHistory, // Include it in the response too
+        loginHistory: user.loginHistory
       }
     });
-
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-
-// Endpoint to refresh access token
 const refreshAccessToken = (req, res) => {
   const token = req.cookies.refreshToken;
   if (!token) return res.status(401).json({ message: "Refresh token missing" });
 
   try {
     const decoded = jwt.verify(token, process.env.REFRESH_SECRET);
+    
+    // Additional verification
+    if (!decoded.id || !decoded.role) {
+      throw new Error('Invalid token payload');
+    }
+
     const accessToken = jwt.sign(
-      { id: decoded.id },
+      { id: decoded.id, role: decoded.role },
       process.env.JWT_SECRET,
       { expiresIn: '15m' }
     );
     res.json({ accessToken });
   } catch (error) {
-    res.status(403).json({ message: "Invalid refresh token" });
+    console.error("Refresh token error:", error.message);
+    res.clearCookie('refreshToken');
+    res.status(403).json({ message: "Invalid or expired refresh token" });
   }
 };
 
+const logout = (req, res) => {
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'Strict'
+  });
+  res.json({ message: "Logged out successfully" });
+};
 
-
-
-// Delete a user account by ID
 const deleteAccount = async (req, res) => {
   try {
     const { id } = req.params;
@@ -138,31 +146,26 @@ const deleteAccount = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
     res.json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-// Update a user account by ID
 const updateAccount = async (req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
-
     const user = await User.findByIdAndUpdate(id, updates, { new: true });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-// Get a user account by ID
 const getAccountById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -170,14 +173,12 @@ const getAccountById = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-// Get all user accounts (Admin only)
 const getAllAccounts = async (req, res) => {
   try {
     const users = await User.find();
@@ -194,6 +195,7 @@ module.exports = {
   updateAccount,
   getAccountById,
   getAllAccounts,
-    refreshAccessToken,
-    setRefreshTokenCookie
+  refreshAccessToken,
+  setRefreshTokenCookie,
+  logout
 };

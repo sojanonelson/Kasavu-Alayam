@@ -10,6 +10,7 @@ const categoryRoutes =require('./routes/CategoryRoute')
 const websettingRoutes =require('./routes/websiteSettingRoutes')
 const collectionRoutes =require('./routes/CollectionRoute')
 const otpRoutes = require('./routes/otpRoute')
+const cookieParser = require('cookie-parser');
 
 const connectDB = require('./config/DB');
 
@@ -35,6 +36,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', req.headers.origin);
