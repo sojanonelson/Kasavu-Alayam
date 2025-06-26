@@ -29,7 +29,7 @@ if (!fs.existsSync(uploadDir)) {
 
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://kasavualayam.vercel.app'],
+  origin: ['http://localhost:3000', 'https://kasavualayam.vercel.app','http://192.168.82.114:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true

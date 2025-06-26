@@ -143,9 +143,9 @@ const CarouselManager = () => {
   };
 
   return (
-    <div className="lg:h-[70vh] select-none w-full bg-white p-6">
+    <div className="lg:h-auto select-none w-full bg-white p-2">
       <div className="max-w-screen-xl mx-auto">
-        <h1 className="text-4xl font-bold text-red-800 mb-8 text-center">Carousel Manager</h1>
+      
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Upload Form */}
           <div className="lg:col-span-1 bg-white border border-red-200 rounded-xl p-6 ">

@@ -21,7 +21,7 @@ const WebsiteSettings = () => {
   if (error) return <Typography color="error">Error: {error}</Typography>;
 
   return (
-    <Paper elevation={3} sx={{ p: 3 }}>
+    <Paper elevation={0} sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
         <span>Kasavu Aalayam Website Settings</span>
       </Typography>
