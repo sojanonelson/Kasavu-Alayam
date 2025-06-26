@@ -181,7 +181,7 @@ const DevelopmentBadge = () => {
           </motion.div>
           <span className="font-medium text-sm">On Development</span>
           <motion.div
-            className="ml-2 w-2 h-2 bg-orange-400 rounded-full"
+            className="ml-2 w-2 h-2 bg-green-400 rounded-full"
             animate={{
               scale: [1, 1.2, 1],
               opacity: [1, 0.7, 1],

@@ -25,7 +25,8 @@ const handleSubmit = async (event) => {
       localStorage.setItem('user', JSON.stringify(loginRes.user));
       localStorage.setItem('token', loginRes.accessToken);
 
-      navigate('/');
+      window.location.href = '/';
+
     } else {
       setError(loginRes.message || 'Login failed. Please try again.');
     }

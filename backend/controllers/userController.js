@@ -68,21 +68,23 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
+    // ✅ Add login timestamp
+    const now = new Date();
+    user.loginHistory = [now, ...user.loginHistory].slice(0, 2); // Only keep last 2
+    await user.save();
+
     const accessToken = jwt.sign(
-      { id: user._id, email: user.email ,role: user.role  },
+      { id: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '15m' }
     );
 
-  
-
     const refreshToken = jwt.sign(
-      { id: user._id ,role: user.role },
+      { id: user._id, role: user.role },
       process.env.REFRESH_SECRET,
       { expiresIn: '7d' }
     );
 
-    // Set HttpOnly cookie for refresh token
     setRefreshTokenCookie(res, refreshToken);
 
     res.status(200).json({
@@ -96,7 +98,8 @@ const loginUser = async (req, res) => {
         phone: user.phone,
         dob: user.dob,
         gender: user.gender,
-        role: user.role
+        role: user.role,
+        loginHistory: user.loginHistory, // Include it in the response too
       }
     });
 
@@ -104,6 +107,7 @@ const loginUser = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 // Endpoint to refresh access token
 const refreshAccessToken = (req, res) => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, User, ShoppingCart, LogIn } from 'lucide-react';
+import { Menu, X, User, ShoppingCart, LogIn, ShieldUserIcon } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginWithOTP from '../pages/Login';
 import { toggleLoginModel } from "../redux/features/general/general"; 
@@ -149,6 +149,19 @@ const Navbar = () => {
             </button>)
 
              }
+            {JSON.parse(localStorage.getItem("user") || "{}")?.role === "admin" && (
+  <button
+    onClick={() => navigate('/admin')}
+    className={`flex items-center gap-1 ${
+      navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"
+    } transition-colors `}
+  >
+    <ShieldUserIcon size={22} />
+    <span className="text-sm font-medium">Admin</span>
+  </button>
+)}
+
+
            
           </div>
         </div>

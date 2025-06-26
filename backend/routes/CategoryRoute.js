@@ -7,6 +7,6 @@ router.post('/',protect, isAdmin,  categoryController.createCategory);
 router.get('/', categoryController.getAllCategories);
 router.put('/:id',protect, isAdmin,  categoryController.updateCategory);
 router.delete('/:id',protect, isAdmin,  categoryController.deleteCategory);
-router.get('/categories-with-subcategories', categoryController.getAllCategoriesWithSubcategories);
+router.get('/categories-with-subca  tegories', categoryController.getAllCategoriesWithSubcategories);
 
 module.exports = router;

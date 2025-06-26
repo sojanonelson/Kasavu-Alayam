@@ -1,11 +1,12 @@
 import axios from 'axios';
+import API from './axiosInstance';
 
 const API_URL = process.env.REACT_APP_BACKEND_API;
 
 // ------- CATEGORY APIs --------
 
 const createCategory = async (name) => {
-  const response = await axios.post(`${API_URL}/categories`, { name });
+  const response = await API.post(`${API_URL}/categories`, { name });
   return response.data;
 };
 
@@ -25,19 +26,19 @@ const getAllCategoriesWithSubcategories = async () => {
 
 const updateCategory = async (id, name) => {
   console.log("SSS;", name)
-  const response = await axios.put(`${API_URL}/categories/${id}`, { name:name });
+  const response = await API.put(`${API_URL}/categories/${id}`, { name:name });
   return response.data;
 };
 
 const deleteCategory = async (id) => {
-  const response = await axios.delete(`${API_URL}/categories/${id}`);
+  const response = await API.delete(`${API_URL}/categories/${id}`);
   return response.data;
 };
 
 // ------- SUBCATEGORY APIs --------
 
 const createSubCategory = async (name, categoryId) => {
-  const response = await axios.post(`${API_URL}/subcategories`, {
+  const response = await API.post(`${API_URL}/subcategories`, {
     name,
     categoryId
   });

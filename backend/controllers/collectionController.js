@@ -20,6 +20,25 @@ exports.getAllCollections = async (req, res) => {
   }
 };
 
+exports.getAllCollectionsAndRoot = async (req, res) => {
+  try {
+    const collections = await Collection.find()
+      .select('title categories')
+      .populate({
+        path: 'categories',
+        select: 'name',
+        populate: {
+          path: 'subcategories', // Assuming 'subcategories' is the field in Category model
+          select: 'name'
+        }
+      });
+
+    res.status(200).json(collections);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.getAllCollectionsOfId = async (req, res) => {
   const { id } = req.params;
   try {

@@ -9,6 +9,7 @@ const { protect, isAdmin } = require('../middleware/auth.js');
 
 router.post('/', collectionController.createCollection);
 router.get('/', collectionController.getAllCollections);
+router.get('/main', collectionController.getAllCollectionsAndRoot)
 router.get('/:id', collectionController.getAllCollectionsOfId);
 router.get('/:id/products', collectionController.getCollectionProducts);
 

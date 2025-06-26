@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  loginHistory: {
+    type: [Date], // Array of login timestamps
+    default: []
   }
 }, { timestamps: true });
 

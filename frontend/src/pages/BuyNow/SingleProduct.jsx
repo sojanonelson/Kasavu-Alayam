@@ -214,21 +214,7 @@ const SingleProductPage = () => {
             {/* Color Selection */}
             <div className="mb-6">
               <h3 className="text-lg font-medium mb-3 text-gray-900">Color: <span className="font-normal text-gray-700">{product.color}</span></h3>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setSelectedColor(product.color)}
-                  className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all ${selectedColor === product.color ? 'border-primary ring-4 ring-primary ring-opacity-30' : 'border-gray-300 hover:border-gray-400'}`}
-                  style={{ backgroundColor: product.color.toLowerCase() }}
-                  aria-label={product.color}
-                >
-                  {selectedColor === product.color && (
-                    <Check className="text-white w-5 h-5" strokeWidth={3} />
-                  )}
-                </button>
-                <span className="text-gray-700">
-                  {product.color.toUpperCase()}
-                </span>
-              </div>
+            
             </div>
 
             {/* Size Selection */}
@@ -297,14 +283,15 @@ const SingleProductPage = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button className="btn btn-primary flex-1 h-14 text-lg font-medium">
-                Add to Cart
-              </button>
-              <button className="btn btn-outline btn-primary flex-1 h-14 text-lg font-medium">
-                Buy Now
-              </button>
-            </div>
+           <div className="flex flex-col sm:flex-row gap-3">
+  <button className="bg-blue-500 hover:bg-blue-600 text-white flex-1 h-14 text-lg font-medium rounded-lg transition-colors">
+    Add to Cart
+  </button>
+  <button className="bg-green-500 hover:bg-green-600 text-white flex-1 h-14 text-lg font-medium rounded-lg transition-colors">
+    Buy Now
+  </button>
+</div>
+
           </div>
         </div>
 
