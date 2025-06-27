@@ -92,7 +92,7 @@ const Checkout = () => {
         handler: async function (response) {
           try {
             const order = await createNewOrder(response.razorpay_payment_id, 'upi');
-            navigate("/thank-you", { 
+            navigate("/my-account/order", { 
               state: { 
                 orderId: order.orderTrackingId,
                 amount: orderData.total,
@@ -134,7 +134,7 @@ const handlePayment = async () => {
     } else {
       try {
         const order = await createNewOrder(`cash-${Date.now()}`, 'cash');
-        navigate("my-account/orders", { 
+        navigate("my-account/order", { 
           state: { 
             orderId: order.orderTrackingId,
             amount: orderData.total,
