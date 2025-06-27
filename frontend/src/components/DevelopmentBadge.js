@@ -16,7 +16,7 @@ const DevelopmentBadge = () => {
   const [isHovered, setIsHovered] = useState(false);
   const audioRef = useRef(null);
   const [latestCommit, setLatestCommit] = useState(null);
-  const [progress, setProgress] = useState(85);
+  const [progress, setProgress] = useState(88);
   const [backendStatus, setBackendStatus] = useState("Checking...");
   const [duration,setDuration]= useState('')
   const [uptimeData, setUptimeData] = useState(null);
