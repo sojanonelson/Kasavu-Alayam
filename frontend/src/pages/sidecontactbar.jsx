@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
 import { Mail, Phone, MessageSquare, Navigation } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Individual Contact Circle Component
 const ContactCircle = memo(({ icon: Icon, title, onClick, bgColor, hoverColor, iconColor }) => (
@@ -128,13 +129,14 @@ const SideContactNavbar = () => {
 };
 
 export default function Demo() {
+  const navigate = useNavigate(); // Use the useNavigate hook
+
   // Premium silk collection image - from your sample
   const handloomImage = "https://img.etimg.com/thumb/width-1200,height-1200,imgsize-961164,resizemode-75,msid-68716260/magazines/panache/how-handloom-sarees-are-weaving-a-storm-in-bengaluru.jpg";
 
   // Function for the Explore Collection button
   const handleExploreCollection = () => {
-    // You can customize this function based on your needs
-    window.open('https://kasavuaalayam.com/collections', '_blank');
+    navigate('/collections/womens/sarees'); // Navigate to the sarees section
   };
 
   return (
