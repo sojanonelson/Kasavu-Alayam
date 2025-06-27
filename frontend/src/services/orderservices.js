@@ -1,20 +1,32 @@
+
 import axios from 'axios';
+import API from './axiosInstance';
 
-const API_URL = process.env.REACT_APP_BACKEND_API// Adjust the URL as necessary
+const API_URL = process.env.REACT_APP_BACKEND_API;
 
-const getUserByPhone = async (phone) => {
-  const response = await axios.get(`${API_URL}/user/?phone=${phone}`);
+
+// 🪙 Create a new order
+export const createOrder = async (orderData) => {
+  const response = await axios.post(`${API_URL}/order/create`, orderData);
   return response.data;
 };
 
-const createOrUpdateUser = async (userData) => {
-  const response = await axios.post(`${API_URL}/user/create`, userData);
+// 📦 Get all orders (admin only)
+export const getAllOrders = async () => {
+  const response = await axios.get(`${API_URL}/order/all`);
   return response.data;
 };
 
-const orderService = {
-  getUserByPhone,
-  createOrUpdateUser,
+
+
+// 👤 Get orders of a specific user
+export const getOrdersByUser = async (userId) => {
+  const response = await axios.get(`${API_URL}/order/user/${userId}`);
+  return response.data;
 };
 
-export default orderService;
+// 🆔 Get single order by tracking ID
+export const getOrderByTrackingId = async (trackingId) => {
+  const response = await axios.get(`${API_URL}/order/${trackingId}`);
+  return response.data;
+};

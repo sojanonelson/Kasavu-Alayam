@@ -2,11 +2,16 @@ const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
 
-router.post('/', orderController.createOrder);
-router.get('/', orderController.getOrders);
-router.get('/report', orderController.getOrdersReport);
-router.get('/:id', orderController.getOrderById);
-router.patch('/:id/status', orderController.updateOrderStatus);
-router.post('/:id/cancel', orderController.cancelOrder);
+// Create Order
+router.post('/create', orderController.createOrder);
+
+// Get all orders (admin use)
+router.get('/all', orderController.getAllOrders);
+
+// Get orders of a specific user
+router.get('/user/:userId', orderController.getOrdersByUser);
+
+// Get order by tracking ID
+router.get('/:trackingId', orderController.getOrderByTrackingId);
 
 module.exports = router;

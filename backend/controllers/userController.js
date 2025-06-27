@@ -21,7 +21,7 @@ const setRefreshTokenCookie = (res, token) => {
 
 const register = async (req, res) => {
   try {
-    const { phone, firstName, lastName, email, gender, dob, password, address } = req.body;
+    const { phone, firstName, lastName, email, gender, dob, password } = req.body;
 
     if (!phone || !gender || !password) {
       return res.status(400).json({ message: "Phone, gender, and password are required" });
@@ -41,7 +41,7 @@ const register = async (req, res) => {
       email,
       gender,
       dob,
-      address,
+      
       password: hashedPassword
     });
 
@@ -189,7 +189,72 @@ const getAllAccounts = async (req, res) => {
   }
 };
 
+const addAddress = async (req, res) => {
+  try {
+    const { userId, address } = req.body;
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.addresses.push(address);
+    await user.save();
+    res.json({ message: "Address added", addresses: user.addresses });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+const deleteAddress = async (req, res) => {
+  try {
+    const { userId, addressId } = req.body;
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.addresses = user.addresses.filter(addr => addr._id.toString() !== addressId);
+    await user.save();
+    res.json({ message: "Address deleted", addresses: user.addresses });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+const updateAddress = async (req, res) => {
+  try {
+    const { userId, addressId, updatedAddress } = req.body;
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const address = user.addresses.id(addressId);
+    if (!address) return res.status(404).json({ message: "Address not found" });
+
+    address.set(updatedAddress); // update fields
+    await user.save();
+    res.json({ message: "Address updated", addresses: user.addresses });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+const getAddresses = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ addresses: user.addresses });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+
+
+
+
 module.exports = {
+  getAddresses,
+  updateAddress,
+  deleteAddress,
+  addAddress,
   register,
   loginUser,
   deleteAccount,

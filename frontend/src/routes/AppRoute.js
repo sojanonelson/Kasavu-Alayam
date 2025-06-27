@@ -36,6 +36,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ResetPassword from "../pages/ResetPassword";
 import CheckoutCart from "../pages/CheckoutCart";
+import Address from "../pages/Customer/Address";
+import Checkout from "../pages/Checkout";
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -97,6 +99,7 @@ const AppRoutes = () => {
           <Route path="/mens" element={<MensCollection />} />
           
           <Route path="/checkout/cart" element={<CheckoutCart />} />
+           <Route path="/checkout" element={<Checkout />} />
           <Route path="/product" element={<SingleProductPage />} />
           <Route path="/product/:productId" element={<SingleProductPage />} />
           <Route path="*" element={<AppNotFound />} />
@@ -105,7 +108,8 @@ const AppRoutes = () => {
           <Route path="/my-account" element={<ProtectedRoute user={user}><CustomerLayout /></ProtectedRoute>}>
             <Route index element={<Navigate to="profile" replace />} />
             <Route path="profile" element={<Profile />} />
-            <Route path="orders" element={<Orders />} />
+             <Route path="address" element={<Address />} />
+            <Route path="order" element={<Orders />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

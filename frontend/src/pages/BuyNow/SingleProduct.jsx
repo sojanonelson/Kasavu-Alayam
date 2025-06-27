@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Star, Truck, MapPin, Check, ChevronLeft, ChevronRight, ZoomIn, X, Heart, Shield } from 'lucide-react';
 import productService from '../../services/productservice';
+import cartService from '../../services/cartService';
 
 const SingleProductPage = () => {
   const { productId } = useParams();
@@ -47,6 +48,36 @@ const SingleProductPage = () => {
   const closeFullscreen = () => {
     setIsFullscreen(false);
   };
+
+
+  const addToCart = async () => {
+  try {
+    const userRaw = localStorage.getItem('user');
+    const user = JSON.parse(userRaw); // 🧠 parse to object
+
+    if (!user || !user.id) {
+      alert('User not logged in');
+      return;
+    }
+
+    if (!selectedSize && product.productDetails.size) {
+      alert('Please select a size first');
+      return;
+    }
+
+    const response = await cartService.addToCart({
+      userId: user.id,
+      productId: product._id,
+      quantity: 1
+    });
+
+    alert('Product added to cart successfully!');
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    alert('Failed to add product to cart');
+  }
+};
+
 
   const navigateFullscreen = (direction) => {
     if (direction === 'prev') {
@@ -284,9 +315,12 @@ const SingleProductPage = () => {
 
             {/* Action Buttons */}
            <div className="flex flex-col sm:flex-row gap-3">
-  <button className="bg-blue-500 hover:bg-blue-600 text-white flex-1 h-14 text-lg font-medium rounded-lg transition-colors">
-    Add to Cart
-  </button>
+ <button 
+  onClick={()=>addToCart()}
+  className="bg-blue-500 hover:bg-blue-600 text-white flex-1 h-14 text-lg font-medium rounded-lg transition-colors"
+>
+  Add to Cart
+</button>
   <button className="bg-green-500 hover:bg-green-600 text-white flex-1 h-14 text-lg font-medium rounded-lg transition-colors">
     Buy Now
   </button>
@@ -402,7 +436,12 @@ const SingleProductPage = () => {
                       <span className="text-xs text-gray-500 line-through ml-1">₹{product.originalPrice}</span>
                     )}
                   </div>
-                  <button className="btn btn-sm btn-primary mt-3">Add to Cart</button>
+                <button 
+  onClick={addToCart}
+  className="bg-blue-500 hover:bg-blue-600 text-white flex-1 h-14 text-lg font-medium rounded-lg transition-colors"
+>
+  Add to Cart
+</button>
                 </div>
               </div>
             ))}

@@ -239,85 +239,8 @@ const Register = () => {
           </form>
         )}
 
+       
         {step === 3 && (
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
-                <MapPin className="inline-block mr-2" /> Address Line
-              </label>
-              <textarea
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="state">
-                <MapPin className="inline-block mr-2" /> State
-              </label>
-              <input
-                type="text"
-                id="state"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="city">
-                <MapPin className="inline-block mr-2" /> City
-              </label>
-              <input
-                type="text"
-                id="city"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="pincode">
-                <MapPin className="inline-block mr-2" /> Pincode
-              </label>
-              <input
-                type="text"
-                id="pincode"
-                name="pincode"
-                value={formData.pincode}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-            <p className="text-sm text-gray-500 mb-4">
-              This address will be used for order delivery.
-            </p>
-            <div className="flex justify-between">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 font-bold flex items-center"
-              >
-                <ArrowLeft className="mr-2" /> Go Back
-              </button>
-             <button
-                type="button"
-                onClick={handleNext}
-                className="bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600 font-bold"
-              >
-                Next
-              </button>
-            </div>
-          </form>
-        )}
-        {step === 4 && (
   <form onSubmit={e => {
     e.preventDefault();
     if (!showOtp) handleSubmit(e);

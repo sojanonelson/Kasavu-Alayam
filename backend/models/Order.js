@@ -1,30 +1,31 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const orderSchema = new mongoose.Schema({
-  customer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  items: [
-    {
-      productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-      size: { type: String },
-      color: { type: String },
-      quantity: { type: Number },
-      productQuality: { type: String }
-    }
-  ],
-  orderAddress: {
-    street: { type: String },
-    city: { type: String },
-    state: { type: String },
-    zipCode: { type: String },
-    country: { type: String }
-  },
-  contactNumber: { type: String },
-  orderStatus: { type: String, enum: ['confirmed', 'declined'], default: 'confirmed' },
-  deliveryStatus: { type: String, enum: ['delivered', 'pending'], default: 'pending' },
-  paymentType: { type: String, enum: ['upi/cards', 'cod'], required: true },
+const productSchema = new Schema({
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+  quantity: { type: Number, required: true },
+  price: { type: Number, required: true },
+});
+
+const addressSchema = new Schema({
+  place: String,
+  city: String,
+  state: String,
+  postOffice: String,
+  pincode: String,
+});
+
+const orderSchema = new Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  products: [productSchema],
+  deliveryType: { type: String, enum: ['shop_pickup', 'online_delivery'], required: true },
+  address: { type: addressSchema, required: function() { return this.deliveryType === 'online_delivery'; } },
+  paymentMode: { type: String, enum: ['cash', 'upi'], required: true },
   transactionId: { type: String },
-  status: { type: String, enum: ['pending', 'shipped', 'delivered'], default: 'pending' },
-  orderDate: { type: Date, default: Date.now }
+  totalPrice: { type: Number, required: true },
+  orderStatus: { type: String, enum: ['confirmed'], default: 'confirmed' },
+  orderTrackingId: { type: String, unique: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model('Order', orderSchema);

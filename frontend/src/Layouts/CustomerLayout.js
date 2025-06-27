@@ -1,11 +1,12 @@
-import { Outlet, NavLink } from 'react-router-dom';
-import { User, ShoppingBag, MapPin, Heart, RotateCcw, LogOut } from 'lucide-react';
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { User, ShoppingBag, MapPin, Heart, RotateCcw, LogOut, HomeIcon, ListOrderedIcon, ShoppingBagIcon } from 'lucide-react';
 import Footer from '../components/Footer';
 import customerService from '../services/customerservice'
 import { useEffect, useState } from 'react';
 
 const CustomerLayout = () => {
   const [userData ,setUserData] = useState('')
+  const navigate = useNavigate()
     useEffect(() => {
       const fetchUser = async () => {
         try {
@@ -26,6 +27,11 @@ const CustomerLayout = () => {
   
       fetchUser();
     }, []);
+
+      const handleLogout = () => {
+    localStorage.clear()
+    navigate('/')
+  }
   return (
     <div className="flex flex-col min-h-screen poppins-regular">
       
@@ -68,12 +74,12 @@ const CustomerLayout = () => {
                 }`
               }
             >
-              <User size={18} />
+              <ShoppingBagIcon size={18} />
               <span>Order</span>
             </NavLink>
 
             <NavLink 
-              to="account-settings" 
+              to="address" 
               className={({ isActive }) => 
                 `flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
                   isActive 
@@ -82,22 +88,10 @@ const CustomerLayout = () => {
                 }`
               }
             >
-              <User size={18} />
-              <span>Account settings</span>
+              <HomeIcon size={18} />
+              <span>Address</span>
             </NavLink>
-            <NavLink 
-              to="help" 
-              className={({ isActive }) => 
-                `flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
-                  isActive 
-                    ? 'bg-blue-50 text-blue-600 font-medium' 
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`
-              }
-            >
-              <User size={18} />
-              <span>Help & support</span>
-            </NavLink>
+           
             <NavLink 
               to="help" 
               className={({ isActive }) => 
@@ -115,6 +109,7 @@ const CustomerLayout = () => {
             
             {/* Add the rest of the links similarly */}
             <NavLink 
+            onClick={()=> handleLogout()}
               to="/" 
               className="flex items-center gap-3 px-3 py-2 rounded-md text-red-500 hover:bg-red-50 transition-colors"
             >
