@@ -93,9 +93,9 @@ const Orders = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow rounded-lg overflow-hidden">
+        <div className="bg-white  rounded-lg overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
             <h1 className="text-xl font-semibold text-gray-900">Your Orders</h1>
           </div>
@@ -148,7 +148,7 @@ const Orders = () => {
                       {order.deliveryType === 'shop_pickup' ? 'Store Pickup' : 'Home Delivery'}
                     </p>
                     <button
-                      onClick={() => navigate(`/my-account/orders/${order.orderTrackingId}`)}
+                      onClick={() => navigate(`/my-account/order/${order.orderTrackingId}`)}
                       className="text-sm text-blue-600 hover:text-blue-800 font-medium"
                     >
                       View Details

@@ -38,6 +38,7 @@ import ResetPassword from "../pages/ResetPassword";
 import CheckoutCart from "../pages/CheckoutCart";
 import Address from "../pages/Customer/Address";
 import Checkout from "../pages/Checkout";
+import OrderDetails from "../pages/Customer/OrderDetails";
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -110,6 +111,7 @@ const AppRoutes = () => {
             <Route path="profile" element={<Profile />} />
              <Route path="address" element={<Address />} />
             <Route path="order" element={<Orders />} />
+            <Route path="order/:id" element={<OrderDetails />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
