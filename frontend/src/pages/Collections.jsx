@@ -234,6 +234,7 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
             <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-white/30 overflow-hidden">
               <div className="bg-gradient-to-r from-red-500 to-rose-600 p-6">
                 <h3 className="text-white font-bold text-lg">Filter Products</h3>
+
               </div>
               <div className="p-6">
                 <FilterSidebar
