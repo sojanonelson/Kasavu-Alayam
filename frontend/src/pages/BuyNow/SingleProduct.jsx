@@ -17,6 +17,8 @@ const SingleProductPage = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentFullscreenIndex, setCurrentFullscreenIndex] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [addingToCartId, setAddingToCartId] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -49,35 +51,109 @@ const SingleProductPage = () => {
     setIsFullscreen(false);
   };
 
-
   const addToCart = async () => {
-  try {
-    const userRaw = localStorage.getItem('user');
-    const user = JSON.parse(userRaw); // 🧠 parse to object
+    if (addingToCart) return;
 
-    if (!user || !user.id) {
-      alert('User not logged in');
-      return;
+    try {
+      setAddingToCart(true);
+      const userRaw = localStorage.getItem('user');
+      const user = JSON.parse(userRaw);
+
+      if (!user || !user.id) {
+        alert('User not logged in');
+        return;
+      }
+
+      if (!selectedSize && product.productDetails.size) {
+        alert('Please select a size first');
+        return;
+      }
+
+      const cartItem = {
+        userId: user.id,
+        productId: product._id,
+        quantity: 1,
+        selectedSize: selectedSize || null,
+        selectedColor: selectedColor || product.color,
+      };
+
+      const response = await cartService.addToCart(cartItem);
+      alert('Product added to cart successfully!');
+
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to add product to cart');
+    } finally {
+      setAddingToCart(false);
     }
+  };
 
-    if (!selectedSize && product.productDetails.size) {
-      alert('Please select a size first');
-      return;
+  const addMainProductToCart = async () => {
+    if (addingToCart) return;
+
+    try {
+      setAddingToCart(true);
+      const userRaw = localStorage.getItem('user');
+      const user = JSON.parse(userRaw);
+
+      if (!user || !user.id) {
+        alert('User not logged in');
+        return;
+      }
+
+      if (!selectedSize && product.productDetails.size) {
+        alert('Please select a size first');
+        return;
+      }
+
+      const cartItem = {
+        userId: user.id,
+        productId: product._id,
+        quantity: 1,
+        selectedSize: selectedSize || null,
+        selectedColor: selectedColor || product.color,
+      };
+
+      const response = await cartService.addToCart(cartItem);
+      alert(`${product.title} added to cart successfully!`);
+
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to add product to cart');
+    } finally {
+      setAddingToCart(false);
     }
+  };
 
-    const response = await cartService.addToCart({
-      userId: user.id,
-      productId: product._id,
-      quantity: 1
-    });
+  const addSimilarProductToCart = async (similarProduct) => {
+    if (addingToCartId === similarProduct.id) return;
 
-    alert('Product added to cart successfully!');
-  } catch (error) {
-    console.error('Error adding to cart:', error);
-    alert('Failed to add product to cart');
-  }
-};
+    try {
+      setAddingToCartId(similarProduct.id);
+      const userRaw = localStorage.getItem('user');
+      const user = JSON.parse(userRaw);
 
+      if (!user || !user.id) {
+        alert('User not logged in');
+        return;
+      }
+
+      const cartItem = {
+        userId: user.id,
+        productId: similarProduct.id,
+        quantity: 1,
+      };
+
+      const response = await cartService.addToCart(cartItem);
+      alert(`${similarProduct.title} added to cart successfully!`);
+
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to add product to cart');
+    } finally {
+      setAddingToCartId(null);
+    }
+  };
 
   const navigateFullscreen = (direction) => {
     if (direction === 'prev') {
@@ -104,7 +180,6 @@ const SingleProductPage = () => {
 
   return (
     <div className="bg-white">
-      {/* Fullscreen Image Viewer */}
       {isFullscreen && (
         <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4">
           <button
@@ -156,19 +231,15 @@ const SingleProductPage = () => {
       )}
 
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Breadcrumb */}
         <div className="text-sm breadcrumbs mb-6 text-gray-600">
           <ul className='flex space-x-2'>
             <li><a>Home</a>/</li>
             <li><a>{product.category.name}</a>/</li>
             <li><a>{product.subcategory.name}</a></li>
-            
           </ul>
         </div>
 
-        {/* Main Product Section */}
-        <div className="flex flex-col lg:flex-row gap-8 mb-12 bg-white rounded-xl  p-6">
-          {/* Image Gallery */}
+        <div className="flex flex-col lg:flex-row gap-8 mb-12 bg-white rounded-xl p-6">
           <div className="lg:w-1/2">
             <div
               className="relative bg-gray-100 rounded-xl overflow-hidden mb-4 aspect-square flex items-center justify-center cursor-zoom-in group"
@@ -182,7 +253,7 @@ const SingleProductPage = () => {
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black bg-opacity-20">
                 <ZoomIn size={48} className="text-white" />
               </div>
-              <button 
+              <button
                 onClick={(e) => { e.stopPropagation(); setIsWishlisted(!isWishlisted); }}
                 className={`absolute top-3 right-3 p-2 rounded-full ${isWishlisted ? 'bg-red-100 text-red-500' : 'bg-white text-gray-600'} shadow-md hover:scale-110 transition-all`}
               >
@@ -207,24 +278,20 @@ const SingleProductPage = () => {
             </div>
           </div>
 
-          {/* Product Info */}
           <div className="lg:w-1/2">
             <div className="flex justify-between items-start mb-2">
               <div>
                 <span className="text-sm font-medium text-gray-500">{product.brand}</span>
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{product.title}</h1>
               </div>
-            
             </div>
 
             <p className="text-gray-600 mb-2">{product.description}</p>
-              <div className="flex items-center mb-4 px-2 py-1 rounded">
-                <Star size={16} className="fill-yellow-400 stroke-yellow-400 mr-1" />
-                <span className="text-sm font-medium">4.8 (1.2k reviews)</span>
-              </div>
-            
+            <div className="flex items-center mb-4 px-2 py-1 rounded">
+              <Star size={16} className="fill-yellow-400 stroke-yellow-400 mr-1" />
+              <span className="text-sm font-medium">4.8 (1.2k reviews)</span>
+            </div>
 
-            {/* Price Section */}
             <div className="mb-6 p-4 bg-gray-50 rounded-lg">
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-2xl font-bold text-primary">₹{product.specialPrice}</span>
@@ -242,13 +309,10 @@ const SingleProductPage = () => {
               </div>
             </div>
 
-            {/* Color Selection */}
             <div className="mb-6">
               <h3 className="text-lg font-medium mb-3 text-gray-900">Color: <span className="font-normal text-gray-700">{product.color}</span></h3>
-            
             </div>
 
-            {/* Size Selection */}
             {product.productDetails.size && (
               <div className="mb-6">
                 <div className="flex justify-between items-center mb-3">
@@ -266,38 +330,31 @@ const SingleProductPage = () => {
               </div>
             )}
 
-            {/* Delivery Options */}
-           <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-  <div className="flex items-start gap-3 mb-3">
-    <Truck size={20} className="text-gray-600 mt-0.5" />
-    <div>
-      <h4 className="font-medium text-gray-900 mb-1">Delivery Options</h4>
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 mb-3">
+                <Truck size={20} className="text-gray-600 mt-0.5" />
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-1">Delivery Options</h4>
+                  <p className="text-sm text-blue-600 mb-2">
+                    ✅ Delivery all over India via <strong>India Post</strong>
+                  </p>
+                  {deliveryDate && (
+                    <p className="text-sm text-green-600 mt-1">
+                      Delivery by {deliveryDate}
+                    </p>
+                  )}
+                </div>
+              </div>
 
-      {/* Info message about delivery */}
-      <p className="text-sm text-blue-600 mb-2">
-        ✅ Delivery all over India via <strong>India Post</strong>
-      </p>
+              <div className="flex items-start gap-3">
+                <MapPin size={20} className="text-gray-600 mt-0.5" />
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-1">Store Pickup</h4>
+                  <p className="text-sm text-gray-600">Check availability at nearby stores</p>
+                </div>
+              </div>
+            </div>
 
-    
-      {deliveryDate && (
-        <p className="text-sm text-green-600 mt-1">
-          Delivery by {deliveryDate}
-        </p>
-      )}
-    </div>
-  </div>
-
-  <div className="flex items-start gap-3">
-    <MapPin size={20} className="text-gray-600 mt-0.5" />
-    <div>
-      <h4 className="font-medium text-gray-900 mb-1">Store Pickup</h4>
-      <p className="text-sm text-gray-600">Check availability at nearby stores</p>
-    </div>
-  </div>
-</div>
-
-
-            {/* Trust Badges */}
             <div className="flex flex-wrap gap-4 mb-6">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Shield size={16} className="text-green-500" />
@@ -313,23 +370,23 @@ const SingleProductPage = () => {
               </div>
             </div>
 
-            {/* Action Buttons */}
-           <div className="flex flex-col sm:flex-row gap-3">
- <button 
-  onClick={()=>addToCart()}
-  className="bg-blue-500 hover:bg-blue-600 text-white flex-1 h-14 text-lg font-medium rounded-lg transition-colors"
->
-  Add to Cart
-</button>
-  <button className="bg-green-500 hover:bg-green-600 text-white flex-1 h-14 text-lg font-medium rounded-lg transition-colors">
-    Buy Now
-  </button>
-</div>
-
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={addMainProductToCart}
+                disabled={addingToCart}
+                className={`flex-1 h-14 text-lg font-medium rounded-lg transition-colors ${
+                  addingToCart ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+                } text-white`}
+              >
+                {addingToCart ? 'Adding...' : 'Add to Cart'}
+              </button>
+              <button className="bg-green-500 hover:bg-green-600 text-white flex-1 h-14 text-lg font-medium rounded-lg transition-colors">
+                Buy Now
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Product Details Tabs */}
         <div className="mb-12 bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="tabs">
             <a className="tab tab-lifted tab-active font-medium">Product Details</a>
@@ -396,19 +453,18 @@ const SingleProductPage = () => {
           </div>
         </div>
 
-        {/* Similar Products */}
         <div className="mb-12">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-gray-900">Similar Products</h2>
             <button className="text-primary hover:underline">View All</button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {similarProducts.map(product => (
-              <div key={product.id} className="card bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
+            {similarProducts.map(similarProduct => (
+              <div key={similarProduct.id} className="card bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
                 <figure className="relative">
                   <img
-                    src={product.image}
-                    alt={product.title}
+                    src={similarProduct.image}
+                    alt={similarProduct.title}
                     className="rounded-t-xl h-48 w-full object-cover"
                   />
                   <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:scale-110 transition-all">
@@ -416,32 +472,37 @@ const SingleProductPage = () => {
                   </button>
                 </figure>
                 <div className="card-body p-4">
-                  <h3 className="card-title text-sm font-medium text-gray-900 line-clamp-1">{product.title}</h3>
-                  <p className="text-gray-600 text-sm">{product.brand}</p>
+                  <h3 className="card-title text-sm font-medium text-gray-900 line-clamp-1">{similarProduct.title}</h3>
+                  <p className="text-gray-600 text-sm">{similarProduct.brand}</p>
                   <div className="flex items-center mt-1">
                     <div className="flex items-center mr-2">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
                           size={12}
-                          className={`${i < Math.floor(product.rating) ? 'fill-yellow-400 stroke-yellow-400' : 'stroke-gray-300'}`}
+                          className={`${i < Math.floor(similarProduct.rating) ? 'fill-yellow-400 stroke-yellow-400' : 'stroke-gray-300'}`}
                         />
                       ))}
                     </div>
-                    <span className="text-xs text-gray-600">({product.rating})</span>
+                    <span className="text-xs text-gray-600">({similarProduct.rating})</span>
                   </div>
                   <div className="mt-2">
-                    <span className="font-bold text-gray-900">₹{product.price}</span>
-                    {product.originalPrice && (
-                      <span className="text-xs text-gray-500 line-through ml-1">₹{product.originalPrice}</span>
+                    <span className="font-bold text-gray-900">₹{similarProduct.price}</span>
+                    {similarProduct.originalPrice && (
+                      <span className="text-xs text-gray-500 line-through ml-1">₹{similarProduct.originalPrice}</span>
                     )}
                   </div>
-                <button 
-  onClick={addToCart}
-  className="bg-blue-500 hover:bg-blue-600 text-white flex-1 h-14 text-lg font-medium rounded-lg transition-colors"
->
-  Add to Cart
-</button>
+                  <button
+                    onClick={() => addSimilarProductToCart(similarProduct)}
+                    disabled={addingToCartId === similarProduct.id}
+                    className={`w-full mt-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                      addingToCartId === similarProduct.id
+                        ? 'bg-gray-400 cursor-not-allowed text-white'
+                        : 'bg-blue-500 hover:bg-blue-600 text-white'
+                    }`}
+                  >
+                    {addingToCartId === similarProduct.id ? 'Adding...' : 'Add to Cart'}
+                  </button>
                 </div>
               </div>
             ))}
