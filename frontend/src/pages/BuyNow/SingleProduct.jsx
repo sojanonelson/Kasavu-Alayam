@@ -20,6 +20,16 @@ const SingleProductPage = () => {
   const [addingToCart, setAddingToCart] = useState(false);
   const [addingToCartId, setAddingToCartId] = useState(null);
 
+  // Advanced zoom states
+  const [isZooming, setIsZooming] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+  const [showMagnifier, setShowMagnifier] = useState(false);
+  const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
+  const [fullscreenZoom, setFullscreenZoom] = useState(1);
+  const [fullscreenPan, setFullscreenPan] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -45,10 +55,82 @@ const SingleProductPage = () => {
   const openFullscreen = (index) => {
     setCurrentFullscreenIndex(index);
     setIsFullscreen(true);
+    setFullscreenZoom(1);
+    setFullscreenPan({ x: 0, y: 0 });
   };
 
   const closeFullscreen = () => {
     setIsFullscreen(false);
+    setFullscreenZoom(1);
+    setFullscreenPan({ x: 0, y: 0 });
+  };
+
+  // Advanced zoom handlers
+  const handleMouseEnter = () => {
+    setIsZooming(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsZooming(false);
+    setShowMagnifier(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isZooming) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    setZoomPosition({ x, y });
+    setMagnifierPosition({ 
+      x: e.clientX - rect.left, 
+      y: e.clientY - rect.top 
+    });
+    setShowMagnifier(true);
+  };
+
+  // Fullscreen zoom handlers
+  const handleFullscreenWheel = (e) => {
+    e.preventDefault();
+    const newZoom = fullscreenZoom + (e.deltaY > 0 ? -0.2 : 0.2);
+    setFullscreenZoom(Math.max(1, Math.min(4, newZoom)));
+    
+    if (newZoom <= 1) {
+      setFullscreenPan({ x: 0, y: 0 });
+    }
+  };
+
+  const handleFullscreenMouseDown = (e) => {
+    if (fullscreenZoom > 1) {
+      setIsDragging(true);
+      setDragStart({ 
+        x: e.clientX - fullscreenPan.x, 
+        y: e.clientY - fullscreenPan.y 
+      });
+    }
+  };
+
+  const handleFullscreenMouseMove = (e) => {
+    if (isDragging && fullscreenZoom > 1) {
+      setFullscreenPan({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y
+      });
+    }
+  };
+
+  const handleFullscreenMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleFullscreenDoubleClick = () => {
+    if (fullscreenZoom === 1) {
+      setFullscreenZoom(2);
+    } else {
+      setFullscreenZoom(1);
+      setFullscreenPan({ x: 0, y: 0 });
+    }
   };
 
   const addToCart = async () => {
@@ -165,7 +247,31 @@ const SingleProductPage = () => {
         prev === product.images.length - 1 ? 0 : prev + 1
       );
     }
+    // Reset zoom when changing images
+    setFullscreenZoom(1);
+    setFullscreenPan({ x: 0, y: 0 });
   };
+
+  // Add event listeners for fullscreen
+  useEffect(() => {
+    if (isFullscreen) {
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') closeFullscreen();
+        if (e.key === 'ArrowLeft') navigateFullscreen('prev');
+        if (e.key === 'ArrowRight') navigateFullscreen('next');
+      };
+
+      document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener('mousemove', handleFullscreenMouseMove);
+      document.addEventListener('mouseup', handleFullscreenMouseUp);
+
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+        document.removeEventListener('mousemove', handleFullscreenMouseMove);
+        document.removeEventListener('mouseup', handleFullscreenMouseUp);
+      };
+    }
+  }, [isFullscreen, isDragging, dragStart, fullscreenPan]);
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   if (error) return <div className="min-h-screen flex items-center justify-center text-red-500">Error: {error}</div>;
@@ -180,53 +286,87 @@ const SingleProductPage = () => {
 
   return (
     <div className="bg-white">
+      {/* Advanced Fullscreen Modal */}
       {isFullscreen && (
-        <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4">
-          <button
-            onClick={closeFullscreen}
-            className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors"
-          >
-            <X size={32} />
-          </button>
-
-          <div className="flex flex-col lg:flex-row items-center w-full max-w-7xl h-full">
-            <div className="flex-1 h-full flex items-center justify-center p-4">
-              <img
-                src={product.images[currentFullscreenIndex].url}
-                alt={product.title}
-                className="h-full max-w-full object-contain"
-              />
-            </div>
-
-            <div className="w-full lg:w-32 lg:ml-4 h-32 lg:h-full flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto p-2">
-              {product.images.map((img, index) => (
+        <div className="fixed inset-0 bg-black bg-opacity-98 z-50 flex items-center justify-center">
+          {/* Header with controls */}
+          <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/50 to-transparent p-6 z-10">
+            <div className="flex justify-between items-center text-white">
+              <div className="flex items-center space-x-4">
+                <span className="text-lg font-medium">{currentFullscreenIndex + 1} / {product.images.length}</span>
+                <span className="text-sm opacity-75">Double-click to zoom • Scroll to zoom • Drag to pan</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm opacity-75">Zoom: {Math.round(fullscreenZoom * 100)}%</span>
                 <button
-                  key={index}
-                  onClick={() => setCurrentFullscreenIndex(index)}
-                  className={`flex-shrink-0 w-24 h-24 lg:w-full lg:h-28 rounded-md overflow-hidden border-2 transition-all ${currentFullscreenIndex === index ? 'border-primary scale-105' : 'border-transparent hover:border-gray-300'}`}
+                  onClick={closeFullscreen}
+                  className="p-2 hover:bg-white/20 rounded-full transition-colors"
                 >
-                  <img
-                    src={img.url}
-                    alt={`${product.title} view ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
+                  <X size={24} />
                 </button>
-              ))}
+              </div>
             </div>
-
-            <button
-              onClick={() => navigateFullscreen('prev')}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all"
-            >
-              <ChevronLeft size={32} />
-            </button>
-            <button
-              onClick={() => navigateFullscreen('next')}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all"
-            >
-              <ChevronRight size={32} />
-            </button>
           </div>
+
+          {/* Main image container */}
+          <div 
+            className="flex-1 h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing"
+            onWheel={handleFullscreenWheel}
+            onMouseDown={handleFullscreenMouseDown}
+            onDoubleClick={handleFullscreenDoubleClick}
+            style={{ cursor: fullscreenZoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default' }}
+          >
+            <img
+              src={product.images[currentFullscreenIndex].url}
+              alt={product.title}
+              className="max-w-none transition-transform duration-200 ease-out select-none"
+              style={{
+                transform: `scale(${fullscreenZoom}) translate(${fullscreenPan.x / fullscreenZoom}px, ${fullscreenPan.y / fullscreenZoom}px)`,
+                maxHeight: fullscreenZoom === 1 ? '90vh' : 'none',
+                maxWidth: fullscreenZoom === 1 ? '90vw' : 'none'
+              }}
+              draggable={false}
+            />
+          </div>
+
+          {/* Thumbnail strip */}
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-6">
+            <div className="flex justify-center">
+              <div className="flex gap-2 overflow-x-auto max-w-full">
+                {product.images.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentFullscreenIndex(index)}
+                    className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                      currentFullscreenIndex === index 
+                        ? 'border-white scale-110 shadow-lg' 
+                        : 'border-transparent hover:border-white/50'
+                    }`}
+                  >
+                    <img
+                      src={img.url}
+                      alt={`${product.title} view ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation arrows */}
+          <button
+            onClick={() => navigateFullscreen('prev')}
+            className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/70 transition-all"
+          >
+            <ChevronLeft size={28} />
+          </button>
+          <button
+            onClick={() => navigateFullscreen('next')}
+            className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/70 transition-all"
+          >
+            <ChevronRight size={28} />
+          </button>
         </div>
       )}
 
@@ -241,24 +381,67 @@ const SingleProductPage = () => {
 
         <div className="flex flex-col lg:flex-row gap-8 mb-12 bg-white rounded-xl p-6">
           <div className="lg:w-1/2">
-            <div
-              className="relative bg-gray-100 rounded-xl overflow-hidden mb-4 aspect-square flex items-center justify-center cursor-zoom-in group"
-              onClick={() => openFullscreen(product.images.findIndex(img => img.url === activeImage))}
-            >
-              <img
-                src={activeImage}
-                alt={product.title}
-                className="object-contain w-full h-full transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black bg-opacity-20">
-                <ZoomIn size={48} className="text-white" />
-              </div>
-              <button
-                onClick={(e) => { e.stopPropagation(); setIsWishlisted(!isWishlisted); }}
-                className={`absolute top-3 right-3 p-2 rounded-full ${isWishlisted ? 'bg-red-100 text-red-500' : 'bg-white text-gray-600'} shadow-md hover:scale-110 transition-all`}
+            {/* Main Image with Advanced Zoom */}
+            <div className="relative">
+              <div
+                className="relative bg-gray-100 rounded-xl overflow-hidden mb-4 aspect-square flex items-center justify-center group"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onMouseMove={handleMouseMove}
+                onClick={() => openFullscreen(product.images.findIndex(img => img.url === activeImage))}
+                style={{ cursor: isZooming ? 'none' : 'zoom-in' }}
               >
-                <Heart size={24} fill={isWishlisted ? 'currentColor' : 'none'} />
-              </button>
+                <img
+                  src={activeImage}
+                  alt={product.title}
+                  className="object-contain w-full h-full transition-transform duration-300 select-none"
+                  style={{
+                    transform: isZooming ? `scale(1.1)` : 'scale(1)',
+                    transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`
+                  }}
+                  draggable={false}
+                />
+                
+                {/* Zoom indicator */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black bg-opacity-20 pointer-events-none">
+                  <div className="bg-black/60 text-white px-3 py-1 rounded-lg text-sm flex items-center gap-2">
+                    <ZoomIn size={16} />
+                    Click to zoom
+                  </div>
+                </div>
+
+                {/* Magnifier */}
+                {showMagnifier && isZooming && (
+                  <div
+                    className="absolute pointer-events-none border-2 border-white shadow-lg rounded-full overflow-hidden bg-white"
+                    style={{
+                      width: '150px',
+                      height: '150px',
+                      left: `${magnifierPosition.x - 75}px`,
+                      top: `${magnifierPosition.y - 75}px`,
+                      backgroundImage: `url(${activeImage})`,
+                      backgroundSize: '300%',
+                      backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                      backgroundRepeat: 'no-repeat',
+                      zIndex: 10
+                    }}
+                  >
+                    <div className="absolute inset-0 border border-gray-300 rounded-full"></div>
+                  </div>
+                )}
+
+                <button
+                  onClick={(e) => { e.stopPropagation(); setIsWishlisted(!isWishlisted); }}
+                  className={`absolute top-3 right-3 p-2 rounded-full ${isWishlisted ? 'bg-red-100 text-red-500' : 'bg-white text-gray-600'} shadow-md hover:scale-110 transition-all z-10`}
+                >
+                  <Heart size={24} fill={isWishlisted ? 'currentColor' : 'none'} />
+                </button>
+              </div>
+
+              {/* Zoom instruction */}
+              <div className="text-xs text-gray-500 text-center mb-2">
+                Hover to zoom • Click for fullscreen
+              </div>
             </div>
 
             <div className="flex gap-3 overflow-x-auto py-2 px-1">
