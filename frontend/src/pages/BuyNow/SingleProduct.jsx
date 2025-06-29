@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Star, Truck, MapPin, Check, ChevronLeft, ChevronRight, ZoomIn, X, Heart, Shield } from 'lucide-react';
+import { Star, Truck, MapPin, Check, ChevronLeft, ChevronRight, ZoomIn, X, Heart, Shield, ShoppingCart, CreditCard } from 'lucide-react';
 import productService from '../../services/productservice';
 import cartService from '../../services/cartService';
 
@@ -250,6 +250,12 @@ const SingleProductPage = () => {
     } finally {
       setAddingToCartId(null);
     }
+  };
+
+  const handleBuyNow = () => {
+    // You can implement the actual buy now logic here, or just redirect to checkout.
+    alert('Proceeding to buy now...');
+    // For now, just a placeholder action.
   };
 
   const navigateFullscreen = (direction) => {
@@ -545,13 +551,18 @@ const SingleProductPage = () => {
               <button
                 onClick={addMainProductToCart}
                 disabled={addingToCart}
-                className={`flex-1 h-14 text-lg font-medium rounded-lg transition-colors ${
+                className={`flex-1 h-14 text-lg font-medium rounded-lg flex items-center justify-center gap-2 transition-colors ${
                   addingToCart ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
                 } text-white`}
               >
+                <ShoppingCart size={22} />
                 {addingToCart ? 'Adding...' : 'Add to Cart'}
               </button>
-              <button className="bg-green-500 hover:bg-green-600 text-white flex-1 h-14 text-lg font-medium rounded-lg transition-colors">
+              <button
+                onClick={handleBuyNow}
+                className="bg-green-500 hover:bg-green-600 text-white flex-1 h-14 text-lg font-medium rounded-lg flex items-center justify-center gap-2 transition-colors"
+              >
+                <CreditCard size={22} />
                 Buy Now
               </button>
             </div>
@@ -663,12 +674,13 @@ const SingleProductPage = () => {
                   <button
                     onClick={() => addSimilarProductToCart(collectionProduct)}
                     disabled={addingToCartId === collectionProduct.id}
-                    className={`w-full mt-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    className={`w-full mt-3 py-2 text-sm font-medium rounded-lg flex items-center justify-center gap-2 transition-colors ${
                       addingToCartId === collectionProduct.id
                         ? 'bg-gray-400 cursor-not-allowed text-white'
                         : 'bg-blue-500 hover:bg-blue-600 text-white'
                     }`}
                   >
+                    <ShoppingCart size={16} />
                     {addingToCartId === collectionProduct.id ? 'Adding...' : 'Add to Cart'}
                   </button>
                 </div>
