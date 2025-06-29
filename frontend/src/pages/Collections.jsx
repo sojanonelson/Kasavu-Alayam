@@ -163,12 +163,20 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
   }, [filteredProducts, currentPage]);
 
   return (
-    <div className="bg-gradient-to-br from-red-50 via-white to-rose-50 min-h-screen lg:px-28 relative overflow-hidden">
-      {/* Background Decorative Elements */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-red-200 to-rose-200 rounded-full opacity-20 blur-xl"></div>
-        <div className="absolute top-60 right-20 w-40 h-40 bg-gradient-to-br from-red-300 to-pink-200 rounded-full opacity-20 blur-xl"></div>
-        <div className="absolute bottom-40 left-20 w-36 h-36 bg-gradient-to-br from-rose-200 to-red-200 rounded-full opacity-20 blur-xl"></div>
+    <div className="bg-gradient-to-b from-slate-50 via-white to-gray-50 min-h-screen relative overflow-hidden">
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 opacity-[0.03]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)`,
+          backgroundSize: '24px 24px'
+        }}></div>
+      </div>
+
+      {/* Modern Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-red-100/30 to-rose-100/30 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 -left-40 w-60 h-60 bg-gradient-to-br from-rose-100/20 to-pink-100/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-1/4 w-40 h-40 bg-gradient-to-br from-red-100/25 to-rose-100/25 rounded-full blur-2xl"></div>
       </div>
 
       <Helmet>
@@ -183,58 +191,64 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
         />
       </Helmet>
 
-      <div className="px-4 md:px-10 py-6 relative z-10">
-        {/* Enhanced Breadcrumb */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Compact Professional Header */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-8"
+          className="pt-6 pb-4"
         >
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 border border-white/20">
-            <div className="text-sm text-gray-600 flex items-center">
+          {/* Breadcrumb */}
+          <div className="mb-4">
+            <div className="inline-flex items-center px-3 py-1.5 bg-white/60 backdrop-blur-sm rounded-full border border-gray-200/50 text-sm">
               <Link 
                 to="/" 
-                className="text-red-600 hover:text-red-800 transition-all duration-300 font-medium hover:underline decoration-2 underline-offset-4"
+                className="text-gray-600 hover:text-red-600 transition-colors duration-200 font-medium"
               >
                 Home
               </Link>
-              <span className="mx-3 text-gray-400">/</span>
-              <span className="font-semibold text-gray-800 bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent">
-                {collection?.toUpperCase()} COLLECTIONS
+              <span className="mx-2 text-gray-400">/</span>
+              <span className="text-red-600 font-semibold">
+                {collection?.charAt(0).toUpperCase() + collection?.slice(1)} Collection
               </span>
             </div>
           </div>
-        </motion.div>
 
-        {/* Collection Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-12 text-center"
-        >
-          <div className="relative">
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-red-600 via-rose-600 to-red-700 bg-clip-text text-transparent mb-6 leading-tight">
-              {collection?.toUpperCase()}
-            </h1>
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-red-400 to-rose-400 rounded-full opacity-60"></div>
+          {/* Compact Header */}
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+                {collection?.charAt(0).toUpperCase() + collection?.slice(1)}
+                <span className="text-red-600 ml-2">Collection</span>
+              </h1>
+              <div className="w-16 h-0.5 bg-gradient-to-r from-red-500 to-rose-500 rounded-full"></div>
+            </div>
+            
+            {!isLoading && (
+              <div className="text-right">
+                <div className="text-2xl font-bold text-gray-900">{filteredProducts.length}</div>
+                <div className="text-sm text-gray-500 font-medium">Products</div>
+              </div>
+            )}
           </div>
         </motion.div>
 
-        {/* Layout */}
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar */}
+        {/* Main Layout */}
+        <div className="flex flex-col lg:flex-row gap-8 pb-12">
+          {/* Enhanced Sidebar */}
           <motion.div 
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="w-full lg:w-1/4 lg:py-4"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="w-full lg:w-80 flex-shrink-0"
           >
-            <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-white/30 overflow-hidden">
-              <div className="bg-gradient-to-r from-red-500 to-rose-600 p-6">
-                <h3 className="text-white font-bold text-lg">Filter Products</h3>
-
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200/60 shadow-sm sticky top-6">
+              <div className="p-6 border-b border-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+                  Filter Products
+                </h3>
               </div>
               <div className="p-6">
                 <FilterSidebar
@@ -246,69 +260,73 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
             </div>
           </motion.div>
 
-          {/* Main Content */}
+          {/* Enhanced Main Content */}
           <motion.div 
-            initial={{ opacity: 0, x: 40 }}
+            initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="w-full lg:w-3/4"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex-1 min-w-0"
           >
-            {/* Results Header */}
-            <div className="mb-8">
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 bg-gradient-to-r from-red-400 to-rose-500 rounded-full animate-pulse"></div>
-                    <span className="text-lg font-semibold text-gray-800">
-                      {filteredProducts.length} {filteredProducts.length === 1 ? 'Product' : 'Products'} Found
-                    </span>
-                  </div>
-                  <div className="text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-full">
-                    Page {currentPage} of {totalPages}
+            {/* Results Summary */}
+            {!isLoading && (
+              <div className="mb-6">
+                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium text-gray-700">
+                        Showing {paginatedProducts.length} of {filteredProducts.length} products
+                      </span>
+                    </div>
+                    {totalPages > 1 && (
+                      <div className="text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full">
+                        Page {currentPage} of {totalPages}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* Loading / Products */}
+            {/* Content */}
             {isLoading ? (
-              <LoadingSpinner />
+              <div className="bg-white/50 backdrop-blur-sm rounded-2xl border border-gray-200/50">
+                <LoadingSpinner />
+              </div>
             ) : filteredProducts.length === 0 ? (
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="bg-white rounded-lg border border-gray-200 overflow-hidden"
+                transition={{ duration: 0.4 }}
+                className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200/50"
               >
                 <EmptyResults />
               </motion.div>
             ) : (
               <>
-                {/* Product Grid */}
+                {/* Enhanced Product Grid */}
                 <motion.div 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-4 gap-6"
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
                 >
                   {paginatedProducts.map((product, index) => (
                     <motion.div
                       key={product._id}
-                      initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ 
-                        duration: 0.5, 
-                        delay: index * 0.05,
-                        type: "spring",
-                        stiffness: 100
+                        duration: 0.4, 
+                        delay: index * 0.03,
+                        ease: "easeOut"
                       }}
                       whileHover={{ 
-                        y: -8, 
-                        transition: { duration: 0.3 }
+                        y: -4, 
+                        transition: { duration: 0.2, ease: "easeOut" }
                       }}
                       className="group"
                     >
-                      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-red-200 transition-all duration-500">
+                      <div className="bg-white rounded-xl border border-gray-200/60 overflow-hidden hover:border-red-200 hover:shadow-lg transition-all duration-300 hover:shadow-red-100/50">
                         <ProductCard
                           product={product}
                           isListView={false}
@@ -321,15 +339,15 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
                   ))}
                 </motion.div>
 
-                {/* Pagination */}
-                {filteredProducts.length > productsPerPage && (
+                {/* Enhanced Pagination */}
+                {totalPages > 1 && (
                   <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.5 }}
-                    className="mt-12"
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="mt-10"
                   >
-                    <div className="bg-white rounded-lg border border-gray-200 p-4">
+                    <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-4">
                       <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
@@ -344,26 +362,27 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
         </div>
       </div>
 
-      {/* Enhanced Back to Top Button */}
+      {/* Modern Back to Top Button */}
       {isScrolled && (
         <motion.button
-          initial={{ opacity: 0, scale: 0.5, y: 100 }}
+          initial={{ opacity: 0, scale: 0.8, y: 100 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           whileHover={{ 
-            scale: 1.1
+            scale: 1.05,
+            y: -2
           }}
-          whileTap={{ scale: 0.9 }}
+          whileTap={{ scale: 0.95 }}
           transition={{ 
             type: "spring", 
-            stiffness: 200, 
-            damping: 15 
+            stiffness: 300, 
+            damping: 20 
           }}
-          className="fixed bottom-8 right-8 md:right-12 z-50 group"
+          className="fixed bottom-6 right-6 z-50 group"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="Back to top"
         >
-          <div className="bg-gradient-to-r from-red-600 to-rose-600 text-white p-4 rounded-full border border-gray-200">
-            <ChevronUp size={24} className="transform group-hover:-translate-y-1 transition-transform" />
+          <div className="bg-white border border-gray-200 text-gray-700 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200">
+            <ChevronUp size={20} className="transform group-hover:-translate-y-0.5 transition-transform duration-200" />
           </div>
         </motion.button>
       )}
