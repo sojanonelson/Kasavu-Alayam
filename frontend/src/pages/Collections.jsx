@@ -10,6 +10,7 @@ import ProductCard from "./ProductCard";
 import Pagination from "../components/ui/Pagination";
 import FilterSidebar from "../components/collectionFilter";
 import EmptyResults from "../components/ui/EmptyResults";
+import Footer from "../components/Footer";
 
 const LoadingSpinner = () => (
   <div className="flex flex-col justify-center items-center py-20 w-full">
@@ -386,8 +387,10 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
           </div>
         </motion.button>
       )}
+      
     </div>
   );
 };
+
 
 export default CollectionsShowCase;

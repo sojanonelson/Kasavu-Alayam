@@ -136,7 +136,7 @@ export default function Demo() {
 
   // Function for the Explore Collection button
   const handleExploreCollection = () => {
-    navigate('/collections/womens/sarees'); // Navigate to the sarees section
+    navigate('/collections/womens'); // Navigate to the women's collection
   };
 
   return (

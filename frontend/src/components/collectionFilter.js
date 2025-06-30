@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp, Filter, X } from "lucide-react";
 
+
 const FilterBar = ({ filters, selectedFilters, onFilterChange }) => {
   const [expandedCategories, setExpandedCategories] = useState({});
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
@@ -181,9 +182,12 @@ const FilterBar = ({ filters, selectedFilters, onFilterChange }) => {
             </div>
           </div>
         </div>
+        
       </div>
+      
     </>
   );
+  
 };
 
 export default FilterBar;

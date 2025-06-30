@@ -24,7 +24,6 @@ import border1 from '../assets/elements/border2.png';
 import border2 from '../assets/elements/border1.png';
 import weddingSilksImage from '../assets/ka women-4.jpg';
 import bridalBlouseSetsImage from '../assets/k-2.jpg';
-import festivalPicksImage from '../assets/ka men-2.webp';
 import sareesImage from '../assets/ka women-1.webp';
 import womensCollectionsImage from '../assets/ka women-2.webp';
 import mensCollectionsImage from '../assets/ka men-1.webp';
@@ -54,21 +53,13 @@ const DEFAULT_HERO_IMAGES = [
 const FEATURED_COLLECTIONS = [
   {
     title: "Wedding Silks",
-    description: "Exquisite silk sarees and attire for your special day",
-    link: "/featured/wedding",
+    link: "/collections/textiles",
     image: weddingSilksImage
   },
   {
     title: "Bridal Blouse Sets",
-    description: "Intricately designed blouses to complement your sarees",
-    link: "/featured/blouse-sets",
+    link: "/collections/womens",
     image: bridalBlouseSetsImage
-  },
-  {
-    title: "Festival Picks",
-    description: "Vibrant collections for all your celebration needs",
-    link: "/featured/festive",
-    image: festivalPicksImage
   }
 ];
 
@@ -76,20 +67,17 @@ const CATEGORIES = [
   {
     title: "Sarees",
     img: sareesImage,
-    link: "/sarees",
-    description: "Traditional and contemporary sarees for every occasion"
+    link: "/collections/womens", // Updated link to navigate to women's collection
   },
   {
     title: "Women's Collections",
     img: womensCollectionsImage,
-    link: "/womens",
-    description: "Kurtas, salwars, lehengas and more"
+    link: "/collections/womens",
   },
   {
     title: "Men's Collections",
     img: mensCollectionsImage,
-    link: "/mens",
-    description: "Traditional and fusion wear for the modern man"
+    link: "/collections/mens",
   }
 ];
 
@@ -99,7 +87,8 @@ const FEATURED_PRODUCTS = [
   { image: product3Image, name: "Silk Blend Saree", price: "₹3,800" }
 ];
 
-// Custom hooks
+// Custom hooks and helper components remain unchanged
+
 const useScrolledState = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -134,7 +123,6 @@ const useCarouselImages = () => {
   return { carouselImages, isLoading };
 };
 
-// Components
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -257,94 +245,71 @@ const HeroCarousel = ({ images, onSlideChange }) => {
   );
 };
 
-const CategoryCard = ({ title, img, link, description, index }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  const imageRounded = index === 0 ? 'lg:rounded-tl-2xl lg:rounded-bl-2xl' :
-                      index === 2 ? 'lg:rounded-tr-2xl lg:rounded-br-2xl' : '';
-
-  return (
-    <Link
-      to={link}
-      className={`group relative block h-[28rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 ${imageRounded}`}
-      aria-label={`Browse ${title} collection`}
-    >
-      <div className="relative h-full w-full overflow-hidden">
-        <img
-          src={img}
-          alt={title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          onLoad={() => setImageLoaded(true)}
-          loading={index < 3 ? "eager" : "lazy"}
-        />
-        {!imageLoaded && (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 animate-pulse" />
-        )}
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-transparent opacity-90 group-hover:from-black/90 transition-all duration-500" />
-      <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-        <div className="mb-3 relative">
-          <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-2 transform group-hover:translate-x-2 transition-transform duration-300">
-            {title}
-          </h3>
-          <div className="w-12 h-1 bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100" />
-        </div>
-        <p className="text-white/90 poppins-regular text-sm md:text-base mb-6 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-75">
-          {description}
-        </p>
-        <button className="self-start flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300 opacity-0 group-hover:opacity-100 translate-y-6 group-hover:translate-y-0 delay-150">
-          <span className="font-medium text-sm">Explore</span>
-          <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-          </svg>
-        </button>
-      </div>
-      <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200" />
-    </Link>
-  );
-};
-
-const FeaturedCard = ({ title, description, link, image }) => {
+// Round Collection Card with minimal mesh blur button
+const RoundCollectionCard = ({ title, img, link, description, index, isCategory = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Link
-      to={link}
-      className="block overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 h-96 relative group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="relative h-full w-full">
-        <img
-          src={image}
-          alt={title}
-          className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110 brightness-90' : 'scale-100'}`}
-          onLoad={() => setImageLoaded(true)}
-        />
-        {!imageLoaded && <div className="absolute inset-0 bg-gray-200 animate-pulse" />}
-        <div className={`absolute inset-0 bg-gradient-to-t from-black/80 to-transparent transition-opacity duration-500 ${isHovered ? 'opacity-100' : 'opacity-70'}`} />
-        <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-          <div className="mb-2 relative">
-            <h3 className={`text-2xl font-bold mb-2 transition-all duration-500 ${isHovered ? 'text-amber-300' : 'text-white'}`}>
-              {title}
-            </h3>
-            <div className={`h-0.5 bg-amber-400 transition-all duration-500 ease-in-out ${isHovered ? 'w-24' : 'w-10'}`} />
-          </div>
-          <p className={`text-white/90 mb-6 transition-all duration-500 line-clamp-2 ${isHovered ? 'opacity-100' : 'opacity-70'}`}>
-            {description}
-          </p>
-          <div className={`flex items-center font-medium transition-all duration-500 ${isHovered ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'}`}>
-            <span className="py-2 px-4 bg-amber-500 hover:bg-amber-600 rounded-lg transition-colors duration-300 text-white flex items-center gap-2">
-              View Collection
-              <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </span>
-          </div>
+    <div className="flex flex-col items-center group">
+      <Link
+        to={link}
+        className="relative block w-64 h-64 rounded-full overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 mb-4"
+        aria-label={`Browse ${title} collection`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{ cursor: "pointer" }}
+      >
+        <div className="relative h-full w-full overflow-hidden rounded-full">
+          <img
+            src={img}
+            alt={title}
+            className={`w-full h-full object-cover transition-all duration-700 ${
+              isHovered ? 'scale-110 brightness-90' : 'scale-100'
+            }`}
+            onLoad={() => setImageLoaded(true)}
+            loading={index < 3 ? "eager" : "lazy"}
+          />
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 animate-pulse rounded-full" />
+          )}
         </div>
+        <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent rounded-full transition-all duration-500 ${
+          isHovered ? 'opacity-80' : 'opacity-40'
+        }`} />
+        {/* Minimal mesh blur Explore button at the bottom of image */}
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
+          <button
+            className={
+              `flex items-center gap-2 px-4 py-1 rounded-full bg-white/60
+              backdrop-blur-[6px] border border-white/30 text-amber-900 font-medium text-sm
+              shadow-md transition-all duration-300
+              ${isHovered ? "bg-amber-400/80 text-white shadow-amber-100 scale-105" : ""}
+              `
+            }
+            style={{
+              boxShadow: isHovered
+                ? "0 8px 24px 0 rgba(245, 158, 11, 0.18), 0 0 0 2px #f59e0b22"
+                : "0 4px 12px 0 rgba(0,0,0,0.08)"
+            }}
+          >
+            Explore
+            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </Link>
+      {/* Collection Name at Bottom */}
+      <div className="text-center mt-2">
+        <h3 className="text-xl font-bold text-gray-800 mb-1 poppins-regular">
+          {title}
+        </h3>
+        <p className="text-gray-600 text-sm poppins-regular max-w-48 leading-relaxed">
+          {description}
+        </p>
       </div>
-    </Link>
+    </div>
   );
 };
 
@@ -406,26 +371,50 @@ const HomePage = () => {
 
       <HeroCarousel images={carouselImages} onSlideChange={handleSlideChange} />
 
-      <div className="flex justify-center items-center lg:pt-10 pt-10">
-        <img draggable="false" src={border1} className="lg:h-16 h-10" alt="border" />
+      <div className="flex justify-center items-center lg:pt-8 pt-8">
+        <img draggable="false" src={border1} className="lg:h-20 h-10" alt="border lg:pt-8"/>
       </div>
 
-      <AnimatedSection className="lg:py-16 py-8 px-6 md:px-20 bg-white" aria-labelledby="categories-heading">
-        <h2 id="categories-heading" className="text-4xl font-semibold text-center mb-8 poppins-regular">
-          Our Collections
-        </h2>
-        <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 text-lg">
-          Discover our curated collections of traditional and contemporary Indian wear, crafted with passion and precision.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* Collections Section */}
+      <AnimatedSection
+  className="lg:py-16 py-6 px-6 md:px-20 bg-white"
+  aria-labelledby="collections-heading"
+>
+  <div className="text-center mb-8 font-playfair tracking-tight text-gray-900"
+    >
+    <h2
+      id="collections-heading"
+      className="text-4xl font-bold mb-6 font-serif tracking-tight">
+      <span>Kasavu Aalayam Collections</span>
+    </h2>
+    <p className="text-center text-gray-600 max-w-3xl mx-auto mb-12 text-lg font-light font-serif leading-relaxed">
+      Discover our curated collections of traditional and contemporary Indian wear,
+      alongside our handpicked featured selections.
+    </p>
+  </div>
+
+        {/* All Collections in Same Row */}
+        <div className="flex flex-wrap justify-center items-start gap-8 lg:gap-12">
+          {/* Our Collections */}
           {CATEGORIES.map((category, index) => (
             <motion.div
-              key={index}
+              key={`category-${index}`}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <CategoryCard {...category} index={index} />
+              <RoundCollectionCard {...category} index={index} isCategory={true} />
+            </motion.div>
+          ))}
+          {/* Featured Collections */}
+          {FEATURED_COLLECTIONS.map((collection, index) => (
+            <motion.div
+              key={`featured-${index}`}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: (CATEGORIES.length + index) * 0.1 }}
+            >
+              <RoundCollectionCard {...collection} index={CATEGORIES.length + index} />
             </motion.div>
           ))}
         </div>
@@ -433,7 +422,7 @@ const HomePage = () => {
 
       <SideContactNavbar />
 
-      <AnimatedSection className="bg-white py-20 px-6 md:px-20" aria-labelledby="about-heading">
+      {/* <AnimatedSection className="bg-white py-20 px-6 md:px-20" aria-labelledby="about-heading">
         <div className="max-w-5xl mx-auto text-center">
           <h2 id="about-heading" className="text-3xl font-bold mb-6">A Legacy of Tradition</h2>
           <ProductShowcase products={FEATURED_PRODUCTS} />
@@ -441,34 +430,7 @@ const HomePage = () => {
             <img src={border2} className="h-16" alt="border" draggable="false" />
           </div>
         </div>
-      </AnimatedSection>
-
-      <AnimatedSection className="py-16 px-6 md:px-20 bg-gradient-to-b from-white to-amber-50" aria-labelledby="featured-heading">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16 relative">
-            <div className="absolute left-1/2 transform -translate-x-1/2 top-0 -translate-y-1/2 w-20 h-1 bg-amber-300"></div>
-            <h2 id="featured-heading" className="text-4xl font-semibold mb-4 poppins-regular pt-2 relative inline-block">
-              Featured Collections
-              <div className="absolute -bottom-2 left-0 right-0 h-0.5 bg-amber-400"></div>
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto mt-4 poppins-regular">
-              Handpicked selections for every occasion, crafted with love and tradition.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {FEATURED_COLLECTIONS.map((collection, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-              >
-                <FeaturedCard {...collection} />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </AnimatedSection>
+      </AnimatedSection> */}
 
       <ScrollToTopButton />
       <EnhancedFeedbackSystem />

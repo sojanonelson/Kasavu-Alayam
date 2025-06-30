@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, User, ShoppingCart, LogIn, LogOut, ShieldUserIcon } from 'lucide-react';
+import { Menu, X, User, ShoppingCart, LogIn, LogOut, Shield } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -41,14 +41,14 @@ const Navbar = () => {
           <div className="flex items-center space-x-8">
             <a href="/" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
               Home
-              <span className={`absolute left-0 -bottom-1 w-0 h-0.5 ${navBar ? (isScrolled ? 'bg-black' : 'bg-white') : 'bg-black'} transition-all duration-500 group-hover:w-full`}></span>
+              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-red-600 transition-all duration-500 group-hover:w-full"></span>
             </a>
 
             {/* Men's Collection Dropdown */}
             <div className="relative group">
               <a href="/collections/mens" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
                 Mens Collection
-                <span className={`absolute left-0 -bottom-1 w-0 h-0.5 ${navBar ? (isScrolled ? 'bg-black' : 'bg-white') : 'bg-black'} transition-all duration-500 group-hover:w-full`}></span>
+                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-red-600 transition-all duration-500 group-hover:w-full"></span>
               </a>
               <div className="absolute left-0 top-full mt-2 w-80 bg-white shadow-lg rounded-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50 grid grid-cols-2 gap-1 p-2">
                 <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b text-sm">Casual Wear</div>
@@ -70,7 +70,7 @@ const Navbar = () => {
             <div className="relative group">
               <a href="/collections/womens" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
                 Womens Collection
-                <span className={`absolute left-0 -bottom-1 w-0 h-0.5 ${navBar ? (isScrolled ? 'bg-black' : 'bg-white') : 'bg-black'} transition-all duration-500 group-hover:w-full`}></span>
+                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-red-600 transition-all duration-500 group-hover:w-full"></span>
               </a>
               <div className="absolute left-0 top-full mt-2 w-80 bg-white shadow-lg rounded-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50 grid grid-cols-2 gap-1 p-2">
                 <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b text-sm">Traditional</div>
@@ -102,11 +102,11 @@ const Navbar = () => {
           <div className="flex items-center space-x-8">
             <a href="/collections/textiles" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
               Textiles
-              <span className={`absolute left-0 -bottom-1 w-0 h-0.5 ${navBar ? (isScrolled ? 'bg-black' : 'bg-white') : 'bg-black'} transition-all duration-500 group-hover:w-full`}></span>
+              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-red-600 transition-all duration-500 group-hover:w-full"></span>
             </a>
             <a href="/collections/kids" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
               Kids
-              <span className={`absolute left-0 -bottom-1 w-0 h-0.5 ${navBar ? (isScrolled ? 'bg-black' : 'bg-white') : 'bg-black'} transition-all duration-500 group-hover:w-full`}></span>
+              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-red-600 transition-all duration-500 group-hover:w-full"></span>
             </a>
 
             <button onClick={() => navigate('/checkout/cart')} className={`${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors duration-500 hover:scale-110 transform`}>
@@ -129,7 +129,7 @@ const Navbar = () => {
             )}
             {JSON.parse(localStorage.getItem("user") || "{}")?.role === "admin" && (
               <button onClick={() => navigate('/admin')} className={`flex items-center gap-1 ${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors`}>
-                <ShieldUserIcon size={22} />
+                <Shield size={22} />
                 <span className="text-sm font-medium">Admin</span>
               </button>
             )}
