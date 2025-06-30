@@ -11,6 +11,7 @@ const websettingRoutes =require('./routes/websiteSettingRoutes')
 const collectionRoutes =require('./routes/CollectionRoute')
 const otpRoutes = require('./routes/otpRoute')
 const cartRoutes = require('./routes/cartRoutes')
+const reviewRoutes = require('./routes/reviewRoutes')
 const cookieParser = require('cookie-parser');
 
 const connectDB = require('./config/DB');
@@ -62,6 +63,9 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/websetting', websettingRoutes);
 app.use('/api/otp',otpRoutes)
 app.use('/api/cart', cartRoutes)
+app.use('/api/product/reviews', reviewRoutes)
+
+
 
 
 app.use('/api/subcategories', subcategoryRoutes);
