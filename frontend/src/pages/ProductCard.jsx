@@ -193,7 +193,7 @@ return (
       </div>
 
       {/* Add to Cart */}
-      <button
+      {/* <button
        onClick={(e) => handleAddToCart(e, product)}
 
         className={`w-full mt-4 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -203,7 +203,7 @@ return (
         }`}
       >
         {isInCart ? 'In Cart' : 'Add to Cart'}
-      </button>
+      </button> */}
     </div>
   </div>
 );

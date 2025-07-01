@@ -10,7 +10,6 @@ import ProductCard from "./ProductCard";
 import Pagination from "../components/ui/Pagination";
 import FilterSidebar from "../components/collectionFilter";
 import EmptyResults from "../components/ui/EmptyResults";
-import Footer from "../components/Footer";
 
 const LoadingSpinner = () => (
   <div className="flex flex-col justify-center items-center py-20 w-full">
@@ -25,7 +24,7 @@ const LoadingSpinner = () => (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5, duration: 0.2}}
+      transition={{ delay: 0.5, duration: 0.2 }}
       className="mt-6 text-center"
     >
       <p className="text-lg font-medium text-gray-700 mb-1">Loading Collection</p>
@@ -33,6 +32,21 @@ const LoadingSpinner = () => (
     </motion.div>
   </div>
 );
+
+// Wrapper component for ProductCard
+const ProductCardWrapper = ({ product, isListView, wishlist, toggleWishlist, toggleCart, showAddToCart }) => {
+  return (
+    <div className="bg-white rounded-xl border border-gray-200/60 overflow-hidden hover:border-red-200 hover:shadow-lg transition-all duration-300 hover:shadow-red-100/50">
+      <ProductCard
+        product={product}
+        isListView={isListView}
+        wishlist={wishlist}
+        toggleWishlist={toggleWishlist}
+        toggleCart={showAddToCart ? toggleCart : undefined}
+      />
+    </div>
+  );
+};
 
 const CollectionsShowCase = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -45,34 +59,31 @@ const CollectionsShowCase = () => {
   const cart = useSelector((state) => state.cart.items);
   const { collection } = useParams();
 
-const extractFilters = (products) => {
-  const typeSet = new Set();
-  const colorSet = new Set();
-  const sizeSet = new Set();
+  const extractFilters = (products) => {
+    const typeSet = new Set();
+    const colorSet = new Set();
+    const sizeSet = new Set();
 
-  products.forEach((product) => {
-    // Type from productDetails
-    if (product.productDetails?.type) {
-      typeSet.add(product.productDetails.type);
-    }
-    // Color directly from root
-    if (product.color) {
-      colorSet.add(product.color);
-    }
-    // Size from productDetails
-    if (product.productDetails?.size) {
-      sizeSet.add(product.productDetails.size);
-    }
-  });
+    products.forEach((product) => {
+      if (product.productDetails?.type) {
+        typeSet.add(product.productDetails.type);
+      }
+      if (product.color) {
+        colorSet.add(product.color);
+      }
+      if (product.productDetails?.size) {
+        sizeSet.add(product.productDetails.size);
+      }
+    });
 
-  return {
-    type: [...typeSet],
-    color: [...colorSet],
-    size: [...sizeSet],
+    return {
+      type: [...typeSet],
+      color: [...colorSet],
+      size: [...sizeSet],
+    };
   };
-};
 
-const filters = useMemo(() => extractFilters(apiData), [apiData]);
+  const filters = useMemo(() => extractFilters(apiData), [apiData]);
 
   const applyFilters = (products, filters) => {
     return products.filter((product) =>
@@ -165,7 +176,6 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
 
   return (
     <div className="bg-gradient-to-b from-slate-50 via-white to-gray-50 min-h-screen relative overflow-hidden">
-      {/* Subtle Background Pattern */}
       <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute inset-0" style={{
           backgroundImage: `radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)`,
@@ -173,7 +183,6 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
         }}></div>
       </div>
 
-      {/* Modern Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-red-100/30 to-rose-100/30 rounded-full blur-3xl"></div>
         <div className="absolute top-1/3 -left-40 w-60 h-60 bg-gradient-to-br from-rose-100/20 to-pink-100/20 rounded-full blur-3xl"></div>
@@ -193,18 +202,16 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
       </Helmet>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Compact Professional Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="pt-6 pb-4"
         >
-          {/* Breadcrumb */}
           <div className="mb-4">
             <div className="inline-flex items-center px-3 py-1.5 bg-white/60 backdrop-blur-sm rounded-full border border-gray-200/50 text-sm">
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 className="text-gray-600 hover:text-red-600 transition-colors duration-200 font-medium"
               >
                 Home
@@ -216,7 +223,6 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
             </div>
           </div>
 
-          {/* Compact Header */}
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
@@ -225,7 +231,7 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
               </h1>
               <div className="w-16 h-0.5 bg-gradient-to-r from-red-500 to-rose-500 rounded-full"></div>
             </div>
-            
+
             {!isLoading && (
               <div className="text-right">
                 <div className="text-2xl font-bold text-gray-900">{filteredProducts.length}</div>
@@ -235,10 +241,8 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
           </div>
         </motion.div>
 
-        {/* Main Layout */}
         <div className="flex flex-col lg:flex-row gap-8 pb-12">
-          {/* Enhanced Sidebar */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -261,14 +265,12 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
             </div>
           </motion.div>
 
-          {/* Enhanced Main Content */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex-1 min-w-0"
           >
-            {/* Results Summary */}
             {!isLoading && (
               <div className="mb-6">
                 <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50">
@@ -288,7 +290,6 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
               </div>
             )}
 
-            {/* Content */}
             {isLoading ? (
               <div className="bg-white/50 backdrop-blur-sm rounded-2xl border border-gray-200/50">
                 <LoadingSpinner />
@@ -304,8 +305,7 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
               </motion.div>
             ) : (
               <>
-                {/* Enhanced Product Grid */}
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.1 }}
@@ -316,31 +316,29 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
                       key={product._id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ 
-                        duration: 0.4, 
+                      transition={{
+                        duration: 0.4,
                         delay: index * 0.03,
                         ease: "easeOut"
                       }}
-                      whileHover={{ 
-                        y: -4, 
+                      whileHover={{
+                        y: -4,
                         transition: { duration: 0.2, ease: "easeOut" }
                       }}
                       className="group"
                     >
-                      <div className="bg-white rounded-xl border border-gray-200/60 overflow-hidden hover:border-red-200 hover:shadow-lg transition-all duration-300 hover:shadow-red-100/50">
-                        <ProductCard
-                          product={product}
-                          isListView={false}
-                          wishlist={wishlist}
-                          toggleWishlist={toggleWishlist}
-                          toggleCart={toggleCart}
-                        />
-                      </div>
+                      <ProductCardWrapper
+                        product={product}
+                        isListView={false}
+                        wishlist={wishlist}
+                        toggleWishlist={toggleWishlist}
+                        toggleCart={toggleCart}
+                        showAddToCart={false}
+                      />
                     </motion.div>
                   ))}
                 </motion.div>
 
-                {/* Enhanced Pagination */}
                 {totalPages > 1 && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -363,20 +361,19 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
         </div>
       </div>
 
-      {/* Modern Back to Top Button */}
       {isScrolled && (
         <motion.button
           initial={{ opacity: 0, scale: 0.8, y: 100 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          whileHover={{ 
+          whileHover={{
             scale: 1.05,
             y: -2
           }}
           whileTap={{ scale: 0.95 }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 300, 
-            damping: 20 
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 20
           }}
           className="fixed bottom-6 right-6 z-50 group"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -387,10 +384,8 @@ const filters = useMemo(() => extractFilters(apiData), [apiData]);
           </div>
         </motion.button>
       )}
-      
     </div>
   );
 };
-
 
 export default CollectionsShowCase;

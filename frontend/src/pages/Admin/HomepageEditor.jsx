@@ -5,6 +5,7 @@ import CarouselManager from './HomePageEditor/CarouselManager';
 import ContactInfoForm from './HomePageEditor/ContactInfoForm';
 import MaintenanceSettings from './HomePageEditor/MaintenanceSettings';
 import { DateTimePicker } from '@mui/x-date-pickers';
+import handloomService from '../../services/handloomService';
 
 const WebsiteSettings = () => {
   const [tabValue, setTabValue] = useState(0);

@@ -67,7 +67,7 @@ const CATEGORIES = [
   {
     title: "Sarees",
     img: sareesImage,
-    link: "/collections/womens", // Updated link to navigate to women's collection
+    link: "/collections/womens",
   },
   {
     title: "Women's Collections",
@@ -87,8 +87,7 @@ const FEATURED_PRODUCTS = [
   { image: product3Image, name: "Silk Blend Saree", price: "₹3,800" }
 ];
 
-// Custom hooks and helper components remain unchanged
-
+// Custom hooks and helper components
 const useScrolledState = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -245,7 +244,6 @@ const HeroCarousel = ({ images, onSlideChange }) => {
   );
 };
 
-// Round Collection Card with minimal mesh blur button
 const RoundCollectionCard = ({ title, img, link, description, index, isCategory = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -277,7 +275,6 @@ const RoundCollectionCard = ({ title, img, link, description, index, isCategory 
         <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent rounded-full transition-all duration-500 ${
           isHovered ? 'opacity-80' : 'opacity-40'
         }`} />
-        {/* Minimal mesh blur Explore button at the bottom of image */}
         <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
           <button
             className={
@@ -300,7 +297,6 @@ const RoundCollectionCard = ({ title, img, link, description, index, isCategory 
           </button>
         </div>
       </Link>
-      {/* Collection Name at Bottom */}
       <div className="text-center mt-2">
         <h3 className="text-xl font-bold text-gray-800 mb-1 poppins-regular">
           {title}
@@ -377,25 +373,20 @@ const HomePage = () => {
 
       {/* Collections Section */}
       <AnimatedSection
-  className="lg:py-16 py-6 px-6 md:px-20 bg-white"
-  aria-labelledby="collections-heading"
->
-  <div className="text-center mb-8 font-playfair tracking-tight text-gray-900"
-    >
-    <h2
-      id="collections-heading"
-      className="text-4xl font-bold mb-6 font-serif tracking-tight">
-      <span>Kasavu Aalayam Collections</span>
-    </h2>
-    <p className="text-center text-gray-600 max-w-3xl mx-auto mb-12 text-lg font-light font-serif leading-relaxed">
-      Discover our curated collections of traditional and contemporary Indian wear,
-      alongside our handpicked featured selections.
-    </p>
-  </div>
+        className="lg:py-16 py-6 px-6 md:px-20 bg-white"
+        aria-labelledby="collections-heading"
+      >
+        <div className="text-center mb-8 font-playfair tracking-tight text-gray-900">
+          <h2 id="collections-heading" className="text-4xl font-bold mb-6 font-serif tracking-tight">
+            <span>Kasavu Aalayam Collections</span>
+          </h2>
+          <p className="text-center text-gray-600 max-w-3xl mx-auto mb-12 text-lg font-light font-serif leading-relaxed">
+            Discover our curated collections of traditional and contemporary Indian wear,
+            alongside our handpicked featured selections.
+          </p>
+        </div>
 
-        {/* All Collections in Same Row */}
         <div className="flex flex-wrap justify-center items-start gap-8 lg:gap-12">
-          {/* Our Collections */}
           {CATEGORIES.map((category, index) => (
             <motion.div
               key={`category-${index}`}
@@ -406,7 +397,6 @@ const HomePage = () => {
               <RoundCollectionCard {...category} index={index} isCategory={true} />
             </motion.div>
           ))}
-          {/* Featured Collections */}
           {FEATURED_COLLECTIONS.map((collection, index) => (
             <motion.div
               key={`featured-${index}`}
@@ -422,18 +412,27 @@ const HomePage = () => {
 
       <SideContactNavbar />
 
-      {/* <AnimatedSection className="bg-white py-20 px-6 md:px-20" aria-labelledby="about-heading">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 id="about-heading" className="text-3xl font-bold mb-6">A Legacy of Tradition</h2>
-          <ProductShowcase products={FEATURED_PRODUCTS} />
-          <div className="flex justify-center select-none my-16 pt-10 items-center">
-            <img src={border2} className="h-16" alt="border" draggable="false" />
-          </div>
-        </div>
-      </AnimatedSection> */}
+      {/* Enhanced Feedback System with Pagination and Autoplay */}
+      <div className="py-10 bg-gray-100">
+        <Swiper
+          modules={[Autoplay, Pagination]}
+          spaceBetween={30}
+          slidesPerView={1}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+          }}
+          pagination={{ clickable: true }}
+          loop={true}
+        >
+          <SwiperSlide>
+            <EnhancedFeedbackSystem />
+          </SwiperSlide>
+          {/* Add more SwiperSlides if you have multiple feedback sections */}
+        </Swiper>
+      </div>
 
       <ScrollToTopButton />
-      <EnhancedFeedbackSystem />
       <Footer />
     </div>
   );
