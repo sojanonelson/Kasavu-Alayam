@@ -3,6 +3,7 @@ const cloudinary = require("../config/cloudinary");
 const fs = require("fs");
 
 exports.uploadCarouselImages = async (req, res) => {
+  console.log("IMAGE UPLOAD")
   try {
     const { title = "", subtitle = "" } = req.body;
     const file = req.file;

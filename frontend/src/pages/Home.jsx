@@ -122,6 +122,22 @@ const useCarouselImages = () => {
   return { carouselImages, isLoading };
 };
 
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  return isMobile;
+};
+
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -325,8 +341,43 @@ const ProductShowcase = ({ products }) => (
   </div>
 );
 
+const ResponsiveAnimatedItem = ({ children, index, isMobile }) => {
+  if (isMobile) {
+    return (
+      <motion.div
+        key={`mobile-${index}`}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: index * 0.1 }}
+      >
+        {children}
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      key={`desktop-${index}`}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
 const AnimatedSection = ({ children, className, ...props }) => {
   const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <section className={className} {...props}>
+        {children}
+      </section>
+    );
+  }
 
   return (
     <motion.section
@@ -347,6 +398,7 @@ const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { carouselImages, isLoading } = useCarouselImages();
   const isScrolled = useScrolledState();
+  const isMobile = useIsMobile();
 
   const handleSlideChange = useCallback((swiper) => {
     setCurrentSlide(swiper.realIndex);
@@ -388,24 +440,18 @@ const HomePage = () => {
 
         <div className="flex flex-wrap justify-center items-start gap-8 lg:gap-12">
           {CATEGORIES.map((category, index) => (
-            <motion.div
-              key={`category-${index}`}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
+            <ResponsiveAnimatedItem key={`category-${index}`} index={index} isMobile={isMobile}>
               <RoundCollectionCard {...category} index={index} isCategory={true} />
-            </motion.div>
+            </ResponsiveAnimatedItem>
           ))}
           {FEATURED_COLLECTIONS.map((collection, index) => (
-            <motion.div
-              key={`featured-${index}`}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: (CATEGORIES.length + index) * 0.1 }}
+            <ResponsiveAnimatedItem 
+              key={`featured-${index}`} 
+              index={CATEGORIES.length + index} 
+              isMobile={isMobile}
             >
               <RoundCollectionCard {...collection} index={CATEGORIES.length + index} />
-            </motion.div>
+            </ResponsiveAnimatedItem>
           ))}
         </div>
       </AnimatedSection>
