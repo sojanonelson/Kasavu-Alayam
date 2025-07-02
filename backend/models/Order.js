@@ -24,6 +24,7 @@ const orderSchema = new Schema({
   transactionId: { type: String },
   totalPrice: { type: Number, required: true },
   orderStatus: { type: String, enum: ['confirmed'], default: 'confirmed' },
+  packed: { type: Boolean, default: false },
   orderTrackingId: { type: String, unique: true },
   createdAt: { type: Date, default: Date.now },
 });

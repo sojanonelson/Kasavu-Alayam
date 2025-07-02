@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { 
   FiPackage, FiTruck, FiCheckCircle, FiXCircle, 
   FiClock, FiSearch, FiFilter, FiRefreshCw 
 } from 'react-icons/fi';
+import { getAllOrders } from '../../services/orderservices';
 
 const OrdersPage = () => {
   // Order status options
@@ -11,77 +12,44 @@ const OrdersPage = () => {
     { value: 'processing', label: 'Processing', icon: <FiPackage className="text-blue-500" />, color: 'bg-blue-100 text-blue-800' },
     { value: 'shipped', label: 'Shipped', icon: <FiTruck className="text-indigo-500" />, color: 'bg-indigo-100 text-indigo-800' },
     { value: 'delivered', label: 'Delivered', icon: <FiCheckCircle className="text-green-500" />, color: 'bg-green-100 text-green-800' },
-    { value: 'cancelled', label: 'Cancelled', icon: <FiXCircle className="text-red-500" />, color: 'bg-red-100 text-red-800' }
+    { value: 'cancelled', label: 'Cancelled', icon: <FiXCircle className="text-red-500" />, color: 'bg-red-100 text-red-800' },
+    { value: 'confirmed', label: 'Confirmed', icon: <FiCheckCircle className="text-green-500" />, color: 'bg-green-100 text-green-800' }
   ];
 
-  // Sample orders data
-  const [orders, setOrders] = useState([
-    {
-      id: 'KA-1001',
-      customer: 'Anitha Menon',
-      date: '2023-06-15',
-      items: 3,
-      amount: '₹8,499',
-      payment: 'Paid',
-      status: 'pending',
-      address: 'Kochi, Kerala'
-    },
-    {
-      id: 'KA-1002',
-      customer: 'Rajesh Kumar',
-      date: '2023-06-14',
-      items: 2,
-      amount: '₹5,750',
-      payment: 'Paid',
-      status: 'processing',
-      address: 'Thiruvananthapuram, Kerala'
-    },
-    {
-      id: 'KA-1003',
-      customer: 'Priya Nair',
-      date: '2023-06-13',
-      items: 1,
-      amount: '₹3,250',
-      payment: 'Paid',
-      status: 'shipped',
-      address: 'Kozhikode, Kerala'
-    },
-    {
-      id: 'KA-1004',
-      customer: 'Deepa Krishnan',
-      date: '2023-06-12',
-      items: 4,
-      amount: '₹12,999',
-      payment: 'Paid',
-      status: 'delivered',
-      address: 'Thrissur, Kerala'
-    },
-    {
-      id: 'KA-1005',
-      customer: 'Suresh Pillai',
-      date: '2023-06-11',
-      items: 2,
-      amount: '₹6,500',
-      payment: 'Pending',
-      status: 'pending',
-      address: 'Alappuzha, Kerala'
-    },
-    {
-      id: 'KA-1006',
-      customer: 'Lakshmi Nair',
-      date: '2023-06-10',
-      items: 1,
-      amount: '₹4,250',
-      payment: 'Paid',
-      status: 'cancelled',
-      address: 'Kannur, Kerala'
-    }
-  ]);
-
-  // Filter states
+  const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState(null);
+
+  // Transform API data to match component structure
+  const transformOrderData = (apiOrders) => {
+    return apiOrders.map(order => ({
+      id: order.orderTrackingId,
+      customer: `${order.userId.firstName} ${order.userId.lastName}`,
+      date: order.createdAt,
+      items: order.products.reduce((total, product) => total + product.quantity, 0),
+      amount: `₹${order.totalPrice}`,
+      payment: order.paymentMode === 'cash' ? 'Pending' : 'Paid',
+      status: order.orderStatus.toLowerCase(),
+      // address: `${order.address.place}, ${order.address.city}, ${order.address.state} - ${order.address.pincode}`
+    }));
+  };
+
+  // Fetch orders from API
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await getAllOrders();
+        const transformedOrders = transformOrderData(response);
+        console.log(response)
+        setOrders(transformedOrders);
+      } catch (error) {
+        console.error("Failed to fetch orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   // Filter orders
   const filteredOrders = orders.filter(order => {
@@ -102,7 +70,8 @@ const OrdersPage = () => {
 
   // Get status details
   const getStatusDetails = (statusValue) => {
-    return statusOptions.find(option => option.value === statusValue);
+    return statusOptions.find(option => option.value === statusValue) || 
+           { value: statusValue, label: statusValue, icon: <FiClock className="text-gray-500" />, color: 'bg-gray-100 text-gray-800' };
   };
 
   return (
@@ -110,7 +79,18 @@ const OrdersPage = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Orders Management</h1>
         <div className="flex space-x-3">
-          <button className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+          <button 
+            className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+            onClick={async () => {
+              try {
+                const response = await getAllOrders();
+                const transformedOrders = transformOrderData(response);
+                setOrders(transformedOrders);
+              } catch (error) {
+                console.error("Failed to refresh orders:", error);
+              }
+            }}
+          >
             <FiRefreshCw className="mr-2" />
             Refresh
           </button>
