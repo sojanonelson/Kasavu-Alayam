@@ -41,7 +41,7 @@ const OrdersPage = () => {
       try {
         const response = await getAllOrders();
         const transformedOrders = transformOrderData(response);
-        console.log(response)
+        console.log(response.addresses)
         setOrders(transformedOrders);
       } catch (error) {
         console.error("Failed to fetch orders:", error);

@@ -723,7 +723,7 @@ const handlePredefinedSelect = (message) => {
               <button
                 onClick={addMainProductToCart}
                 disabled={addingToCart}
-                className={`flex-1 h-14 text-lg font-medium rounded-lg flex items-center justify-center gap-2 transition-colors ${
+                className={`flex-1 h-14 text-lg font-medium flex items-center justify-center gap-2 transition-colors ${
                   addingToCart
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-blue-500 hover:bg-blue-600"
@@ -732,13 +732,7 @@ const handlePredefinedSelect = (message) => {
                 <ShoppingCart size={22} />
                 {addingToCart ? "Adding..." : "Add to Cart"}
               </button>
-              <button
-                onClick={handleBuyNow}
-                className="bg-green-500 hover:bg-green-600 text-white flex-1 h-14 text-lg font-medium rounded-lg flex items-center justify-center gap-2 transition-colors"
-              >
-                <CreditCard size={22} />
-                Buy Now
-              </button>
+             
             </div>
           </div>
         </div>
@@ -834,64 +828,7 @@ const handlePredefinedSelect = (message) => {
             </div>
           </div>
         </div>
-        {/* <div className="mb-12">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Collection</h2>
-            <button className="text-primary hover:underline">View All</button>
-          </div>
-          {collectionLoading && <div className="flex justify-center">Loading...</div>}
-          {collectionError && <div className="text-red-500">Error: {collectionError}</div>}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {collectionProducts.map(collectionProduct => (
-              <div key={collectionProduct.id} className="card bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
-                <figure className="relative">
-                  <img
-                    src={collectionProduct.image}
-                    alt={collectionProduct.title}
-                    className="rounded-t-xl h-48 w-full object-cover"
-                  />
-                  <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:scale-110 transition-all">
-                    <Heart size={18} className="text-gray-600" />
-                  </button>
-                </figure>
-                <div className="card-body p-4">
-                  <h3 className="card-title text-sm font-medium text-gray-900 line-clamp-1">{collectionProduct.title}</h3>
-                  <p className="text-gray-600 text-sm">{collectionProduct.brand}</p>
-                  <div className="flex items-center mt-1">
-                    <div className="flex items-center mr-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={12}
-                          className={`${i < Math.floor(collectionProduct.rating) ? 'fill-yellow-400 stroke-yellow-400' : 'stroke-gray-300'}`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-xs text-gray-600">({collectionProduct.rating})</span>
-                  </div>
-                  <div className="mt-2">
-                    <span className="font-bold text-gray-900">₹{collectionProduct.price}</span>
-                    {collectionProduct.originalPrice && (
-                      <span className="text-xs text-gray-500 line-through ml-1">₹{collectionProduct.originalPrice}</span>
-                    )}
-                  </div>
-                  <button
-                    onClick={() => addSimilarProductToCart(collectionProduct)}
-                    disabled={addingToCartId === collectionProduct.id}
-                    className={`w-full mt-3 py-2 text-sm font-medium rounded-lg flex items-center justify-center gap-2 transition-colors ${
-                      addingToCartId === collectionProduct.id
-                        ? 'bg-gray-400 cursor-not-allowed text-white'
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'
-                    }`}
-                  >
-                    <ShoppingCart size={16} />
-                    {addingToCartId === collectionProduct.id ? 'Adding...' : 'Add to Cart'}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div> */}
+        
         <div className="mb-12 bg-white p-6 rounded-lg border border-gray-200">
 <div className="flex justify-between items-center mb-6">
   <h2 className="text-2xl font-bold text-gray-900">Customer Reviews</h2>
