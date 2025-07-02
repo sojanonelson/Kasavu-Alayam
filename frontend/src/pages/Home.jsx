@@ -22,11 +22,11 @@ import 'swiper/css/pagination';
 // Import assets
 import border1 from '../assets/elements/border2.png';
 import border2 from '../assets/elements/border1.png';
-import weddingSilksImage from '../assets/ka women-4.jpg';
-import bridalBlouseSetsImage from '../assets/k-2.jpg';
-import sareesImage from '../assets/ka women-1.webp';
-import womensCollectionsImage from '../assets/ka women-2.webp';
-import mensCollectionsImage from '../assets/ka men-1.webp';
+import weddingSilksImage from '../assets/wedding logo.jpg';
+import bridalBlouseSetsImage from '../assets/bridal logo.jpg';
+import sareesImage from '../assets/sarees logo.png';
+import womensCollectionsImage from '../assets/womens logo.png';
+import mensCollectionsImage from '../assets/mens logo.png';
 import product1Image from '../assets/k-1.jpg';
 import product2Image from '../assets/k-4.jpg';
 import product3Image from '../assets/k-1.jpg';
@@ -129,7 +129,7 @@ const useIsMobile = () => {
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkIsMobile();
     window.addEventListener('resize', checkIsMobile);
     return () => window.removeEventListener('resize', checkIsMobile);
@@ -282,6 +282,7 @@ const RoundCollectionCard = ({ title, img, link, description, index, isCategory 
               isHovered ? 'scale-110 brightness-90' : 'scale-100'
             }`}
             onLoad={() => setImageLoaded(true)}
+            onError={() => setImageLoaded(false)}
             loading={index < 3 ? "eager" : "lazy"}
           />
           {!imageLoaded && (
@@ -445,9 +446,9 @@ const HomePage = () => {
             </ResponsiveAnimatedItem>
           ))}
           {FEATURED_COLLECTIONS.map((collection, index) => (
-            <ResponsiveAnimatedItem 
-              key={`featured-${index}`} 
-              index={CATEGORIES.length + index} 
+            <ResponsiveAnimatedItem
+              key={`featured-${index}`}
+              index={CATEGORIES.length + index}
               isMobile={isMobile}
             >
               <RoundCollectionCard {...collection} index={CATEGORIES.length + index} />
