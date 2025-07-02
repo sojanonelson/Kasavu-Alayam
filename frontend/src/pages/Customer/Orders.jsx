@@ -94,8 +94,8 @@ const Orders = () => {
 
   return (
     <div className="min-h-screen py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white  rounded-lg overflow-hidden">
+      <div className="max-w-4xl  mx-auto  sm:px-6 lg:px-8">
+        <div className="bg-white   overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
             <h1 className="text-xl font-semibold text-gray-900">Your Orders</h1>
           </div>
@@ -106,7 +106,7 @@ const Orders = () => {
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="font-medium">Order #{order.orderTrackingId}</span>
+                      <span className="font-medium text-xs">Order #{order.orderTrackingId}</span>
                       <div className="flex items-center gap-1">
                         {getStatusIcon(order.orderStatus)}
                         <span className="text-sm capitalize">{order.orderStatus}</span>
@@ -131,7 +131,7 @@ const Orders = () => {
                             />
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-medium text-gray-900">
+                            <h3 className="font-medium text-gray-900 text-xs">
                               {product.productId?.title || 'Product not available'}
                             </h3>
                             <p className="text-sm text-gray-500">Qty: {product.quantity}</p>

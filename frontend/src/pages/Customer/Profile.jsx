@@ -67,7 +67,7 @@ useEffect(() => {
       await customerService.updateUser(user.id, formData);
       setIsEditing(false);
       setOriginalData({ ...formData });
-      alert('Profile updated successfully!');
+     
     } catch (error) {
       console.error('Update failed:', error);
       alert('Something went wrong while updating profile.');
@@ -83,14 +83,14 @@ useEffect(() => {
   }
 
   return (
-    <div className="poppins-regular">
+    <div className="poppins-regular ">
       <div>
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-semibold text-gray-800">Personal Information</h1>
           {!isEditing && (
             <button
               onClick={handleEdit}
-              className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md transition-colors"
+              className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 lg:px-4 py-2 rounded-md transition-colors"
             >
               <Edit2 size={16} />
               <span>Edit</span>
