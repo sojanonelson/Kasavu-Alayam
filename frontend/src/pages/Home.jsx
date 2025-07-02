@@ -235,7 +235,7 @@ const HeroCarousel = ({ images, onSlideChange }) => {
               {!imagesLoaded[`hero-${index}`] && (
                 <div className="absolute inset-0 bg-gray-200 animate-pulse" />
               )}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/0 z-10" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/0 z-10" />
               <div className="absolute inset-0 flex flex-col justify-end items-center lg:pb-32 pb-[20%] text-center px-6 z-20">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
@@ -432,7 +432,7 @@ const HomePage = () => {
           <h2 id="collections-heading" className="text-4xl font-bold mb-6 font-serif tracking-tight">
             <span>Kasavu Aalayam Collections</span>
           </h2>
-          <p className="text-center text-gray-600 max-w-3xl mx-auto mb-12 text-lg font-light font-serif leading-relaxed">
+          <p className="text-center text-gray-600 max-w-3xl mx-auto mb-12 lg:text-lg font-light font-serif leading-relaxed">
             Discover our curated collections of traditional and contemporary Indian wear,
             alongside our handpicked featured selections.
           </p>
