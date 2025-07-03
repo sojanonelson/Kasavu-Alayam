@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { 
-  FiPackage, FiTruck, FiCheckCircle, FiXCircle, 
-  FiClock, FiSearch, FiFilter, FiRefreshCw 
+import {
+  FiPackage, FiTruck, FiCheckCircle, FiXCircle,
+  FiClock, FiSearch, FiFilter, FiRefreshCw
 } from 'react-icons/fi';
 import { getAllOrders } from '../../services/orderservices';
 
@@ -31,7 +31,7 @@ const OrdersPage = () => {
       amount: `₹${order.totalPrice}`,
       payment: order.paymentMode === 'cash' ? 'Pending' : 'Paid',
       status: order.orderStatus.toLowerCase(),
-      // address: `${order.address.place}, ${order.address.city}, ${order.address.state} - ${order.address.pincode}`
+      read: false, // Add a read property to track read status
     }));
   };
 
@@ -41,36 +41,41 @@ const OrdersPage = () => {
       try {
         const response = await getAllOrders();
         const transformedOrders = transformOrderData(response);
-        console.log(response.addresses)
         setOrders(transformedOrders);
       } catch (error) {
         console.error("Failed to fetch orders:", error);
       }
     };
-
     fetchOrders();
   }, []);
 
   // Filter orders
   const filteredOrders = orders.filter(order => {
-    const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          order.customer.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
-    
+
     return matchesSearch && matchesStatus;
   });
 
   // Update order status
   const updateOrderStatus = (orderId, newStatus) => {
-    setOrders(orders.map(order => 
+    setOrders(orders.map(order =>
       order.id === orderId ? { ...order, status: newStatus } : order
     ));
     setSelectedOrder(null);
   };
 
+  // Update order read status
+  const updateOrderReadStatus = (orderId, readStatus) => {
+    setOrders(orders.map(order =>
+      order.id === orderId ? { ...order, read: readStatus } : order
+    ));
+  };
+
   // Get status details
   const getStatusDetails = (statusValue) => {
-    return statusOptions.find(option => option.value === statusValue) || 
+    return statusOptions.find(option => option.value === statusValue) ||
            { value: statusValue, label: statusValue, icon: <FiClock className="text-gray-500" />, color: 'bg-gray-100 text-gray-800' };
   };
 
@@ -79,7 +84,7 @@ const OrdersPage = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Orders Management</h1>
         <div className="flex space-x-3">
-          <button 
+          <button
             className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
             onClick={async () => {
               try {
@@ -96,7 +101,6 @@ const OrdersPage = () => {
           </button>
         </div>
       </div>
-
       {/* Filters Section */}
       <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -113,7 +117,6 @@ const OrdersPage = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-
           {/* Status Filter */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -130,7 +133,6 @@ const OrdersPage = () => {
               ))}
             </select>
           </div>
-
           {/* Reset Filters */}
           <button
             className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
@@ -143,7 +145,6 @@ const OrdersPage = () => {
           </button>
         </div>
       </div>
-
       {/* Orders Table */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
@@ -184,7 +185,6 @@ const OrdersPage = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{order.customer}</div>
-                    <div className="text-sm text-gray-500">{order.address}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(order.date).toLocaleDateString()}
@@ -209,11 +209,23 @@ const OrdersPage = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button 
+                    <button
                       onClick={() => setSelectedOrder(order)}
                       className="text-blue-600 hover:text-blue-900"
                     >
                       Update Status
+                    </button>
+                    <button
+                      onClick={() => updateOrderReadStatus(order.id, true)}
+                      className="ml-2 text-green-600 hover:text-green-900"
+                    >
+                      Mark as Read
+                    </button>
+                    <button
+                      onClick={() => updateOrderReadStatus(order.id, false)}
+                      className="ml-2 text-red-600 hover:text-red-900"
+                    >
+                      Mark as Unread
                     </button>
                   </td>
                 </tr>
@@ -227,7 +239,6 @@ const OrdersPage = () => {
           </div>
         )}
       </div>
-
       {/* Status Update Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -250,8 +261,8 @@ const OrdersPage = () => {
                     onClick={() => updateOrderStatus(selectedOrder.id, option.value)}
                     disabled={selectedOrder.status === option.value}
                     className={`w-full flex items-center justify-between p-3 border rounded-lg ${
-                      selectedOrder.status === option.value 
-                        ? 'border-gray-300 bg-gray-50 cursor-not-allowed' 
+                      selectedOrder.status === option.value
+                        ? 'border-gray-300 bg-gray-50 cursor-not-allowed'
                         : 'border-gray-200 hover:bg-gray-50'
                     }`}
                   >
