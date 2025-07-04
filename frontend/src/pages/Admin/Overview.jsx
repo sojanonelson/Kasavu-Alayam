@@ -2,41 +2,107 @@ import { useState, useEffect } from 'react';
 import { 
   FiUsers, FiShoppingBag, FiDollarSign, FiPieChart, 
   FiTrendingUp, FiCalendar, FiRefreshCw, FiBox,
-  FiArrowUp, FiArrowDown, FiEye, FiMoreHorizontal
+  FiArrowUp, FiArrowDown, FiEye, FiMoreHorizontal, FiCreditCard
 } from 'react-icons/fi';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Area, AreaChart } from 'recharts';
+import { getAllOrders, getUnpackedOrders } from '../../services/orderservices';
+import { getTransactionHistory } from '../../services/paymentService';
+import CustomerService from "../../services/customerservice";
+import customerService from '../../services/customerservice';
 
 const ModernDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('monthly');
+  const [dashboardData, setDashboardData] = useState({
+    totalRevenue: 0,
+    totalOrders: 0,
+    totalCustomers: 0,
+    onlinePayments: 0,
+    recentOrders: [],
+    salesData: [],
+    categoryData: []
+  });
 
-  // Enhanced sample data
-  const salesData = [
-    { name: 'Jan', sales: 4000, orders: 120, revenue: 45000 },
-    { name: 'Feb', sales: 3000, orders: 98, revenue: 38000 },
-    { name: 'Mar', sales: 5000, orders: 156, revenue: 62000 },
-    { name: 'Apr', sales: 2780, orders: 89, revenue: 34000 },
-    { name: 'May', sales: 1890, orders: 67, revenue: 28000 },
-    { name: 'Jun', sales: 2390, orders: 78, revenue: 31000 },
-  ];
+  // Fetch all dashboard data
+  const fetchDashboardData = async () => {
+    setIsLoading(true);
+    try {
+      // Fetch customers
+      
+      const customersRes = await customerService.getAllCustomers();
+      const totalCustomers = customersRes.length;
 
-  const categoryData = [
-    { name: 'Sarees', value: 35, sales: 15420 },
-    { name: 'Mundu', value: 25, sales: 11050 },
-    { name: 'Shirts', value: 20, sales: 8840 },
-    { name: 'Dhoti', value: 15, sales: 6630 },
-    { name: 'Others', value: 5, sales: 2210 },
-  ];
+      // Fetch payment transactions
+      const paymentsRes = await getTransactionHistory();
+      const onlinePayments = paymentsRes.data.items.reduce((sum, payment) => sum + (payment.amount / 100), 0);
+
+      // Fetch recent unpacked orders
+      const ordersRes = await getUnpackedOrders();
+      const recentOrders = ordersRes.slice(0, 5).map(order => ({
+        id: order.orderTrackingId,
+        customer: order.userId ? `${order.userId.firstName} ${order.userId.lastName}` : 'Guest Customer',
+        amount: `₹${order.totalPrice}`,
+        status: order.orderStatus,
+        date: new Date(order.createdAt).toLocaleDateString(),
+        items: order.products.reduce((total, product) => total + product.quantity, 0)
+      }));
+
+      // Calculate total revenue and orders (you might want to get this from your backend)
+      const totalRevenue = recentOrders.reduce((sum, order) => sum + parseFloat(order.amount.replace('₹', '')), 0);
+      const totalOrders = ordersRes.length;
+
+      // Generate sales data (monthly)
+      const currentMonth = new Date().getMonth();
+      const salesData = Array.from({ length: 6 }, (_, i) => {
+        const month = (currentMonth - 5 + i + 12) % 12;
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return {
+          name: monthNames[month],
+          sales: Math.floor(Math.random() * 5000) + 1000,
+          orders: Math.floor(Math.random() * 100) + 20,
+          revenue: Math.floor(Math.random() * 50000) + 10000
+        };
+      });
+
+      // Generate category data (you would get this from your backend)
+      const categoryData = [
+        { name: 'Sarees', value: 35, sales: 15420 },
+        { name: 'Mundu', value: 25, sales: 11050 },
+        { name: 'Shirts', value: 20, sales: 8840 },
+        { name: 'Dhoti', value: 15, sales: 6630 },
+        { name: 'Others', value: 5, sales: 2210 },
+      ];
+
+      setDashboardData({
+        totalRevenue,
+        totalOrders,
+        totalCustomers,
+        onlinePayments,
+        recentOrders,
+        salesData,
+        categoryData
+      });
+
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
   const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
-  // Enhanced stats with animations
+  // Stats with dynamic data
   const [stats, setStats] = useState([
     { 
       id: 1, 
       title: "Total Revenue", 
-      value: "₹1,42,659", 
-      change: "+12%", 
+      value: "₹0", 
+      change: "+0%", 
       trend: "up",
       icon: <FiDollarSign className="w-6 h-6" />,
       color: "from-green-400 to-green-600",
@@ -46,8 +112,8 @@ const ModernDashboard = () => {
     { 
       id: 2, 
       title: "Total Orders", 
-      value: "1,248", 
-      change: "+8%", 
+      value: "0", 
+      change: "+0%", 
       trend: "up",
       icon: <FiShoppingBag className="w-6 h-6" />,
       color: "from-blue-400 to-blue-600",
@@ -56,9 +122,9 @@ const ModernDashboard = () => {
     },
     { 
       id: 3, 
-      title: "New Customers", 
-      value: "324", 
-      change: "+5%", 
+      title: "Total Customers", 
+      value: "0", 
+      change: "+0%", 
       trend: "up",
       icon: <FiUsers className="w-6 h-6" />,
       color: "from-purple-400 to-purple-600",
@@ -67,57 +133,77 @@ const ModernDashboard = () => {
     },
     { 
       id: 4, 
-      title: "Inventory Items", 
-      value: "2,187", 
-      change: "-2%", 
-      trend: "down",
-      icon: <FiBox className="w-6 h-6" />,
-      color: "from-orange-400 to-orange-600",
-      bgColor: "bg-orange-50",
-      textColor: "text-orange-600"
+      title: "Online Payments", 
+      value: "₹0", 
+      change: "+0%", 
+      trend: "up",
+      icon: <FiCreditCard className="w-6 h-6" />,
+      color: "from-indigo-400 to-indigo-600",
+      bgColor: "bg-indigo-50",
+      textColor: "text-indigo-600"
     },
   ]);
 
-  // Enhanced recent orders
-  const recentOrders = [
-    { id: '#KA-1001', customer: 'Anitha Menon', amount: '₹3,499', status: 'Delivered', date: '12 Jun 2023', items: 2 },
-    { id: '#KA-1002', customer: 'Deepa Krishnan', amount: '₹5,999', status: 'Shipped', date: '11 Jun 2023', items: 1 },
-    { id: '#KA-1003', customer: 'Meera Nair', amount: '₹2,850', status: 'Processing', date: '10 Jun 2023', items: 3 },
-    { id: '#KA-1004', customer: 'Priya Suresh', amount: '₹7,250', status: 'Delivered', date: '09 Jun 2023', items: 2 },
-    { id: '#KA-1005', customer: 'Lakshmi Kumar', amount: '₹4,500', status: 'Cancelled', date: '08 Jun 2023', items: 1 },
-  ];
+  // Update stats when dashboard data changes
+  useEffect(() => {
+    setStats([
+      { 
+        ...stats[0], 
+        value: `₹${dashboardData.totalRevenue.toLocaleString('en-IN')}`,
+        change: "+12%"
+      },
+      { 
+        ...stats[1], 
+        value: dashboardData.totalOrders.toLocaleString('en-IN'),
+        change: "+8%"
+      },
+      { 
+        ...stats[2], 
+        value: dashboardData.totalCustomers.toLocaleString('en-IN'),
+        change: "+5%"
+      },
+      { 
+        ...stats[3], 
+        value: `₹${dashboardData.onlinePayments.toLocaleString('en-IN')}`,
+        change: "+15%"
+      },
+    ]);
+  }, [dashboardData]);
 
   const getStatusConfig = (status) => {
-    switch(status) {
-      case 'Delivered': return { bg: 'bg-green-100', text: 'text-green-800', dot: 'bg-green-500' };
-      case 'Shipped': return { bg: 'bg-blue-100', text: 'text-blue-800', dot: 'bg-blue-500' };
-      case 'Processing': return { bg: 'bg-yellow-100', text: 'text-yellow-800', dot: 'bg-yellow-500' };
-      case 'Cancelled': return { bg: 'bg-red-100', text: 'text-red-800', dot: 'bg-red-500' };
+    const statusLower = status.toLowerCase();
+    switch(statusLower) {
+      case 'delivered': return { bg: 'bg-green-100', text: 'text-green-800', dot: 'bg-green-500' };
+      case 'shipped': return { bg: 'bg-blue-100', text: 'text-blue-800', dot: 'bg-blue-500' };
+      case 'processing': return { bg: 'bg-yellow-100', text: 'text-yellow-800', dot: 'bg-yellow-500' };
+      case 'cancelled': return { bg: 'bg-red-100', text: 'text-red-800', dot: 'bg-red-500' };
+      case 'pending': return { bg: 'bg-orange-100', text: 'text-orange-800', dot: 'bg-orange-500' };
       default: return { bg: 'bg-gray-100', text: 'text-gray-800', dot: 'bg-gray-500' };
     }
   };
 
   const handleRefresh = () => {
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 1500);
+    fetchDashboardData();
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 md:p-6">
-      {/* Animated Background Elements */}
+      {/* Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/10 to-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute top-40 -left-40 w-80 h-80 bg-gradient-to-br from-green-400/10 to-blue-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Enhanced Header */}
+        {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
           <div className="space-y-2">
             <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
               Kasavu Aalayam Dashboard
             </h1>
-            <p className="text-gray-600 text-lg">Welcome back! Here's what's happening with your store today.</p>
+            <p className="text-gray-600 text-lg">
+              {isLoading ? 'Loading data...' : 'Welcome back! Here are your latest business insights.'}
+            </p>
           </div>
           <div className="flex items-center space-x-3">
             <button 
@@ -135,7 +221,7 @@ const ModernDashboard = () => {
           </div>
         </div>
 
-        {/* Enhanced Stats Cards */}
+        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
             <div 
@@ -143,7 +229,6 @@ const ModernDashboard = () => {
               className="group relative bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-white/20 hover:scale-105 overflow-hidden"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              {/* Gradient Background */}
               <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
               
               <div className="relative z-10">
@@ -171,9 +256,9 @@ const ModernDashboard = () => {
           ))}
         </div>
 
-        {/* Enhanced Charts Section */}
+        {/* Charts Section */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
-          {/* Sales Chart - Larger */}
+          {/* Sales Chart */}
           <div className="xl:col-span-2 bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-white/20">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-gray-800">Sales Overview</h2>
@@ -195,7 +280,7 @@ const ModernDashboard = () => {
             </div>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={salesData}>
+                <AreaChart data={dashboardData.salesData}>
                   <defs>
                     <linearGradient id="salesGradient" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
@@ -233,7 +318,7 @@ const ModernDashboard = () => {
                 <ResponsiveContainer width="100%" height="200">
                   <PieChart>
                     <Pie
-                      data={categoryData}
+                      data={dashboardData.categoryData}
                       cx="50%"
                       cy="50%"
                       innerRadius={50}
@@ -241,7 +326,7 @@ const ModernDashboard = () => {
                       paddingAngle={3}
                       dataKey="value"
                     >
-                      {categoryData.map((entry, index) => (
+                      {dashboardData.categoryData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
@@ -250,7 +335,7 @@ const ModernDashboard = () => {
                 </ResponsiveContainer>
               </div>
               <div className="space-y-3">
-                {categoryData.map((item, index) => (
+                {dashboardData.categoryData.map((item, index) => (
                   <div key={item.name} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 transition-colors">
                     <div className="flex items-center space-x-3">
                       <div 
@@ -270,10 +355,10 @@ const ModernDashboard = () => {
           </div>
         </div>
 
-        {/* Enhanced Recent Orders */}
+        {/* Recent Unpacked Orders */}
         <div className="bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-white/20 mb-8">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-800">Recent Orders</h2>
+            <h2 className="text-xl font-bold text-gray-800">Recent Unpacked Orders</h2>
             <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 font-medium transition-colors">
               <span>View All</span>
               <FiEye className="w-4 h-4" />
@@ -289,11 +374,11 @@ const ModernDashboard = () => {
                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Items</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {recentOrders.map((order, index) => {
+                  {dashboardData.recentOrders.map((order, index) => {
                     const statusConfig = getStatusConfig(order.status);
                     return (
                       <tr key={order.id} className="hover:bg-blue-50/50 transition-colors group">
@@ -307,7 +392,6 @@ const ModernDashboard = () => {
                             </div>
                             <div>
                               <div className="text-sm font-medium text-gray-900">{order.customer}</div>
-                              <div className="text-xs text-gray-500">{order.items} items</div>
                             </div>
                           </div>
                         </td>
@@ -321,11 +405,7 @@ const ModernDashboard = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{order.date}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
-                            <FiMoreHorizontal className="w-4 h-4" />
-                          </button>
-                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{order.items}</td>
                       </tr>
                     );
                   })}
@@ -335,7 +415,7 @@ const ModernDashboard = () => {
           </div>
         </div>
 
-        {/* Enhanced Quick Stats */}
+        {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
@@ -348,17 +428,17 @@ const ModernDashboard = () => {
             },
             {
               icon: <FiPieChart size={24} />,
-              title: "Average Order Value",
-              value: "₹3,842",
-              subtitle: "+8% from last month",
+              title: "Online Payment Percentage",
+              value: "78%",
+              subtitle: "of total payments",
               color: "from-green-500 to-emerald-600",
               bgColor: "bg-green-50"
             },
             {
               icon: <FiUsers size={24} />,
-              title: "Customer Retention",
-              value: "68%",
-              subtitle: "42 repeat customers",
+              title: "New Customers",
+              value: dashboardData.recentOrders.filter(o => o.customer === 'Guest Customer').length.toString(),
+              subtitle: "this month",
               color: "from-purple-500 to-pink-600",
               bgColor: "bg-purple-50"
             }
