@@ -13,23 +13,17 @@ import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
 import HomePageSkeleton from './HomePageSkeleton';
 import websiteSettingService from '../services/websiteSettingService';
 
-// Import styles
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
 
-// Import assets
 import border1 from '../assets/elements/border2.png';
-import border2 from '../assets/elements/border1.png';
 import weddingSilksImage from '../assets/wedding logo.jpg';
 import bridalBlouseSetsImage from '../assets/bridal logo.jpg';
 import sareesImage from '../assets/sarees logo.png';
 import womensCollectionsImage from '../assets/womens logo.png';
 import mensCollectionsImage from '../assets/mens logo.png';
-import product1Image from '../assets/k-1.jpg';
-import product2Image from '../assets/k-4.jpg';
-import product3Image from '../assets/k-1.jpg';
 
 // Configuration data
 const DEFAULT_HERO_IMAGES = [
@@ -81,11 +75,6 @@ const CATEGORIES = [
   }
 ];
 
-const FEATURED_PRODUCTS = [
-  { image: product1Image, name: "Traditional Saree", price: "₹3,200" },
-  { image: product2Image, name: "Wedding Saree", price: "₹4,500" },
-  { image: product3Image, name: "Silk Blend Saree", price: "₹3,800" }
-];
 
 // Custom hooks and helper components
 const useScrolledState = () => {
@@ -326,21 +315,7 @@ const RoundCollectionCard = ({ title, img, link, description, index, isCategory 
   );
 };
 
-const ProductShowcase = ({ products }) => (
-  <div className="flex flex-row justify-center items-center pb-10 gap-5">
-    {products.map((product, index) => (
-      <div key={index} className="w-2/6 text-center cursor-pointer">
-        <img
-          className="w-full rounded-t-full object-cover"
-          src={product.image}
-          alt={product.name}
-        />
-        <p className="mt-2 font-semibold poppins-regular text-gray-700">{product.name}</p>
-        <p className="text-gray-800 poppins-regular-bold font-medium">{product.price}</p>
-      </div>
-    ))}
-  </div>
-);
+
 
 const ResponsiveAnimatedItem = ({ children, index, isMobile }) => {
   if (isMobile) {
@@ -398,7 +373,6 @@ const AnimatedSection = ({ children, className, ...props }) => {
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { carouselImages, isLoading } = useCarouselImages();
-  const isScrolled = useScrolledState();
   const isMobile = useIsMobile();
 
   const handleSlideChange = useCallback((swiper) => {
@@ -458,8 +432,6 @@ const HomePage = () => {
       </AnimatedSection>
 
       <SideContactNavbar />
-
-      {/* Enhanced Feedback System with Pagination and Autoplay */}
       <div className="py-10 bg-gray-100">
         <Swiper
           modules={[Autoplay, Pagination]}

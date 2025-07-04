@@ -5,8 +5,8 @@ import Footer from '../components/Footer';
 import authService from '../services/authService';
 
 const Login = () => {
-  const [email, setEmail] = useState('ravi@example.com');
-  const [password, setPassword] = useState('hashedpassword123');
+  const [email, setEmail] = useState('techhikeofficial@gmail.com');
+  const [password, setPassword] = useState('Sojan#54');
   const [isLoading, setIsLoading] = useState(false);
   const [error,setError] = useState('')
   const [keepSignedIn, setKeepSignedIn] = useState(false); // New state for the checkbox

@@ -36,7 +36,7 @@ const LoadingSpinner = () => (
 // Wrapper component for ProductCard
 const ProductCardWrapper = ({ product, isListView, wishlist, toggleWishlist, toggleCart, showAddToCart }) => {
   return (
-    <div className="bg-white rounded-xl border border-gray-200/60 overflow-hidden hover:border-red-200 hover:shadow-lg transition-all duration-300 hover:shadow-red-100/50">
+    <div className="bg-white  border  overflow-hidden   transition-all duration-300 hover:shadow-red-100/50">
       <ProductCard
         product={product}
         isListView={isListView}
@@ -232,12 +232,12 @@ const CollectionsShowCase = () => {
               <div className="w-16 h-0.5 bg-gradient-to-r from-red-500 to-rose-500 rounded-full"></div>
             </div>
 
-            {!isLoading && (
+            {/* {!isLoading && (
               <div className="text-right">
                 <div className="text-2xl font-bold text-gray-900">{filteredProducts.length}</div>
                 <div className="text-sm text-gray-500 font-medium">Products</div>
               </div>
-            )}
+            )} */}
           </div>
         </motion.div>
 
@@ -248,7 +248,7 @@ const CollectionsShowCase = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="w-full lg:w-80 flex-shrink-0"
           >
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200/60 shadow-sm sticky top-6">
+            <div className=" backdrop-blur-sm rounded-2xl  border-gray-200/60 sticky top-6">
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900 flex items-center">
                   <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
@@ -271,7 +271,7 @@ const CollectionsShowCase = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex-1 min-w-0"
           >
-            {!isLoading && (
+            {/* {!isLoading && (
               <div className="mb-6">
                 <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50">
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -288,7 +288,7 @@ const CollectionsShowCase = () => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
 
             {isLoading ? (
               <div className="bg-white/50 backdrop-blur-sm rounded-2xl border border-gray-200/50">

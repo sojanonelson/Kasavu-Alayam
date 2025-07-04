@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toggleNavbar } from "../redux/features/general/general";
-
-// Pages and Components
 import HomeScreen from "../pages/Home";
-import WomensCollection from "../components/collections/Womens-collection";
-
 import SideContactNavbar from "../pages/sidecontactbar";
 import CustomerLayout from "../Layouts/CustomerLayout";
 import Profile from "../pages/Customer/Profile";
@@ -14,8 +10,6 @@ import Orders from "../pages/Customer/Orders";
 import NotFound from "../pages/NotFound";
 import AppNotFound from "../pages/AppNotFound";
 import SingleProductPage from "../pages/BuyNow/SingleProduct";
-import MensCollection from "../components/collections/Mens-collection";
-import KidsCollection from "../components/collections/Kids-collection";
 import AdminLayout from "../Layouts/AdminLayout";
 import Navbar from "../components/Navbar";
 import OverviewPage from "../pages/Admin/Overview";
@@ -27,7 +21,6 @@ import ManageCategory from "../pages/Admin/ManageCategory";
 import CreateProduct from "../pages/Admin/Products/CreateProduct";
 import ProductOverview from "../pages/Admin/ProductOverview";
 import UpdateProduct from "../pages/Admin/Products/UpdateProduct";
-import Settings from "../pages/Admin/Settings";
 import HomepageEditor from "../pages/Admin/HomepageEditor";
 import CollectionManager from "../pages/Admin/Collections";
 import InventoryCollections from "../pages/Admin/Inventory/InventoryCollections";
@@ -90,26 +83,32 @@ const AppRoutes = () => {
         <Route element={<WithNavbar />}>
           <Route path="/" element={<HomeScreen />} />
           <Route path="/" element={<SideContactNavbar />} />
-          <Route path="/" element={<MensCollection />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/collections/:collection" element={<CollectionsShowCase />} />
-          <Route path="/womens" element={<WomensCollection />} />
-          <Route path="/kids" element={<KidsCollection />} />
-          <Route path="/mens" element={<MensCollection />} />
-          
+          <Route
+            path="/collections/:collection"
+            element={<CollectionsShowCase />}
+          />
+
           <Route path="/checkout/cart" element={<CheckoutCart />} />
-           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/product" element={<SingleProductPage />} />
           <Route path="/product/:productId" element={<SingleProductPage />} />
           <Route path="*" element={<AppNotFound />} />
 
           {/* Protected Customer Routes */}
-          <Route path="/my-account" element={<ProtectedRoute user={user}><CustomerLayout /></ProtectedRoute>}>
+          <Route
+            path="/my-account"
+            element={
+              <ProtectedRoute user={user}>
+                <CustomerLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Navigate to="profile" replace />} />
             <Route path="profile" element={<Profile />} />
-             <Route path="address" element={<Address />} />
+            <Route path="address" element={<Address />} />
             <Route path="order" element={<Orders />} />
             <Route path="order/:id" element={<OrderDetails />} />
             <Route path="*" element={<NotFound />} />
@@ -130,10 +129,13 @@ const AppRoutes = () => {
           <Route path="collection" element={<CollectionManager />} />
           <Route path="users" element={<Customers />} />
           <Route path="orders" element={<OrdersPage />} />
-        
+
           <Route path="homepage-editor" element={<HomepageEditor />} />
           <Route path="inventory" element={<InventoryManagement />} />
-          <Route path="inventory/collection/:id" element={<InventoryCollections />} />
+          <Route
+            path="inventory/collection/:id"
+            element={<InventoryCollections />}
+          />
           <Route path="notifications" element={<NotificationsPage />} />
           <Route path="category" element={<ManageCategory />} />
           <Route path="products/create" element={<CreateProduct />} />

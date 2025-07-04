@@ -1,13 +1,8 @@
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import {
   User,
-  ShoppingBag,
-  MapPin,
-  Heart,
-  RotateCcw,
   LogOut,
   HomeIcon,
-  ListOrderedIcon,
   ShoppingBagIcon,
   HelpCircle,
 } from "lucide-react";
@@ -18,7 +13,7 @@ import { useEffect, useState } from "react";
 const CustomerLayout = () => {
   const [userData, setUserData] = useState("");
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -26,7 +21,7 @@ const CustomerLayout = () => {
         if (!userStr) return;
         const user = JSON.parse(userStr);
 
-        const userData = await customerService.getUserById(user._id || user.id); // support both _id and id
+        const userData = await customerService.getUserById(user._id || user.id);
         if (userData && userData._id) {
           setUserData(userData);
           console.log("U:", userData);
@@ -51,11 +46,14 @@ const CustomerLayout = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-50 to-red-50/30 poppins-regular lg:pt-20">
       {/* Mobile Header */}
-              <div className="lg:hidden bg-white shadow-sm border-b border-gray-200">
+      <div className="lg:hidden bg-white shadow-sm border-b border-gray-200">
         <div className="p-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-semibold shadow-md">
-              {getInitials(userData?.firstName || JSON.parse(localStorage.getItem("user"))?.firstName)}
+              {getInitials(
+                userData?.firstName ||
+                  JSON.parse(localStorage.getItem("user"))?.firstName
+              )}
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-semibold text-gray-800">
@@ -77,14 +75,19 @@ const CustomerLayout = () => {
           <div className="border-b border-gray-100 pb-6 mb-6 hidden lg:block">
             <div className="flex items-center gap-4 mb-4">
               <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                {getInitials(userData?.firstName || JSON.parse(localStorage.getItem("user"))?.firstName)}
+                {getInitials(
+                  userData?.firstName ||
+                    JSON.parse(localStorage.getItem("user"))?.firstName
+                )}
               </div>
               <div className="flex-1">
                 <h2 className="text-xl font-semibold text-gray-800 mb-1">
                   {userData?.firstName ||
                     JSON.parse(localStorage.getItem("user"))?.firstName}
                 </h2>
-                <p className="text-sm text-gray-500 break-all">{userData.email}</p>
+                <p className="text-sm text-gray-500 break-all">
+                  {userData.email}
+                </p>
               </div>
             </div>
           </div>
@@ -101,8 +104,13 @@ const CustomerLayout = () => {
                 }`
               }
             >
-              <User size={20} className="transition-transform group-hover:scale-110" />
-              <span className="hidden lg:inline font-medium">Profile Settings</span>
+              <User
+                size={20}
+                className="transition-transform group-hover:scale-110"
+              />
+              <span className="hidden lg:inline font-medium">
+                Profile Settings
+              </span>
             </NavLink>
 
             <NavLink
@@ -115,7 +123,10 @@ const CustomerLayout = () => {
                 }`
               }
             >
-              <ShoppingBagIcon size={20} className="transition-transform group-hover:scale-110" />
+              <ShoppingBagIcon
+                size={20}
+                className="transition-transform group-hover:scale-110"
+              />
               <span className="hidden lg:inline font-medium">My Orders</span>
             </NavLink>
 
@@ -129,7 +140,10 @@ const CustomerLayout = () => {
                 }`
               }
             >
-              <HomeIcon size={20} className="transition-transform group-hover:scale-110" />
+              <HomeIcon
+                size={20}
+                className="transition-transform group-hover:scale-110"
+              />
               <span className="hidden lg:inline font-medium">Addresses</span>
             </NavLink>
 
@@ -143,8 +157,13 @@ const CustomerLayout = () => {
                 }`
               }
             >
-              <HelpCircle size={20} className="transition-transform group-hover:scale-110" />
-              <span className="hidden lg:inline font-medium">Help & Support</span>
+              <HelpCircle
+                size={20}
+                className="transition-transform group-hover:scale-110"
+              />
+              <span className="hidden lg:inline font-medium">
+                Help & Support
+              </span>
             </NavLink>
 
             {/* Divider */}
@@ -155,7 +174,10 @@ const CustomerLayout = () => {
               onClick={handleLogout}
               className="group flex items-center gap-3 px-4 py-3 rounded-lg text-red-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200 hover:shadow-sm w-full text-left"
             >
-              <LogOut size={20} className="transition-transform group-hover:scale-110" />
+              <LogOut
+                size={20}
+                className="transition-transform group-hover:scale-110"
+              />
               <span className="hidden lg:inline font-medium">Sign Out</span>
             </button>
           </nav>

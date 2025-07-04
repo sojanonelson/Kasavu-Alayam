@@ -124,12 +124,7 @@ const FilterBar = ({ filters, selectedFilters, onFilterChange }) => {
       {/* Desktop Sidebar */}
       <div className="hidden lg:block">
         <div className="w-64 bg-white p-2 border-r border-gray-200 h-screen overflow-y-auto fixed">
-          <div className="mb-1 pb-1 border-b border-gray-200">
-            <h2 className="text-lg font-bold flex items-center">
-              <Filter className="mr-2" size={20} />
-              Filters
-            </h2>
-          </div>
+        
           <div className="space-y-1">
             {Object.entries(filters).map(([category, values]) => (
               <div key={category} className="border-b border-gray-200 py-1">
