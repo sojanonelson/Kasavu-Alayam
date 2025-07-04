@@ -30,3 +30,24 @@ export const getOrderByTrackingId = async (trackingId) => {
   const response = await axios.get(`${API_URL}/order/${trackingId}`);
   return response.data;
 };
+export const getPackedOrders = async () => {
+  const response = await axios.get(`${API_URL}/order/packed`);
+  return response.data;
+};
+export const getUnpackedOrders = async () => {
+  const response = await axios.get(`${API_URL}/order/unpacked`);
+  return response.data;
+};
+
+// In your orderservices.js
+export const updateOrderPack = async (orderId, packedStatus) => {
+  try {
+    const response = await axios.patch(`${API_URL}/order/${orderId}/packed`, {
+      packed: packedStatus
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating packed status:", error);
+    throw error;
+  }
+};

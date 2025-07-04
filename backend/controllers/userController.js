@@ -1,6 +1,14 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+require('dotenv').config(); // Make sure this is at the top
+const Razorpay = require('razorpay');
+
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 const generateAccessToken = (user) => {
   return jwt.sign(
@@ -246,12 +254,59 @@ const getAddresses = async (req, res) => {
   }
 };
 
+const getAllPaymentTransactions = async (req, res) => {
+  try {
+    const payments = await razorpay.payments.all({
+      count: 100, // Max per call, pagination possible
+      // Optional filters:
+      // from: Math.floor(new Date('2024-01-01').getTime() / 1000),
+      // to: Math.floor(Date.now() / 1000)
+    });
+
+    res.status(200).json({
+      message: 'Razorpay payment transactions fetched successfully',
+      total: payments.count,
+      data: payments.items,
+    });
+  } catch (error) {
+    console.error('🔥 Error fetching Razorpay payments:', error);
+    res.status(500).json({ message: 'Failed to fetch payment transactions' });
+  }
+};
+
+
+// In your userController.js
+const getPaymentById = async (req, res) => {
+  try {
+    const { paymentId } = req.params;
+    
+    if (!paymentId) {
+      return res.status(400).json({ message: 'Payment ID is required' });
+    }
+
+    const payment = await razorpay.payments.fetch(paymentId);
+    
+    res.status(200).json({
+      message: 'Payment details fetched successfully',
+      data: payment
+    });
+  } catch (error) {
+    console.error('🔥 Error fetching payment details:', error);
+    res.status(500).json({ 
+      message: 'Failed to fetch payment details',
+      error: error.error ? error.error.description : error.message
+    });
+  }
+};
+
 
 
 
 
 module.exports = {
   getAddresses,
+  getAllPaymentTransactions,
+  getPaymentById,
   updateAddress,
   deleteAddress,
   addAddress,

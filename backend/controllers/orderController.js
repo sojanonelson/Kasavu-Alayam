@@ -101,3 +101,47 @@ exports.getOrderByTrackingId = async (req, res) => {
     res.status(500).json({ message: 'Error fetching order' });
   }
 };
+
+
+// Update packed status
+exports.updatePackedStatus = async (req, res) => {
+  console.log("Packed")
+  try {
+    const { orderId } = req.params;
+    const { packed } = req.body;
+    
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { packed },
+      { new: true }
+    );
+    
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+    
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating packed status' });
+  }
+};
+
+exports.getPackedOrders = async (req, res) => {
+  console.log("Packed")
+  try {
+    const orders = await Order.find({ packed: true }).populate('products.productId userId');
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching packed orders' });
+  }
+};
+
+exports.getUnpackedOrders = async (req, res) => {
+  console.log("Unpacked")
+  try {
+    const orders = await Order.find({ packed: { $ne: true } }).populate('products.productId userId');
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching unpacked orders' });
+  }
+};

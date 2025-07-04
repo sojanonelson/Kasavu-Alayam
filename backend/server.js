@@ -12,6 +12,7 @@ const collectionRoutes =require('./routes/CollectionRoute')
 const otpRoutes = require('./routes/otpRoute')
 const cartRoutes = require('./routes/cartRoutes')
 const reviewRoutes = require('./routes/reviewRoutes')
+const paymentRoute = require('./routes/paymentRoute')
 const cookieParser = require('cookie-parser');
 
 const connectDB = require('./config/DB');
@@ -64,6 +65,7 @@ app.use('/api/websetting', websettingRoutes);
 app.use('/api/otp',otpRoutes)
 app.use('/api/cart', cartRoutes)
 app.use('/api/product/reviews', reviewRoutes)
+app.use('/api/payment', paymentRoute)
 
 
 

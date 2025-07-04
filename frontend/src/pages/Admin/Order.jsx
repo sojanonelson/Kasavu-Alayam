@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import {
   FiPackage, FiTruck, FiCheckCircle, FiXCircle,
-  FiClock, FiSearch, FiFilter, FiRefreshCw
+  FiClock, FiSearch, FiFilter, FiRefreshCw, FiBox
 } from 'react-icons/fi';
-import { getAllOrders } from '../../services/orderservices';
+import { getAllOrders, updateOrderPack, getPackedOrders, getUnpackedOrders } from '../../services/orderservices';
 
 const OrdersPage = () => {
   // Order status options
@@ -20,33 +20,88 @@ const OrdersPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showAddress, setShowAddress] = useState(null);
+  const [showPackedOrders, setShowPackedOrders] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleShowAddress = (order) => {
+    if (order.deliveryType === 'shop_pickup') {
+      alert("This is a shop pickup order - no delivery address");
+      return;
+    }
+    setShowAddress(order.address);
+  };
 
   // Transform API data to match component structure
   const transformOrderData = (apiOrders) => {
-    return apiOrders.map(order => ({
-      id: order.orderTrackingId,
-      customer: `${order.userId.firstName} ${order.userId.lastName}`,
-      date: order.createdAt,
-      items: order.products.reduce((total, product) => total + product.quantity, 0),
-      amount: `₹${order.totalPrice}`,
-      payment: order.paymentMode === 'cash' ? 'Pending' : 'Paid',
-      status: order.orderStatus.toLowerCase(),
-      read: false, // Add a read property to track read status
-    }));
+    return apiOrders.map(order => {
+      const customerName = order.userId 
+        ? `${order.userId.firstName || ''} ${order.userId.lastName || ''}`.trim()
+        : 'Guest Customer';
+
+      return {
+        id: order.orderTrackingId,
+        customer: customerName,
+        date: order.createdAt,
+        items: order.products.reduce((total, product) => total + product.quantity, 0),
+        amount: `₹${order.totalPrice}`,
+        payment: order.paymentMode === 'cash' ? 'Pending' : 'Paid',
+        status: order.orderStatus.toLowerCase(),
+        packed: order.packed || false,
+        read: false,
+        originalOrder: order,
+        deliveryType: order.deliveryType,
+        address: order.address
+      };
+    });
   };
 
-  // Fetch orders from API
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await getAllOrders();
-        const transformedOrders = transformOrderData(response);
-        setOrders(transformedOrders);
-      } catch (error) {
-        console.error("Failed to fetch orders:", error);
+  const togglePackedStatus = async (orderId, currentStatus) => {
+    try {
+      const orderToUpdate = orders.find(order => order.id === orderId);
+      if (!orderToUpdate) return;
+
+      await updateOrderPack(orderToUpdate.originalOrder._id, !currentStatus);
+      
+      setOrders(orders.map(order => 
+        order.id === orderId ? { ...order, packed: !currentStatus } : order
+      ));
+    } catch (error) {
+      console.error("Failed to update packed status:", error);
+      alert("Failed to update packed status. Please try again.");
+    }
+  };
+
+  // Fetch orders based on packed status
+  const fetchOrders = async (packedStatus) => {
+    setLoading(true);
+    try {
+      let response;
+      if (packedStatus === 'packed') {
+        response = await getPackedOrders();
+      } else if (packedStatus === 'unpacked') {
+        response = await getUnpackedOrders();
+      } else {
+        response = await getAllOrders();
       }
-    };
-    fetchOrders();
+      const transformedOrders = transformOrderData(response);
+      setOrders(transformedOrders);
+    } catch (error) {
+      console.error("Failed to fetch orders:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Toggle between packed and unpacked orders
+  const toggleOrderView = () => {
+    setShowPackedOrders(!showPackedOrders);
+    fetchOrders(!showPackedOrders ? 'packed' : 'unpacked');
+  };
+
+  // Initial fetch of unpacked orders
+  useEffect(() => {
+    fetchOrders('unpacked');
   }, []);
 
   // Filter orders
@@ -66,13 +121,6 @@ const OrdersPage = () => {
     setSelectedOrder(null);
   };
 
-  // Update order read status
-  const updateOrderReadStatus = (orderId, readStatus) => {
-    setOrders(orders.map(order =>
-      order.id === orderId ? { ...order, read: readStatus } : order
-    ));
-  };
-
   // Get status details
   const getStatusDetails = (statusValue) => {
     return statusOptions.find(option => option.value === statusValue) ||
@@ -85,22 +133,22 @@ const OrdersPage = () => {
         <h1 className="text-2xl font-bold text-gray-800">Orders Management</h1>
         <div className="flex space-x-3">
           <button
+            onClick={toggleOrderView}
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <FiBox className="mr-2" />
+            {showPackedOrders ? 'Show Unpacked Orders' : 'Show Packed Orders'}
+          </button>
+          <button
             className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
-            onClick={async () => {
-              try {
-                const response = await getAllOrders();
-                const transformedOrders = transformOrderData(response);
-                setOrders(transformedOrders);
-              } catch (error) {
-                console.error("Failed to refresh orders:", error);
-              }
-            }}
+            onClick={() => fetchOrders(showPackedOrders ? 'packed' : 'unpacked')}
           >
             <FiRefreshCw className="mr-2" />
             Refresh
           </button>
         </div>
       </div>
+
       {/* Filters Section */}
       <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -118,127 +166,112 @@ const OrdersPage = () => {
             />
           </div>
           {/* Status Filter */}
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiFilter className="text-gray-400" />
-            </div>
-            <select
-              className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="all">All Statuses</option>
-              {statusOptions.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </select>
-          </div>
-          {/* Reset Filters */}
-          <button
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
-            onClick={() => {
-              setSearchTerm('');
-              setStatusFilter('all');
-            }}
-          >
-            Reset Filters
-          </button>
+         
+        
         </div>
       </div>
+
       {/* Orders Table */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Order ID
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Customer
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Items
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Amount
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Payment
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredOrders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                    {order.id}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{order.customer}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(order.date).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {order.items}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {order.amount}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs rounded-full ${
-                      order.payment === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {order.payment}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs rounded-full flex items-center ${getStatusDetails(order.status).color}`}>
-                      {getStatusDetails(order.status).icon}
-                      <span className="ml-1">{getStatusDetails(order.status).label}</span>
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => setSelectedOrder(order)}
-                      className="text-blue-600 hover:text-blue-900"
-                    >
-                      Update Status
-                    </button>
-                    <button
-                      onClick={() => updateOrderReadStatus(order.id, true)}
-                      className="ml-2 text-green-600 hover:text-green-900"
-                    >
-                      Mark as Read
-                    </button>
-                    <button
-                      onClick={() => updateOrderReadStatus(order.id, false)}
-                      className="ml-2 text-red-600 hover:text-red-900"
-                    >
-                      Mark as Unread
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {filteredOrders.length === 0 && (
-          <div className="p-8 text-center text-gray-500">
-            No orders found matching your filters
+        {loading ? (
+          <div className="p-8 text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading orders...</p>
           </div>
+        ) : (
+          <>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Order ID
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Customer
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Items
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Amount
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Payment
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredOrders.map((order) => (
+                    <tr key={order.id} className={`hover:bg-gray-50 ${order.packed ? 'bg-green-50' : 'bg-yellow-50'}`}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                        {order.id}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{order.customer}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(order.date).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {order.items}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {order.amount}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 py-1 text-xs rounded-full ${
+                          order.payment === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {order.payment}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 py-1 text-xs rounded-full flex items-center ${getStatusDetails(order.status).color}`}>
+                          {getStatusDetails(order.status).icon}
+                          <span className="ml-1">{getStatusDetails(order.status).label}</span>
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex flex-col space-y-2">
+                         
+                          <button
+                            onClick={() => togglePackedStatus(order.id, order.packed)}
+                            className={`text-left ${order.packed ? 'text-green-600' : 'text-yellow-600'} hover:text-green-900`}
+                          >
+                            {order.packed ? 'Mark as Unpacked' : 'Mark as Packed'}
+                          </button>
+                          <button
+                            onClick={() => handleShowAddress(order)}
+                            className="text-left text-purple-600 hover:text-purple-900"
+                          >
+                            View Address
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {filteredOrders.length === 0 && (
+              <div className="p-8 text-center text-gray-500">
+                No {showPackedOrders ? 'packed' : 'unpacked'} orders found matching your filters
+              </div>
+            )}
+          </>
         )}
       </div>
+
       {/* Status Update Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -284,6 +317,35 @@ const OrdersPage = () => {
                 onClick={() => setSelectedOrder(null)}
               >
                 Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Address Modal */}
+      {showAddress && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div className="p-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                Delivery Address
+              </h3>
+              <div className="space-y-2">
+                <p><span className="font-medium">Place:</span> {showAddress.place}</p>
+                <p><span className="font-medium">City:</span> {showAddress.city}</p>
+                <p><span className="font-medium">State:</span> {showAddress.state}</p>
+                <p><span className="font-medium">Post Office:</span> {showAddress.postOffice}</p>
+                <p><span className="font-medium">Pincode:</span> {showAddress.pincode}</p>
+              </div>
+            </div>
+            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg">
+              <button
+                type="button"
+                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                onClick={() => setShowAddress(null)}
+              >
+                Close
               </button>
             </div>
           </div>

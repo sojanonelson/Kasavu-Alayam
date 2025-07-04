@@ -36,11 +36,6 @@ const DEFAULT_HERO_IMAGES = [
     url: "https://kalyansilks.com/_next/image?url=https%3A%2F%2Fapi.kalyansilks.com%2Fmedia%2Fvegam%2Fhomepage%2Fimages%2F1920_x1040_-_Main_Banner_-_03_1.jpg&w=1920&q=75",
     title: "Festive Collection",
     subtitle: "Adorn yourself in ceremonial splendor"
-  },
-  {
-    url: "https://www.tata.com/content/dam/tata/images/newsroom/business/desktop/taneira_traditional_crafts_banner_desktop_1920x1080.jpg",
-    title: "Traditional Wear",
-    subtitle: "Celebrating heritage and culture"
   }
 ];
 
@@ -76,7 +71,7 @@ const CATEGORIES = [
 ];
 
 
-// Custom hooks and helper components
+
 const useScrolledState = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 

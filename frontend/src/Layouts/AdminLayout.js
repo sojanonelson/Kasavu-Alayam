@@ -18,7 +18,9 @@ import {
   Search,
   Menu,
   Home,    // For Homepage Editor
-  ClipboardList // For Inventory (alternative)
+  ClipboardList, // For Inventory (alternative)
+  CurrencyIcon,
+  Wallet
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
@@ -195,6 +197,21 @@ const AdminLayout = () => {
               >
                 <ShoppingBag size={18} className="flex-shrink-0" />
                 <span className="text-sm">Orders</span>
+              </NavLink>
+
+               <NavLink 
+                to="payments" 
+                className={({ isActive }) => 
+                  `flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
+                    isActive 
+                      ? 'bg-blue-50 text-blue-600 font-medium border-l-4 border-blue-600' 
+                      : 'text-gray-100 hover:text-gray-800 hover:bg-gray-50'
+                  }`
+                }
+                onClick={() => isMobile && setSidebarOpen(false)}
+              >
+                <Wallet  size={18} className="flex-shrink-0" />
+                <span className="text-sm">Payments</span>
               </NavLink>
 
               <NavLink 
