@@ -70,7 +70,7 @@ const CustomerLayout = () => {
       {/* Main Container */}
       <div className="flex flex-1 max-w-7xl mx-auto w-full lg:pb-4 lg:px-8 lg:pt-6 gap-8">
         {/* Sidebar */}
-        <aside className="lg:w-80 bg-white lg:rounded-xl lg:shadow-lg lg:border border-gray-200/50 lg:p-6 p-1 pt-4 lg:pt-6 lg:h-fit lg:sticky lg:top-28">
+        <aside className="lg:w-80 bg-white lg:rounded-xl lg:border border-gray-200/50 lg:p-6 p-1 pt-4 lg:pt-6 lg:h-fit lg:sticky lg:top-28">
           {/* Desktop Profile Header */}
           <div className="border-b border-gray-100 pb-6 mb-6 hidden lg:block">
             <div className="flex items-center gap-4 mb-4">
@@ -147,7 +147,7 @@ const CustomerLayout = () => {
               <span className="hidden lg:inline font-medium">Addresses</span>
             </NavLink>
 
-            <NavLink
+            {/* <NavLink
               to="help"
               className={({ isActive }) =>
                 `group flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
@@ -164,7 +164,7 @@ const CustomerLayout = () => {
               <span className="hidden lg:inline font-medium">
                 Help & Support
               </span>
-            </NavLink>
+            </NavLink> */}
 
             {/* Divider */}
             <div className="hidden lg:block border-t border-gray-200 my-4"></div>
@@ -194,7 +194,7 @@ const CustomerLayout = () => {
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 bg-white lg:rounded-xl lg:shadow-lg lg:border border-gray-200/50 lg:p-8 py-4 px-4 lg:py-8 overflow-hidden">
+        <main className="flex-1 bg-white lg:rounded-xl  lg:border border-gray-200/50 lg:p-8 py-4 px-4 lg:py-8 overflow-hidden">
           <div className="h-full">
             <Outlet />
           </div>

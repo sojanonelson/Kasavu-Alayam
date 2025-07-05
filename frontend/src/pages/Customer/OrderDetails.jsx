@@ -8,6 +8,7 @@ const OrderDetails = () => {
   const { id } = useParams(); // get order id from URL
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  console.log("DDDD")
 
   useEffect(() => {
     const fetchOrder = async () => {

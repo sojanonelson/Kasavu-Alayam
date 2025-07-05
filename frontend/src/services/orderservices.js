@@ -27,7 +27,7 @@ export const getOrdersByUser = async (userId) => {
 
 // 🆔 Get single order by tracking ID
 export const getOrderByTrackingId = async (trackingId) => {
-  const response = await axios.get(`${API_URL}/order/${trackingId}`);
+  const response = await API.get(`${API_URL}/order/${trackingId}`);
   return response.data;
 };
 export const getPackedOrders = async () => {

@@ -250,7 +250,7 @@ const CheckoutCart = () => {
             </div>
           </div>
 
-          {/* Order Summary - Mobile: Below cart, Desktop: 4 columns */}
+        
           {cartItems.length > 0 && (
             <div className="mt-6 lg:mt-0 lg:col-span-4">
               <div className="sticky top-24">
@@ -258,7 +258,7 @@ const CheckoutCart = () => {
                   <div className="p-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-6">Order Summary</h3>
                     
-                    {/* Price Breakdown */}
+                 
                     <div className="space-y-4 mb-6">
                       <div className="flex justify-between text-gray-600">
                         <span>Subtotal ({cartItems.reduce((sum, item) => sum + item.quantity, 0)} items)</span>
