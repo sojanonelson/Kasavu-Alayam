@@ -33,6 +33,7 @@ import Address from "../pages/Customer/Address";
 import Checkout from "../pages/Checkout";
 import OrderDetails from "../pages/Customer/OrderDetails";
 import PaymentHistory from "../pages/Admin/PaymentHistory";
+import AdminSettings from "../pages/Admin/Settings";
 
 const AppRoutes = () => {
   const [showCart, setShowCart] = useState(false);
@@ -130,6 +131,7 @@ const AppRoutes = () => {
           <Route path="collection" element={<CollectionManager />} />
           <Route path="users" element={<Customers />} />
           <Route path="orders" element={<OrdersPage />} />
+           <Route path="settings" element={<AdminSettings />} />
            <Route path="payments" element={<PaymentHistory />} />
 
           <Route path="homepage-editor" element={<HomepageEditor />} />

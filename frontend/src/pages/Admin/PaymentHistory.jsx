@@ -108,7 +108,7 @@ const PaymentHistory = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              className="w-full px-4 py-2 pl-10 border border-gray-300  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               aria-label="Search payments"
             />
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -122,7 +122,7 @@ const PaymentHistory = () => {
           </button>
         </div>
         
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 mb-2 poppins-bold">
           🧾 Razorpay Payment History
         </h2>
         

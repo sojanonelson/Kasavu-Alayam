@@ -51,3 +51,14 @@ export const updateOrderPack = async (orderId, packedStatus) => {
     throw error;
   }
 };
+
+export const getRevenueData = async () => {
+  try{
+    const response = await axios.get(`${API_URL}/order/revenue`)
+    return response.data;
+
+  }catch(error){
+    console.error(error)
+    throw error;
+  }
+}

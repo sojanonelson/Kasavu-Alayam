@@ -145,3 +145,59 @@ exports.getUnpackedOrders = async (req, res) => {
     res.status(500).json({ message: 'Error fetching unpacked orders' });
   }
 };
+
+
+// Get revenue statistics
+exports.getRevenueData = async (req, res) => {
+  try {
+    // Get all orders
+    const orders = await Order.find();
+    
+    // Calculate totals
+    const result = {
+      totalRevenue: 0,
+      totalOrders: orders.length,
+      paymentMethods: {
+        cash: { count: 0, amount: 0 },
+        upi: { count: 0, amount: 0 }
+      },
+      deliveryTypes: {
+        shop_pickup: { count: 0, amount: 0 },
+        online_delivery: { count: 0, amount: 0 }
+      },
+      combinedStats: {
+        shop_pickup_cash: { count: 0, amount: 0 },
+        shop_pickup_upi: { count: 0, amount: 0 },
+        online_delivery_upi: { count: 0, amount: 0 }
+      }
+    };
+
+    // Process each order
+    orders.forEach(order => {
+      result.totalRevenue += order.totalPrice;
+      
+      // Payment method stats
+      result.paymentMethods[order.paymentMode].count++;
+      result.paymentMethods[order.paymentMode].amount += order.totalPrice;
+      
+      // Delivery type stats
+      result.deliveryTypes[order.deliveryType].count++;
+      result.deliveryTypes[order.deliveryType].amount += order.totalPrice;
+      
+      // Combined stats
+      if (order.deliveryType === 'shop_pickup') {
+        const key = `shop_pickup_${order.paymentMode}`;
+        result.combinedStats[key].count++;
+        result.combinedStats[key].amount += order.totalPrice;
+      } else if (order.deliveryType === 'online_delivery') {
+        result.combinedStats.online_delivery_upi.count++;
+        result.combinedStats.online_delivery_upi.amount += order.totalPrice;
+      }
+    });
+
+    res.json(result);
+  } catch (err) {
+    console.error('Error fetching revenue data:', err);
+    res.status(500).json({ message: 'Error fetching revenue data' });
+  }
+};

@@ -190,12 +190,13 @@ const getAccountById = async (req, res) => {
 
 const getAllAccounts = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find({}, '-password'); // Exclude password field
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 const addAddress = async (req, res) => {
   try {

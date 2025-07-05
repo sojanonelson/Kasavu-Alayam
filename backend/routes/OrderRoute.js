@@ -16,6 +16,8 @@ router.get("/user/:userId", orderController.getOrdersByUser);
 
 router.patch("/:orderId/packed", orderController.updatePackedStatus);
 
+router.get("/revenue", orderController.getRevenueData);
+
 
 
 module.exports = router;
