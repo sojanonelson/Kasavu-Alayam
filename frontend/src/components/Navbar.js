@@ -53,12 +53,10 @@ const Navbar = () => {
               <div className="absolute left-0 top-full mt-2 w-80 bg-white shadow-lg rounded-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50 grid grid-cols-2 gap-1 p-2">
                 <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b text-sm">Casual Wear</div>
                 <a href="/collections/mens/casual-shirts" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Casual Shirts</a>
-                <a href="/collections/mens/casual-pants" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Casual Pants</a>
                 <a href="/collections/mens/t-shirts" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">T-Shirts</a>
 
                 <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b mt-2 text-sm">Formal Wear</div>
                 <a href="/collections/mens/formal-shirts" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Formal Shirts</a>
-                <a href="/collections/mens/formal-pants" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Formal Pants</a>
 
                 <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b mt-2 text-sm">Traditional</div>
                 <a href="/collections/mens/dhotis" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Dhotis</a>
@@ -75,16 +73,10 @@ const Navbar = () => {
               <div className="absolute left-0 top-full mt-2 w-80 bg-white shadow-lg rounded-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50 grid grid-cols-2 gap-1 p-2">
                 <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b text-sm">Traditional</div>
                 <a href="/collections/womens/sarees" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Sarees</a>
-                <a href="/collections/womens/salwars" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Salwars</a>
-                <a href="/collections/womens/lehengas" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Lehengas</a>
                 <a href="/collections/womens/blouses" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Blouses</a>
-
                 <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b mt-2 text-sm">Casual Wear</div>
                 <a href="/collections/womens/kurtis" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Kurtis</a>
                 <a href="/collections/womens/tops" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Tops</a>
-
-                <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b mt-2 text-sm">Party Wear</div>
-                <a href="/collections/womens/party-gowns" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Gowns</a>
               </div>
             </div>
           </div>
@@ -100,14 +92,20 @@ const Navbar = () => {
 
           {/* Right Navigation Links and Icons */}
           <div className="flex items-center space-x-8">
-            <a href="/collections/textiles" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
-              Textiles
-              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-red-600 transition-all duration-500 group-hover:w-full"></span>
-            </a>
-            <a href="/collections/kids" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
-              Kids
-              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-red-600 transition-all duration-500 group-hover:w-full"></span>
-            </a>
+            <div className="relative group">
+              <a href="/collections/mens" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
+               Kids
+                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-red-600 transition-all duration-500 group-hover:w-full"></span>
+              </a>
+              <div className="absolute left-0 top-full mt-2 w-80 bg-white shadow-lg rounded-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50 grid grid-cols-2 gap-1 p-2">
+                <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b text-sm">Casual Wear</div>
+                <a href="/collections/mens/casual-shirts" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Shirts</a>
+                <a href="/collections/mens/t-shirts" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">T-Shirts</a>
+                <div className="col-span-2 font-medium px-3 py-2 text-orange-700 border-b mt-2 text-sm">Traditional</div>
+                <a href="/collections/mens/dhotis" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Dhotis</a>
+                <a href="/collections/mens/mundu" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Mundu</a>
+              </div>
+            </div>
 
             <button onClick={() => navigate('/checkout/cart')} className={`${navBar ? (isScrolled ? "text-black" : "text-white") : "text-black"} transition-colors duration-500 hover:scale-110 transform`}>
               <ShoppingCart size={22} />
