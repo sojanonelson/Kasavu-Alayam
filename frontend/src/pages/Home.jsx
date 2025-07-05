@@ -39,18 +39,7 @@ const DEFAULT_HERO_IMAGES = [
   }
 ];
 
-const FEATURED_COLLECTIONS = [
-  {
-    title: "Wedding Silks",
-    link: "/collections/textiles",
-    image: weddingSilksImage
-  },
-  {
-    title: "Bridal Blouse Sets",
-    link: "/collections/womens",
-    image: bridalBlouseSetsImage
-  }
-];
+
 
 const CATEGORIES = [
   {
@@ -66,7 +55,16 @@ const CATEGORIES = [
   {
     title: "Men's Collections",
     img: mensCollectionsImage,
+    link: "/collections/textiles",
+  }
+  ,{
+    title: "Wedding Silks",
+    img: weddingSilksImage,
     link: "/collections/mens",
+  },{
+    title: "Bridal Blouse Sets",
+    img: bridalBlouseSetsImage,
+    link: "/collections/womens",
   }
 ];
 
@@ -414,15 +412,7 @@ const HomePage = () => {
               <RoundCollectionCard {...category} index={index} isCategory={true} />
             </ResponsiveAnimatedItem>
           ))}
-          {FEATURED_COLLECTIONS.map((collection, index) => (
-            <ResponsiveAnimatedItem
-              key={`featured-${index}`}
-              index={CATEGORIES.length + index}
-              isMobile={isMobile}
-            >
-              <RoundCollectionCard {...collection} index={CATEGORIES.length + index} />
-            </ResponsiveAnimatedItem>
-          ))}
+         
         </div>
       </AnimatedSection>
 
