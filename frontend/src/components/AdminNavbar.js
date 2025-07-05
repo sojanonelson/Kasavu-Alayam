@@ -7,14 +7,11 @@ const AdminNavbar = () => {
     <header className="bg-white shadow-sm">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          {/* Logo/Brand */}
           <div className="flex items-center">
             <Link to="/admin" className="text-xl font-bold text-blue-600">
               AdminPanel
             </Link>
           </div>
-          
-          {/* Search and User Area */}
           <div className="flex items-center space-x-4">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

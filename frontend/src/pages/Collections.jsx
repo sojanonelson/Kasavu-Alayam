@@ -32,8 +32,6 @@ const LoadingSpinner = () => (
     </motion.div>
   </div>
 );
-
-// Wrapper component for ProductCard
 const ProductCardWrapper = ({ product, isListView, wishlist, toggleWishlist, toggleCart, showAddToCart }) => {
   return (
     <div className="bg-white  border  overflow-hidden   transition-all duration-300 hover:shadow-red-100/50">
@@ -75,7 +73,6 @@ const CollectionsShowCase = () => {
         sizeSet.add(product.productDetails.size);
       }
     });
-
     return {
       type: [...typeSet],
       color: [...colorSet],
@@ -117,7 +114,6 @@ const CollectionsShowCase = () => {
       setIsLoading(true);
       const lowerParam = collection?.toLowerCase() || "";
       let collectionId = "";
-
       if (lowerParam.startsWith("mens")) {
         collectionId = "6855a746cd5b892bfbd0b0bf";
       } else if (lowerParam.startsWith("womens")) {
@@ -130,7 +126,6 @@ const CollectionsShowCase = () => {
         setIsLoading(false);
         return;
       }
-
       try {
         const res = await collectionService.getProductByCollectionId(collectionId);
         const allProducts = Object.values(res).flat();
@@ -182,13 +177,11 @@ const CollectionsShowCase = () => {
           backgroundSize: '24px 24px'
         }}></div>
       </div>
-
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-red-100/30 to-rose-100/30 rounded-full blur-3xl"></div>
         <div className="absolute top-1/3 -left-40 w-60 h-60 bg-gradient-to-br from-rose-100/20 to-pink-100/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 right-1/4 w-40 h-40 bg-gradient-to-br from-red-100/25 to-rose-100/25 rounded-full blur-2xl"></div>
       </div>
-
       <Helmet>
         <title>Kasavu Aalayam | {collection?.toUpperCase()} Collection</title>
         <meta
@@ -387,5 +380,4 @@ const CollectionsShowCase = () => {
     </div>
   );
 };
-
 export default CollectionsShowCase;

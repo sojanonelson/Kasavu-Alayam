@@ -34,14 +34,11 @@ const Footer = () => {
 
   return (
     <footer className="bg-gradient-to-br from-red-800 via-red-700 to-red-900 text-white relative overflow-hidden">
-      {/* Decorative Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-32 -translate-y-32"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-48 translate-y-48"></div>
       </div>
-
       <div className="relative z-10">
-        {/* Top Section - Features Bar */}
         <div className="bg-red-900/50 backdrop-blur-sm py-6 px-6 md:px-8 border-b border-white/10">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -87,15 +84,9 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
-        {/* Main Footer Content */}
         <div className="py-12 px-6 md:px-8">
           <div className="max-w-6xl mx-auto">
-            
-            {/* Main Grid - 4 Columns */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
-              
-              {/* Company Info Column */}
               <div className="lg:col-span-1">
                 <div className="mb-6">
                   <img src={logo} alt="Kasavu Aalayam" className="h-12 mb-4" />
@@ -103,8 +94,6 @@ const Footer = () => {
                     Celebrating the rich heritage of traditional Indian wear with contemporary elegance. 
                     Your destination for premium silk sarees and ethnic collections.
                   </p>
-                  
-                  {/* Social Media Links */}
                   <div className="flex gap-3">
                     <a href="#" className="bg-white/10 hover:bg-white/20 p-2 rounded-lg transition-all duration-300 hover:scale-110">
                       <Facebook size={18} />
@@ -115,8 +104,6 @@ const Footer = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Quick Links Column */}
               <div>
                 <h3 className="text-lg font-semibold mb-6 relative">
                   <span className="border-b-2 border-amber-400 pb-1">Quick Links</span>
@@ -135,8 +122,6 @@ const Footer = () => {
                   ))}
                 </ul>
               </div>
-
-              {/* Customer Service Column */}
               <div>
                 <h3 className="text-lg font-semibold mb-6 relative">
                   <span className="border-b-2 border-amber-400 pb-1">Customer Care</span>
@@ -156,14 +141,10 @@ const Footer = () => {
                   ))}
                 </ul>
               </div>
-
-              {/* Newsletter & Contact Column */}
               <div>
                 <h3 className="text-lg font-semibold mb-6 relative">
                   <span className="border-b-2 border-amber-400 pb-1">Stay Connected</span>
                 </h3>
-                
-                {/* Contact Info */}
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center gap-3 text-sm">
                     <Phone size={16} className="text-amber-300" />
@@ -178,8 +159,6 @@ const Footer = () => {
                     <span>Idukki, Kerala, India</span>
                   </div>
                 </div>
-
-                {/* Newsletter Signup */}
                 <div className="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10">
                   <h4 className="font-semibold mb-2 text-amber-300">Exclusive Offers</h4>
                   <p className="text-xs text-white/80 mb-3">
@@ -212,8 +191,6 @@ const Footer = () => {
                 </div>
               </div>
             </div>
-
-            {/* Bottom Bar */}
             <div className="pt-8 border-t border-white/20">
               <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="text-sm text-white/80">

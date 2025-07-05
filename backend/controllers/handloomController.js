@@ -1,8 +1,6 @@
 const Handloom = require("../models/Handloom");
 const cloudinary = require("../config/cloudinary");
 const fs = require("fs");
-
-// Upload handloom images
 exports.uploadHandloomImages = async (req, res) => {
   try {
     const { title = "", description = "" } = req.body;
@@ -44,7 +42,6 @@ exports.uploadHandloomImages = async (req, res) => {
   }
 };
 
-// Get all handloom images
 exports.getHandloomImages = async (req, res) => {
   try {
     const handloom = await Handloom.findOne({}, { images: 1 });
@@ -53,8 +50,6 @@ exports.getHandloomImages = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch handloom images", error: err.message });
   }
 };
-
-// Delete specific handloom image by public_id
 exports.deleteHandloomImage = async (req, res) => {
   try {
     const { publicId } = req.body;
@@ -73,8 +68,6 @@ exports.deleteHandloomImage = async (req, res) => {
     res.status(500).json({ message: "Error deleting handloom image", error: error.message });
   }
 };
-
-// Reorder handloom images
 exports.reorderHandloomImages = async (req, res) => {
   try {
     const { orderedPublicIds } = req.body;

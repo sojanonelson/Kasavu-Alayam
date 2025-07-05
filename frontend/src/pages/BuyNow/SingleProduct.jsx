@@ -112,17 +112,10 @@ const [selectedPredefined, setSelectedPredefined] = useState(null);
       message: reviewMessage || predefinedMessages[5 - rating],
     };
     const reviewSubmit = await createReview(reviewData)
-    
-    // Call your API to submit the review
-    // await submitReview(reviewData);
-    
-    // For now, just show a success message
     alert("Thank you for your review!");
     setShowReviewForm(false);
     setRating(0);
     setReviewMessage('');
-    
-    // Refresh reviews
     const updatedReviews = await getReviewOfProduct(productId);
     setReviewData(updatedReviews.reviews);
   } catch (error) {
@@ -139,7 +132,6 @@ const handlePredefinedSelect = (message) => {
   useEffect(() => {
     const fetchCollectionProducts = async () => {
       try {
-        // Replace with actual API call to fetch collection products
         const data = await productService.getCollectionProducts();
         setCollectionProducts(data);
         setCollectionLoading(false);
@@ -170,8 +162,6 @@ const handlePredefinedSelect = (message) => {
     setFullscreenZoom(1);
     setFullscreenPan({ x: 0, y: 0 });
   };
-
-  // Advanced zoom handlers
   const handleMouseEnter = () => {
     setIsZooming(true);
   };
@@ -194,8 +184,6 @@ const handlePredefinedSelect = (message) => {
     });
     setShowMagnifier(true);
   };
-
-  // Fullscreen zoom handlers
   const handleFullscreenWheel = (e) => {
     e.preventDefault();
     const newZoom = fullscreenZoom + (e.deltaY > 0 ? -0.2 : 0.2);
@@ -340,9 +328,7 @@ const handlePredefinedSelect = (message) => {
   };
 
   const handleBuyNow = () => {
-    // You can implement the actual buy now logic here, or just redirect to checkout.
     alert("Proceeding to buy now...");
-    // For now, just a placeholder action.
   };
 
   const navigateFullscreen = (direction) => {
@@ -355,12 +341,9 @@ const handlePredefinedSelect = (message) => {
         prev === product.images.length - 1 ? 0 : prev + 1
       );
     }
-    // Reset zoom when changing images
     setFullscreenZoom(1);
     setFullscreenPan({ x: 0, y: 0 });
   };
-
-  // Add event listeners for fullscreen
   useEffect(() => {
     if (isFullscreen) {
       const handleKeyDown = (e) => {
@@ -400,10 +383,8 @@ const handlePredefinedSelect = (message) => {
 
   return (
     <div className="bg-white">
-      {/* Advanced Fullscreen Modal */}
       {isFullscreen && (
         <div className="fixed inset-0 bg-black bg-opacity-98 z-50 flex items-center justify-center">
-          {/* Header with controls */}
           <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/50 to-transparent p-6 z-10">
             <div className="flex justify-between items-center text-white">
               <div className="flex items-center space-x-4">
@@ -427,7 +408,6 @@ const handlePredefinedSelect = (message) => {
               </div>
             </div>
           </div>
-          {/* Main image container */}
           <div
             className="flex-1 h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing"
             onWheel={handleFullscreenWheel}
@@ -456,7 +436,6 @@ const handlePredefinedSelect = (message) => {
               draggable={false}
             />
           </div>
-          {/* Thumbnail strip */}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-6">
             <div className="flex justify-center">
               <div className="flex gap-2 overflow-x-auto max-w-full">
@@ -480,7 +459,6 @@ const handlePredefinedSelect = (message) => {
               </div>
             </div>
           </div>
-          {/* Navigation arrows */}
           <button
             onClick={() => navigateFullscreen("prev")}
             className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/70 transition-all"
@@ -511,7 +489,6 @@ const handlePredefinedSelect = (message) => {
         </div>
         <div className="flex flex-col lg:flex-row gap-8 mb-12 bg-white rounded-xl p-6">
           <div className="lg:w-1/2">
-            {/* Main Image with Advanced Zoom */}
             <div className="relative">
               <div
                 className="relative bg-gray-100 rounded-xl overflow-hidden mb-4 aspect-square flex items-center justify-center group"
@@ -535,15 +512,12 @@ const handlePredefinedSelect = (message) => {
                   }}
                   draggable={false}
                 />
-
-                {/* Zoom indicator */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black bg-opacity-20 pointer-events-none">
                   <div className="bg-black/60 text-white px-3 py-1 rounded-lg text-sm flex items-center gap-2">
                     <ZoomIn size={16} />
                     Click to zoom
                   </div>
                 </div>
-                {/* Magnifier */}
                 {showMagnifier && isZooming && (
                   <div
                     className="absolute pointer-events-none border-2 border-white shadow-lg rounded-full overflow-hidden bg-white"
@@ -579,7 +553,6 @@ const handlePredefinedSelect = (message) => {
                   />
                 </button>
               </div>
-              {/* Zoom instruction */}
               <div className="text-xs text-gray-500 text-center mb-2">
                 Hover to zoom • Click for fullscreen
               </div>
@@ -737,16 +710,12 @@ const handlePredefinedSelect = (message) => {
           </div>
         </div>
         <div className="mb-12 bg-white  border border-gray-100 overflow-hidden">
-          {/* Tab Navigation */}
           <div className="flex border-b ">
             <button className="px-6 py-4 font-medium text-primary border-b-2 border-primary transition-colors">
               Product Details
             </button>
           </div>
-
-          {/* Content Area */}
           <div className="p-8">
-            {/* About Section */}
             <div className="mb-8">
               <h3 className="text-2xl font-semibold text-gray-900 mb-4">
                 About this item
@@ -755,10 +724,7 @@ const handlePredefinedSelect = (message) => {
                 {product.description}
               </p>
             </div>
-
-            {/* Details Grid */}
             <div className="grid md:grid-cols-2 gap-10">
-              {/* Product Details Column */}
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">
                   Product Details
@@ -778,8 +744,6 @@ const handlePredefinedSelect = (message) => {
                   )}
                 </ul>
               </div>
-
-              {/* Additional Info Column */}
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">
                   Additional Information
@@ -844,12 +808,9 @@ const handlePredefinedSelect = (message) => {
     )
   ) : (
     <div className="relative flex flex-col items-end group">
-      {/* Message only visible on hover */}
       <div className="absolute bottom-12 right-0 bg-red-100 text-red-600 text-sm px-3 py-2 rounded-md shadow-md w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
         You already reviewed this product or haven't ordered it yet.
       </div>
-
-      {/* Disabled button */}
       <button
         disabled
         className="bg-gray-300 text-gray-600 px-4 py-2 rounded-lg cursor-not-allowed"
@@ -859,9 +820,6 @@ const handlePredefinedSelect = (message) => {
     </div>
   )}
 </div>
-
-
-  {/* Review Form */}
   {showReviewForm && (
     <div className="mb-8 p-6 bg-gray-50 rounded-lg">
       <h3 className="text-lg font-semibold mb-4">Write Your Review</h3>
@@ -939,8 +897,6 @@ const handlePredefinedSelect = (message) => {
       </div>
     </div>
   )}
-
-  {/* Reviews List */}
   {reviews.length > 0 ? (
     <div className="space-y-6">
       {reviews.map((review) => (

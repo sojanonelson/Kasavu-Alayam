@@ -2,13 +2,11 @@ import axios from 'axios';
 import API from './axiosInstance';
 
 const API_BASE_URL = process.env.REACT_APP_BACKEND_API;
-
 const uploadCarouselImage = async (formData) =>{
   const upload = await  API.post(`${API_BASE_URL}/websetting/upload`, formData);
   console.log("FORM:", formData)
   console.log("DJ:", upload.data)
   return upload
-
 
 }
 

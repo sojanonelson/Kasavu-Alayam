@@ -1,10 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-require('dotenv').config(); // Make sure this is at the top
+require('dotenv').config();
 const Razorpay = require('razorpay');
-
-
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -115,13 +113,10 @@ const loginUser = async (req, res) => {
 
 const refreshAccessToken = (req, res) => {
   const token = req.cookies.refreshToken;
-  // console.log("Token:",token)
   if (!token) return res.status(401).json({ message: "Refresh token missing" });
 
   try {
     const decoded = jwt.verify(token, process.env.REFRESH_SECRET);
-    
-    // Additional verification
     if (!decoded.id || !decoded.role) {
       throw new Error('Invalid token payload');
     }
@@ -190,13 +185,12 @@ const getAccountById = async (req, res) => {
 
 const getAllAccounts = async (req, res) => {
   try {
-    const users = await User.find({}, '-password'); // Exclude password field
+    const users = await User.find({}, '-password'); 
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
 
 const addAddress = async (req, res) => {
   try {
@@ -235,7 +229,7 @@ const updateAddress = async (req, res) => {
     const address = user.addresses.id(addressId);
     if (!address) return res.status(404).json({ message: "Address not found" });
 
-    address.set(updatedAddress); // update fields
+    address.set(updatedAddress); 
     await user.save();
     res.json({ message: "Address updated", addresses: user.addresses });
   } catch (err) {
@@ -258,10 +252,7 @@ const getAddresses = async (req, res) => {
 const getAllPaymentTransactions = async (req, res) => {
   try {
     const payments = await razorpay.payments.all({
-      count: 100, // Max per call, pagination possible
-      // Optional filters:
-      // from: Math.floor(new Date('2024-01-01').getTime() / 1000),
-      // to: Math.floor(Date.now() / 1000)
+      count: 100, 
     });
 
     res.status(200).json({
@@ -274,9 +265,6 @@ const getAllPaymentTransactions = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch payment transactions' });
   }
 };
-
-
-// In your userController.js
 const getPaymentById = async (req, res) => {
   try {
     const { paymentId } = req.params;
@@ -299,10 +287,6 @@ const getPaymentById = async (req, res) => {
     });
   }
 };
-
-
-
-
 
 module.exports = {
   getAddresses,

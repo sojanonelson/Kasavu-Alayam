@@ -1,26 +1,19 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React from 'react'
-
 const Pagination = ({ currentPage = 1, totalPages = 10 }) => {
   const renderPageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5;
     
     if (totalPages <= maxVisiblePages) {
-      // Show all pages if total pages are less than max visible
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Show first page, current page and nearby pages, last page
       pages.push(1);
-      
-      // Show ellipsis if current page is far from first page
       if (currentPage > 3) {
         pages.push('...');
       }
-      
-      // Add pages around current page
       const startPage = Math.max(2, currentPage - 1);
       const endPage = Math.min(totalPages - 1, currentPage + 1);
       
@@ -29,13 +22,9 @@ const Pagination = ({ currentPage = 1, totalPages = 10 }) => {
           pages.push(i);
         }
       }
-      
-      // Show ellipsis if current page is far from last page
       if (currentPage < totalPages - 2) {
         pages.push('...');
       }
-      
-      // Add last page if not already included
       if (totalPages > 1) {
         pages.push(totalPages);
       }

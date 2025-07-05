@@ -49,9 +49,8 @@ const Register = () => {
   setIsLoading(true);
   
   try {
-    // First send OTP to the user's email/phone
     await otpService.SendVerificationOtp({ email: formData.email });
-    setShowOtp(true); // Show OTP verification screen
+    setShowOtp(true); 
   } catch (error) {
     console.error('Error sending OTP:', error);
     alert('Failed to send OTP. Please try again.');
@@ -64,7 +63,6 @@ const Register = () => {
   
   try {
     if (verified) {
-      // Verify OTP first if user chose to verify
       const result = await otpService.verifyOtp({ 
         email: formData.email, 
         code: otp 
@@ -75,8 +73,6 @@ const Register = () => {
         return;
       }
     }
-    
-    // Create account regardless of verification status
     const userRegister = await authService.createAccount(formData);
     if (userRegister.userId) {
        showToast("Account created", "success");
@@ -130,8 +126,6 @@ const Register = () => {
   <a href="#" className="text-blue-600 underline hover:text-blue-800">Terms of Use</a> &{' '}
   <a href="#" className="text-blue-600 underline hover:text-blue-800">Privacy Policy</a>.
 </p>
-
-
             </div>
             <button
               type="button"
@@ -337,8 +331,6 @@ const Register = () => {
     </p>
   </div>
 )}
-
-
         <p className="mt-6 text-center text-gray-600">
           Already have an account?{' '}
           <button

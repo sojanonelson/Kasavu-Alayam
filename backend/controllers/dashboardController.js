@@ -1,18 +1,14 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 const User = require('../models/User');
-require('dotenv').config(); // Make sure this is at the top
+require('dotenv').config(); 
 const Razorpay = require('razorpay');
-
-
-
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 exports.getDashboardData = async (req, res) => {
   try {
-    // Get all data in parallel
     const [
       totalUsers,
       userGenderStats,
@@ -26,11 +22,7 @@ exports.getDashboardData = async (req, res) => {
       this.getLowStockProducts(),
       this.getRecentPayments(),
     ]);
-
-    // Calculate revenue stats
     const revenueStats = this.calculateRevenueStats(orders);
-
-    // Prepare recent orders (already sorted by createdAt descending)
     const recentOrders = orders.slice(0, 5).map(order => ({
       id: order.orderTrackingId,
       customer: order.userId ? `${order.userId.firstName} ${order.userId.lastName}` : 'Guest Customer',
@@ -41,8 +33,6 @@ exports.getDashboardData = async (req, res) => {
       paymentMethod: order.paymentMode,
       deliveryType: order.deliveryType
     }));
-
-    // Prepare response
     const dashboardData = {
       overview: {
         totalUsers,
@@ -64,7 +54,6 @@ exports.getDashboardData = async (req, res) => {
     res.status(500).json({ message: 'Error fetching dashboard data' });
   }
 };
-// Helper methods
 exports.calculateRevenueStats = (orders) => {
   const result = {
     totalRevenue: 0,
@@ -86,16 +75,10 @@ exports.calculateRevenueStats = (orders) => {
 
   orders.forEach(order => {
     result.totalRevenue += order.totalPrice;
-    
-    // Payment method stats
     result.paymentMethods[order.paymentMode].count++;
     result.paymentMethods[order.paymentMode].amount += order.totalPrice;
-    
-    // Delivery type stats
     result.deliveryTypes[order.deliveryType].count++;
     result.deliveryTypes[order.deliveryType].amount += order.totalPrice;
-    
-    // Combined stats
     if (order.deliveryType === 'shop_pickup') {
       const key = `shop_pickup_${order.paymentMode}`;
       result.combinedStats[key].count++;
@@ -125,13 +108,13 @@ exports.getRecentPayments = async () => {
   try {
     const payments = await razorpay.payments.all({
       count: 100,
-      from: Math.floor((Date.now() - 30 * 24 * 60 * 60 * 1000) / 1000), // Last 30 days
+      from: Math.floor((Date.now() - 30 * 24 * 60 * 60 * 1000) / 1000), 
       to: Math.floor(Date.now() / 1000)
     });
 
     return payments.items.map(payment => ({
       id: payment.id,
-      amount: payment.amount / 100, // Convert to rupees
+      amount: payment.amount / 100,
       currency: payment.currency,
       status: payment.status,
       method: payment.method,
@@ -154,8 +137,6 @@ exports.getUserGenderStats = async () => {
         }
       }
     ]);
-
-    // Convert array to object with male/female properties
     const stats = {
       male: 0,
       female: 0

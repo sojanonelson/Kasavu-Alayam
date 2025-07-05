@@ -79,8 +79,6 @@ const Address = () => {
     <div className="p-6 bg-white ">
       <div className="max-w-3xl mx-auto bg-white rounded-lg p-6">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">Your Addresses</h2>
-
-        {/* Form */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <input
             type="text"
@@ -131,8 +129,6 @@ const Address = () => {
         >
           {editingId ? 'Update Address' : 'Add Address'}
         </button>
-
-        {/* Address List */}
         <div className="mt-8 space-y-4">
           {addresses.length === 0 ? (
             <p className="text-gray-600 text-center">🚫 No address found. Please create one.</p>

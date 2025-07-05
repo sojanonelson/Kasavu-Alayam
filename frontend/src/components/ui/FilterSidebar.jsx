@@ -49,7 +49,6 @@ const FilterSidebar = ({ filters, handleFilterChange, categories, colors, patter
 
   return (
     <>
-      {/* Mobile Filter Button */}
       <div className="md:hidden fixed bottom-4 right-4 z-30">
         <button
           onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
@@ -58,8 +57,6 @@ const FilterSidebar = ({ filters, handleFilterChange, categories, colors, patter
           <Sliders size={24} />
         </button>
       </div>
-
-      {/* Main Sidebar */}
       <div className={`fixed top-32 left-0 w-full md:w-1/5 h-full bg-white z-20 transform transition-transform duration-300 ease-in-out overflow-y-auto border-r border-gray-200 ${mobileFiltersOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         <div className="p-4 poppins-regular">
           <div className="flex justify-between items-center mb-6">
@@ -194,7 +191,6 @@ const FilterSidebar = ({ filters, handleFilterChange, categories, colors, patter
               ))}
             </div>
           </FilterSection>
-
           <FilterSection title="Price Range" name="price">
             <div className="mt-2">
               <div className="flex justify-between text-sm text-gray-500 mb-1">
@@ -247,7 +243,6 @@ const FilterSidebar = ({ filters, handleFilterChange, categories, colors, patter
               </div>
             </div>
           </FilterSection>
-
           <div className="mt-6">
             <button
               onClick={() => setMobileFiltersOpen(false)}

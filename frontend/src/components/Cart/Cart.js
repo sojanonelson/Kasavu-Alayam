@@ -6,9 +6,7 @@ import CartItem from './CartItem';
 const Cart = ({ onClose }) => {
   const cartItems = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
-
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-end z-50">
       <div className="bg-white w-full md:w-1/3 p-4">

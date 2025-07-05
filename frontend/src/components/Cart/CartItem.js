@@ -4,7 +4,6 @@ import { removeFromCart, incrementQuantity, decrementQuantity } from '../../../r
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
-
   return (
     <div className="flex items-center justify-between p-4 border-b">
       <div className="flex items-center">
@@ -38,5 +37,4 @@ const CartItem = ({ item }) => {
     </div>
   );
 };
-
 export default CartItem;

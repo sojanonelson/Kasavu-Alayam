@@ -81,7 +81,6 @@ const AppRoutes = () => {
       )}
 
       <Routes>
-        {/* Public Routes */}
         <Route element={<WithNavbar />}>
           <Route path="/" element={<HomeScreen />} />
           <Route path="/" element={<SideContactNavbar />} />
@@ -98,8 +97,6 @@ const AppRoutes = () => {
           <Route path="/product" element={<SingleProductPage />} />
           <Route path="/product/:productId" element={<SingleProductPage />} />
           <Route path="*" element={<AppNotFound />} />
-
-          {/* Protected Customer Routes */}
           <Route
             path="/my-account"
             element={
@@ -116,8 +113,6 @@ const AppRoutes = () => {
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
-
-        {/* Protected Admin Routes */}
         <Route
           path="/admin"
           element={
@@ -151,22 +146,16 @@ const AppRoutes = () => {
     </div>
   );
 };
-
-// Navbar Wrapper Layout
 const WithNavbar = () => (
   <>
     <Navbar />
     <Outlet />
   </>
 );
-
-// Route Guard for Logged-In Users
 const ProtectedRoute = ({ user, children }) => {
   if (!user) return <Navigate to="/login" replace />;
   return children;
 };
-
-// Route Guard for Admin Only
 const ProtectedAdminRoute = ({ user, children }) => {
   console.log("US:", user);
   if (!user) return <Navigate to="/login" replace />;

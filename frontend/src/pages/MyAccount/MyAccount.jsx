@@ -3,14 +3,11 @@ import { Link } from 'react-router-dom';
 import { User, ShoppingBag, Heart, Settings, LogOut } from 'lucide-react';
 
 const MyAccount = () => {
-  // Example user data
   const user = {
     name: 'Achu',
     email: 'anandhu292@gmail.com',
     joinDate: 'May 30, 2025',
   };
-
-  // Example order history
   const orderHistory = [
     { id: 1, date: '2023-10-01', total: '₹1,200', status: 'Delivered' },
     { id: 2, date: '2023-09-15', total: '₹800', status: 'Delivered' },

@@ -5,7 +5,7 @@ import { LoaderCircle, PackageCheck, Truck, IndianRupee, MapPin, ShoppingBag, Ba
 import { getOrderByTrackingId } from '../../services/orderservices';
 
 const OrderDetails = () => {
-  const { id } = useParams(); // get order id from URL
+  const { id } = useParams(); 
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   console.log("DDDD")

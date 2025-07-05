@@ -1,4 +1,3 @@
-// customerService.js
 import API from './axiosInstance';
 
 const getAllCustomers = async () => {

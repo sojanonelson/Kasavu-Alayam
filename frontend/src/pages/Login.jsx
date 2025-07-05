@@ -9,14 +9,13 @@ const Login = () => {
   const [password, setPassword] = useState('Sojan#54');
   const [isLoading, setIsLoading] = useState(false);
   const [error,setError] = useState('')
-  const [keepSignedIn, setKeepSignedIn] = useState(false); // New state for the checkbox
+  const [keepSignedIn, setKeepSignedIn] = useState(false); 
   const navigate = useNavigate();
 
 const handleSubmit = async (event) => {
   event.preventDefault();
   setIsLoading(true);
   setError('');
-
   try {
     const response = await authService.LoginAccount(email, password);
     
@@ -84,7 +83,6 @@ const handleSubmit = async (event) => {
            {error && (
   <p className="text-red-500 text-sm mt-2">{error}</p>
 )}
-
           </div>
           <div className="mb-6 flex items-center">
             <input
@@ -119,11 +117,7 @@ const handleSubmit = async (event) => {
           </button>
         </p>
       </div>
-
       </div>
-      
-     
-
       <Footer/>
     </div>
   );

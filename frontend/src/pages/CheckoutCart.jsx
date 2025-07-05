@@ -10,8 +10,6 @@ const CheckoutCart = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const { addToast } = useToast();
   const navigate = useNavigate()
-  
-  // Get user from localStorage
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   const getTotal = () => {
@@ -42,7 +40,6 @@ const CheckoutCart = () => {
   };
 
   const handleQuantityChange = async (productId, change) => {
-    // Optimistic update
     const updatedCart = cartItems.map((item) => {
       if (item.productId._id === productId) {
         const newQty = item.quantity + change;
@@ -59,16 +56,13 @@ const CheckoutCart = () => {
       if (!changedItem || !user?.id) return;
 
       await cartService.updateCartItemQuantity(user.id, productId, changedItem.quantity);
-      // Refresh cart to get updated totals
       await fetchCart();
     } catch (err) {
       console.error('Failed to update quantity', err);
       addToast && addToast("Failed to update quantity", "error");
-      // Revert optimistic update on error
       await fetchCart();
     }
   };
-
   const handleDelete = async (productId) => {
     try {
       if (!user?.id) return;
@@ -76,14 +70,12 @@ const CheckoutCart = () => {
       await cartService.removeFromCart(user.id, productId);
       setCartItems(prev => prev.filter(item => item.productId._id !== productId));
       addToast && addToast("Item removed from cart", "success");
-      // Refresh cart to get updated totals
       await fetchCart();
     } catch (err) {
       console.error('Failed to delete item', err);
       addToast && addToast("Failed to remove item", "error");
     }
   };
-
   useEffect(() => {
     fetchCart();
   }, []);
@@ -91,7 +83,6 @@ const CheckoutCart = () => {
   const subtotal = parseFloat(getTotal());
   const deliveryFee = 50;
   const total = subtotal + deliveryFee;
-
   const handlePlaceOrder = () => {
   const orderData = {
     items: cartItems.map(item => ({
@@ -134,7 +125,6 @@ const CheckoutCart = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-          {/* Cart Items - Mobile: Full width, Desktop: 8 columns */}
           <div className="lg:col-span-8">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-6 border-b border-gray-200">
@@ -168,11 +158,9 @@ const CheckoutCart = () => {
                     const price = product.specialPrice || product.price;
                     const originalPrice = product.price;
                     const hasDiscount = product.specialPrice && product.specialPrice < product.price;
-
                     return (
                       <div key={item._id} className="p-6 hover:bg-gray-50 transition-colors">
                         <div className="flex flex-col sm:flex-row gap-4">
-                          {/* Product Image */}
                           <div className="flex-shrink-0">
                             <img
                               src={product.images[0]?.url || '/placeholder.jpg'}
@@ -180,8 +168,6 @@ const CheckoutCart = () => {
                               className="w-full sm:w-24 h-32 sm:h-24 object-cover rounded-lg border"
                             />
                           </div>
-
-                          {/* Product Details */}
                           <div className="flex-1 space-y-3">
                             <div>
                               <h3 className="font-medium text-gray-900 leading-tight">
@@ -199,10 +185,7 @@ const CheckoutCart = () => {
                                 )}
                               </div>
                             </div>
-
-                            {/* Mobile Layout: Quantity and Delete in one row */}
                             <div className="flex items-center justify-between sm:justify-start sm:gap-6">
-                              {/* Quantity Controls */}
                               <div className="flex items-center bg-gray-100 rounded-lg">
                                 <button
                                   onClick={() => handleQuantityChange(product._id, -1)}
@@ -222,8 +205,6 @@ const CheckoutCart = () => {
                                   <Plus className="w-4 h-4" />
                                 </button>
                               </div>
-
-                              {/* Delete Button */}
                               <button
                                 onClick={() => handleDelete(product._id)}
                                 disabled={loading}
@@ -232,8 +213,6 @@ const CheckoutCart = () => {
                                 <Trash2 className="w-5 h-5" />
                               </button>
                             </div>
-
-                            {/* Item Total */}
                             <div className="text-right sm:text-left">
                               <span className="text-sm text-gray-500">Item total: </span>
                               <span className="font-semibold text-gray-900">
@@ -248,17 +227,13 @@ const CheckoutCart = () => {
                 )}
               </div>
             </div>
-          </div>
-
-        
+          </div>        
           {cartItems.length > 0 && (
             <div className="mt-6 lg:mt-0 lg:col-span-4">
               <div className="sticky top-24">
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                   <div className="p-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-6">Order Summary</h3>
-                    
-                 
                     <div className="space-y-4 mb-6">
                       <div className="flex justify-between text-gray-600">
                         <span>Subtotal ({cartItems.reduce((sum, item) => sum + item.quantity, 0)} items)</span>
@@ -278,8 +253,6 @@ const CheckoutCart = () => {
                         </div>
                       </div>
                     </div>
-
-                    {/* Delivery Info */}
                     <div className="bg-gray-50 rounded-lg p-4 mb-6">
                       <div className="flex items-start gap-3">
                         <MapPin className="w-5 h-5 text-gray-500 mt-0.5" />
@@ -293,14 +266,10 @@ const CheckoutCart = () => {
                         </div>
                       </div>
                     </div>
-
-                    {/* Checkout Button */}
                     <button onClick={()=>handlePlaceOrder()} className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
                       <CreditCard className="w-5 h-5" />
                       Checkout
                     </button>
-
-                    {/* Security Badge */}
                     <div className="mt-4 text-center">
                       <p className="text-xs text-gray-500">🔒 Secure checkout with 256-bit SSL encryption</p>
                     </div>

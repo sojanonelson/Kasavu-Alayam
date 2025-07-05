@@ -28,23 +28,16 @@ const Navbar = () => {
 
   return (
     <header className={`w-full transition-all duration-500 ${navBar ? 'z-50 fixed' : 'top-0 z-50'}`}>
-      {/* Top Banner - Only visible on larger screens and not scrolled */}
       <div className={`lg:block hidden bg-gray-900 text-white text-xs py-2 text-center px-4 ${isScrolled ? 'hidden' : ''}`}>
         Order Available Worldwide | Free Shipping on Orders Above ₹2999
       </div>
-
-      {/* Main Navbar */}
       <nav className={`${navBar ? (isScrolled ? 'bg-white/95 backdrop-blur-xl border-b border-gray-200/20' : 'bg-white/10 backdrop-blur-2xl') : (isScrolled ? 'bg-white/95 backdrop-blur-xl border-b border-gray-200/50' : 'bg-white')} transition-all duration-500`}>
-        {/* Desktop Layout */}
         <div className="hidden lg:flex lg:px-32 items-center justify-between px-8 py-4">
-          {/* Left Navigation Links */}
           <div className="flex items-center space-x-8">
             <a href="/" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
               Home
               <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-red-600 transition-all duration-500 group-hover:w-full"></span>
             </a>
-
-            {/* Men's Collection Dropdown */}
             <div className="relative group">
               <a href="/collections/mens" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
                 Mens Collection
@@ -63,8 +56,6 @@ const Navbar = () => {
                 <a href="/collections/mens/mundu" className="block px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded">Mundu</a>
               </div>
             </div>
-
-            {/* Women's Collection Dropdown */}
             <div className="relative group">
               <a href="/collections/womens" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
                 Womens Collection
@@ -80,8 +71,6 @@ const Navbar = () => {
               </div>
             </div>
           </div>
-
-          {/* Center Logo */}
           <div className="flex-shrink-0 absolute left-1/2 transform -translate-x-1/2">
             <a href="/" className="block">
               <div className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font font-bold text-4xl ${isScrolled ? 'text-3xl' : ''} transition-all duration-500`}>
@@ -89,8 +78,6 @@ const Navbar = () => {
               </div>
             </a>
           </div>
-
-          {/* Right Navigation Links and Icons */}
           <div className="flex items-center space-x-8">
             <div className="relative group">
               <a href="/collections/mens" className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font2 relative group transition-colors duration-500`}>
@@ -133,8 +120,6 @@ const Navbar = () => {
             )}
           </div>
         </div>
-
-        {/* Mobile Layout */}
         <div className="lg:hidden">
           <div className="flex items-center justify-between px-3 py-2">
             {/* Hamburger Menu */}
@@ -145,8 +130,6 @@ const Navbar = () => {
                 <span className={`block h-0.5 w-full ${navBar ? (isScrolled ? 'bg-black' : 'bg-white') : 'bg-black'} transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
               </div>
             </button>
-
-            {/* Center Logo */}
             <div className="absolute left-1/2 transform -translate-x-1/2">
               <a href="/">
                 <div className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} custom-font font-bold text-lg sm:text-xl transition-all duration-500`}>
@@ -154,8 +137,6 @@ const Navbar = () => {
                 </div>
               </a>
             </div>
-
-            {/* Right Icons */}
             <div className="flex items-center space-x-2">
               <button onClick={() => navigate('/checkout/cart')} className={`${navBar ? (isScrolled ? 'text-black' : 'text-white') : 'text-black'} transition-all duration-500 relative p-1`}>
                 <ShoppingCart size={18} />
@@ -182,8 +163,6 @@ const Navbar = () => {
               )}
             </div>
           </div>
-
-          {/* Mobile Menu */}
           <div className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
             <div className={`${navBar ? (isScrolled ? 'bg-white/95 backdrop-blur-xl' : 'bg-white/10 backdrop-blur-2xl') : 'bg-white'} border-t ${navBar ? (isScrolled ? 'border-white/20' : 'border-white/20') : 'border-gray-200'} px-3 py-4`}>
               <div className="space-y-2">

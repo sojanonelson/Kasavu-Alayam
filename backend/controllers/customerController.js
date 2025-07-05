@@ -2,8 +2,6 @@ const Customer = require('../models/Customer');
 const Order = require('../models/Order');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
-// Get all customers
 exports.getCustomers = async (req, res) => {
   try {
     const { search, page = 1, limit = 20 } = req.query;
@@ -43,8 +41,6 @@ exports.getCustomers = async (req, res) => {
     });
   }
 };
-
-// Create a new customer
 exports.createCustomer = async (req, res) => {
   try {
     const { name ,email,gender, phone, password, addresses } = req.body;
@@ -154,8 +150,6 @@ exports.loginCustomer = async (req, res) => {
     });
   }
 };
-
-// Get customer by ID (with order history and lifetime value)
 exports.getCustomerById = async (req, res) => {
   try {
     const customer = await Customer.findById(req.params.id);
@@ -196,8 +190,6 @@ exports.getCustomerById = async (req, res) => {
     });
   }
 };
-
-// Update customer by ID
 exports.updateCustomer = async (req, res) => {
   try {
     const customer = await Customer.findByIdAndUpdate(

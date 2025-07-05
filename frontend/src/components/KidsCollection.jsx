@@ -8,14 +8,11 @@ import {
 } from 'lucide-react';
 import Navbar from './Navbar';
 import ScrolledNavbar from './ScrolledNavbar';
-import products from '../Data/kids-collection'; // Import kids collection data
+import products from '../Data/kids-collection'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../redux/features/cart/cartSlice';
 import { Helmet } from 'react-helmet';
-
-// Rest of the component code remains the same, but update the Helmet title and meta tags as needed
 const KidsCollection = () => {
-  // Component logic remains the same
   <>
   <div className='bg-red-600 h-32 p-32'>
     <Helmet>

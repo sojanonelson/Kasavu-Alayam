@@ -14,18 +14,16 @@ const ProfilePage = () => {
   });
 
   const [originalData, setOriginalData] = useState({ ...formData });
-
-  // 🌀 Fetch user on mount
 useEffect(() => {
   const fetchUser = async () => {
     try {
       const userStr = localStorage.getItem('user');
-      const token = localStorage.getItem('token'); // 👈 Get token from storage
+      const token = localStorage.getItem('token'); 
 
       if (!userStr || !token) return;
 
       const user = JSON.parse(userStr);
-      const userData = await customerService.getUserById(user._id || user.id, token); // 👈 Pass token
+      const userData = await customerService.getUserById(user._id || user.id, token); 
       if (userData && userData._id) {
         setFormData(userData);
         setOriginalData(userData);

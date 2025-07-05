@@ -45,7 +45,6 @@ const CustomerLayout = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-50 to-red-50/30 poppins-regular lg:pt-20">
-      {/* Mobile Header */}
       <div className="lg:hidden bg-white shadow-sm border-b border-gray-200">
         <div className="p-4">
           <div className="flex items-center gap-3">
@@ -66,12 +65,8 @@ const CustomerLayout = () => {
           </div>
         </div>
       </div>
-
-      {/* Main Container */}
       <div className="flex flex-1 max-w-7xl mx-auto w-full lg:pb-4 lg:px-8 lg:pt-6 gap-8">
-        {/* Sidebar */}
         <aside className="lg:w-80 bg-white lg:rounded-xl lg:border border-gray-200/50 lg:p-6 p-1 pt-4 lg:pt-6 lg:h-fit lg:sticky lg:top-28">
-          {/* Desktop Profile Header */}
           <div className="border-b border-gray-100 pb-6 mb-6 hidden lg:block">
             <div className="flex items-center gap-4 mb-4">
               <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
@@ -91,8 +86,6 @@ const CustomerLayout = () => {
               </div>
             </div>
           </div>
-
-          {/* Navigation */}
           <nav className="flex flex-col space-y-2">
             <NavLink
               to="profile"
@@ -168,8 +161,6 @@ const CustomerLayout = () => {
 
             {/* Divider */}
             <div className="hidden lg:block border-t border-gray-200 my-4"></div>
-
-            {/* Logout Button */}
             <button
               onClick={handleLogout}
               className="group flex items-center gap-3 px-4 py-3 rounded-lg text-red-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200 hover:shadow-sm w-full text-left"
@@ -181,8 +172,6 @@ const CustomerLayout = () => {
               <span className="hidden lg:inline font-medium">Sign Out</span>
             </button>
           </nav>
-
-          {/* Desktop Footer Info */}
           <div className="hidden lg:block mt-8 pt-6 border-t border-gray-100">
             <div className="text-center">
               <p className="text-xs text-gray-400 mb-2">Need assistance?</p>
@@ -192,8 +181,6 @@ const CustomerLayout = () => {
             </div>
           </div>
         </aside>
-
-        {/* Main Content Area */}
         <main className="flex-1 bg-white lg:rounded-xl  lg:border border-gray-200/50 lg:p-8 py-4 px-4 lg:py-8 overflow-hidden">
           <div className="h-full">
             <Outlet />

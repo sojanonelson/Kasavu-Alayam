@@ -1,6 +1,4 @@
 const { sendOtpEmail, sendPasswordResetOtp } = require('../utils/nodeMailer');
-
-// In-memory OTP store (Use Redis in production)
 const otpStore = new Map();
 
 exports.AccountVerify = async (req, res) => {
@@ -10,8 +8,6 @@ exports.AccountVerify = async (req, res) => {
   }
 
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-  // Save OTP with expiry (5 minutes)
   otpStore.set(email, { otp, expiresAt: Date.now() + 5 * 60 * 1000 });
 
   try {
@@ -35,8 +31,6 @@ exports.ResetPassword = async (req, res) => {
   if (!email) return res.status(400).json({ message: 'Email is required' });
 
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-  // Save OTP with expiry (5 mins)
   otpStore.set(email, { otp, expiresAt: Date.now() + 5 * 60 * 1000 });
 
   try {
@@ -59,8 +53,6 @@ exports.verifyOtp = (req, res) => {
     return res.status(401).json({ message: 'Incorrect OTP' });
   }
 
-  otpStore.delete(email); // Clean up after verification
-
-  // Continue with login/signup flow here
+  otpStore.delete(email); 
   res.json({ message: 'OTP verified successfully', verified: true });
 };

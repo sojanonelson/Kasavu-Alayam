@@ -18,7 +18,7 @@ const ResetPassword = () => {
 
     setIsLoading(true);
     setTimeout(() => {
-      setOtp('123456'); // Simulated OTP
+      setOtp('123456'); 
       setIsLoading(false);
       setStep(2);
     }, 1500);
@@ -29,14 +29,11 @@ const ResetPassword = () => {
       const newOtp = [...enteredOtp];
       newOtp[index] = value;
       setEnteredOtp(newOtp);
-
-      // Move focus to the next input box if a digit was entered
       if (value && index < 5) {
         inputRefs.current[index + 1].focus();
       }
     }
   };
-
   const handleVerifyOtp = () => {
     const joinedOtp = enteredOtp.join('');
     if (joinedOtp === otp) {
@@ -45,7 +42,6 @@ const ResetPassword = () => {
       alert('Invalid OTP');
     }
   };
-
   const handleResetPassword = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -63,12 +59,10 @@ const ResetPassword = () => {
       navigate('/login');
     }, 2000);
   };
-
   return (
     <div className="flex justify-center items-center lg:h-[80vh] bg-white mt-10 lg:mt-0">
       <div className="w-full max-w-md p-8 bg-white">
         <h2 className="text-3xl font-bold text-center mb-8 text-red-600">Reset Password</h2>
-
         {step === 1 && (
           <div className="mb-8">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
@@ -167,5 +161,4 @@ const ResetPassword = () => {
     </div>
   );
 };
-
 export default ResetPassword;

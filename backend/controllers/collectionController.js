@@ -28,7 +28,7 @@ exports.getAllCollectionsAndRoot = async (req, res) => {
         path: 'categories',
         select: 'name',
         populate: {
-          path: 'subcategories', // Assuming 'subcategories' is the field in Category model
+          path: 'subcategories', 
           select: 'name'
         }
       });
@@ -101,7 +101,7 @@ exports.updateCollection = async (req, res) => {
 exports.getLowStockProductsInCollection = async (req, res) => {
   try {
     const { id: collectionId } = req.params;
-    const threshold = parseInt(req.query.threshold) || 5; // default to 5 if not provided
+    const threshold = parseInt(req.query.threshold) || 5;
 
     const collection = await Collection.findById(collectionId).populate('categories');
     if (!collection) {

@@ -7,7 +7,7 @@ const addressSchema = new mongoose.Schema({
   state: String,
   pincode: String,
   postOffice: String
-}, { _id: true }); // default _id helps with editing/deleting
+}, { _id: true }); 
 
 const userSchema = new mongoose.Schema({
   phone: { type: String, required: true, unique: true },
@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ['customer', 'admin'], default: 'customer' },
   dob: Date,
   password: { type: String, required: true },
-  addresses: [addressSchema], // 🔥 multiple addresses here
+  addresses: [addressSchema], 
   loginHistory: { type: [Date], default: [] }
 }, { timestamps: true });
 

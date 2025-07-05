@@ -26,13 +26,8 @@ exports.deleteCategory = async (req, res) => {
 
 exports.getAllCategoriesWithSubcategories = async (req, res) => {
   try {
-    // Fetch all categories
     const categories = await Category.find();
-
-    // Fetch all subcategories and group them by category
     const subcategories = await Subcategory.find();
-
-    // Combine them manually
     const enriched = categories.map(cat => ({
       _id: cat._id,
       name: cat.name,

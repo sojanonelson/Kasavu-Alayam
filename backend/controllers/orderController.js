@@ -1,14 +1,10 @@
 const Order = require('../models/Order');
-const Product = require('../models/Product'); // 🧠 Don't forget to import this
+const Product = require('../models/Product'); 
 const Cart = require('../models/Cart');
 
 
 const { v4: uuidv4 } = require('uuid');
-
-// Utility for generating unique orderTrackingId
 const generateTrackingId = () => `ORD-${uuidv4().split('-')[0].toUpperCase()}`;
-
-// Create Order
 exports.createOrder = async (req, res) => {
   try {
     const { userId, products, deliveryType, paymentMode, transactionId, address } = req.body;
@@ -18,8 +14,6 @@ exports.createOrder = async (req, res) => {
 
     if (!products || products.length === 0)
       return res.status(400).json({ message: 'No products provided' });
-
-    // 🧮 Total Price Calculation
     let productTotal = products.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0
@@ -31,8 +25,6 @@ exports.createOrder = async (req, res) => {
     }
 
     const totalPrice = productTotal + deliveryCharge;
-
-    // 🧾 Create Order Document
     const newOrder = new Order({
       userId,
       products,
@@ -46,8 +38,6 @@ exports.createOrder = async (req, res) => {
 
     const saved = await newOrder.save();
     await Cart.findOneAndDelete({ userId });
-
-    // 🪓 Reduce stock for each product
     for (const item of products) {
       const product = await Product.findById(item.productId);
       if (!product) continue;
@@ -68,8 +58,6 @@ exports.createOrder = async (req, res) => {
     res.status(500).json({ message: 'Error creating order' });
   }
 };
-
-// Get all orders (admin)
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find().populate('products.productId userId');
@@ -78,8 +66,6 @@ exports.getAllOrders = async (req, res) => {
     res.status(500).json({ message: 'Error fetching orders' });
   }
 };
-
-// Get user orders
 exports.getOrdersByUser = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -89,8 +75,6 @@ exports.getOrdersByUser = async (req, res) => {
     res.status(500).json({ message: 'Error fetching user orders' });
   }
 };
-
-// Get order by ID (tracking ID)
 exports.getOrderByTrackingId = async (req, res) => {
   try {
     const { trackingId } = req.params;
@@ -101,9 +85,6 @@ exports.getOrderByTrackingId = async (req, res) => {
     res.status(500).json({ message: 'Error fetching order' });
   }
 };
-
-
-// Update packed status
 exports.updatePackedStatus = async (req, res) => {
   console.log("Packed")
   try {
@@ -145,15 +126,9 @@ exports.getUnpackedOrders = async (req, res) => {
     res.status(500).json({ message: 'Error fetching unpacked orders' });
   }
 };
-
-
-// Get revenue statistics
 exports.getRevenueData = async (req, res) => {
   try {
-    // Get all orders
     const orders = await Order.find();
-    
-    // Calculate totals
     const result = {
       totalRevenue: 0,
       totalOrders: orders.length,
@@ -171,20 +146,12 @@ exports.getRevenueData = async (req, res) => {
         online_delivery_upi: { count: 0, amount: 0 }
       }
     };
-
-    // Process each order
     orders.forEach(order => {
       result.totalRevenue += order.totalPrice;
-      
-      // Payment method stats
       result.paymentMethods[order.paymentMode].count++;
       result.paymentMethods[order.paymentMode].amount += order.totalPrice;
-      
-      // Delivery type stats
       result.deliveryTypes[order.deliveryType].count++;
       result.deliveryTypes[order.deliveryType].amount += order.totalPrice;
-      
-      // Combined stats
       if (order.deliveryType === 'shop_pickup') {
         const key = `shop_pickup_${order.paymentMode}`;
         result.combinedStats[key].count++;

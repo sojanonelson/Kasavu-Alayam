@@ -151,15 +151,11 @@ const handlePayment = async () => {
       alert('Please select an address');
       return;
     }
-    
-    // Find the selected address and set it before proceeding
     const selected = addresses.find(a => a._id === selectedAddressId);
     if (!selected) {
       alert('Invalid address selected');
       return;
     }
-    
-    // Set the selected address in state
     setSelectedAddress({
       place: selected.place,
       city: selected.city,
@@ -167,8 +163,6 @@ const handlePayment = async () => {
       postOffice: selected.postOffice,
       pincode: selected.pincode
     });
-
-    // Wait for state to update if needed, then proceed
     await new Promise(resolve => setTimeout(resolve, 0));
     
     await openRazorpay();
@@ -176,16 +170,13 @@ const handlePayment = async () => {
 };
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <div className="bg-white shadow-sm py-4 px-6 border-b">
         <h1 className="text-2xl font-bold text-gray-800">Checkout</h1>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-          {/* Left Column - Order Details & Delivery Options */}
           <div className="lg:col-span-8 space-y-6">
-            {/* Order Summary Card */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
@@ -227,8 +218,6 @@ const handlePayment = async () => {
                 )}
               </div>
             </div>
-
-            {/* Delivery Method Card */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
@@ -238,7 +227,6 @@ const handlePayment = async () => {
                   Delivery Method
                 </h2>
               </div>
-              
               <div className="p-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <button
@@ -277,8 +265,6 @@ const handlePayment = async () => {
                 </div>
               </div>
             </div>
-
-            {/* Delivery Details Section */}
             {deliveryMethod === 'shop' && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="p-6">
@@ -300,7 +286,6 @@ const handlePayment = async () => {
                 </div>
               </div>
             )}
-
             {deliveryMethod === 'online' && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="p-6">

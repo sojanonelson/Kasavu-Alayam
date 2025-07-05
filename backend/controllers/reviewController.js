@@ -1,10 +1,5 @@
 const Review = require('../models/Review');
-
 const Order = require('../models/Order');
-
-
-
-
 exports.checkReviewEligibility = async (req, res) => {
   try {
     const userId = req.user.id; // ✅ from auth middleware
@@ -12,11 +7,7 @@ exports.checkReviewEligibility = async (req, res) => {
 
     console.log("🧠 userId:", userId);
     console.log("🧠 productId:", productId);
-
-    // ⏱ For testing: allow only after 5 seconds
     const fiveSecondsAgo = new Date(Date.now() - 5 * 1000);
-
-    // ✅ Check if the user has already reviewed the product
     const existingReview = await Review.findOne({
       userId,
       productId,
@@ -29,8 +20,6 @@ exports.checkReviewEligibility = async (req, res) => {
         message: 'You have already reviewed this product.',
       });
     }
-
-    // ✅ Check if user has ordered this product and enough time has passed
     const hasOrdered = await Order.findOne({
       userId,
       'products.productId': productId,
@@ -44,8 +33,6 @@ exports.checkReviewEligibility = async (req, res) => {
         message: 'User has not ordered this product or 5 seconds have not passed since the order.',
       });
     }
-
-    // ✅ If both checks pass
     res.status(200).json({
       success: true,
       eligible: true,
@@ -166,21 +153,15 @@ exports.getReviewsByProduct = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
-
-
-
-// ❌ Delete a review (user/admin only)
 exports.deleteReview = async (req, res) => {
   try {
     const review = await Review.findById(req.params.reviewId);
 
     if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
 
-    // Check permission
     if (req.user.role !== 'admin' && String(review.userId) !== String(req.user._id)) {
       return res.status(403).json({ success: false, message: 'Unauthorized' });
     }
-
     await review.deleteOne();
     res.status(200).json({ success: true, message: 'Review deleted' });
   } catch (err) {

@@ -5,27 +5,27 @@ import {
   Users,
   ShoppingBag,
   Boxes,
-  Layers, // For Collections
-  Tag, // For Categories
+  Layers, 
+  Tag, 
   Package,
   Bell,
   Settings,
   LayoutGrid,
-  FileText, // For Reports
+  FileText,
   HelpCircle,
   LogOut,
   ChevronDown,
   Search,
   Menu,
-  Home, // For Homepage Editor
-  ClipboardList, // For Inventory (alternative)
+  Home, 
+  ClipboardList, 
   CurrencyIcon,
   Wallet,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import AdminNavbar from "../components/AdminNavbar";
-import Logo from "../assets/square.png"; // Adjust the path to your logo image
+import Logo from "../assets/square.png";
 
 const AdminLayout = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -63,7 +63,6 @@ const AdminLayout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Mobile Alert */}
       {showMobileAlert && (
         <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
           <div className="bg-white  shadow-2xl p-6 max-w-md w-full border border-gray-100">
@@ -112,8 +111,6 @@ const AdminLayout = () => {
           </div>
         </div>
       )}
-
-      {/* Mobile Header */}
       {isMobile && (
         <header className="bg-white shadow-sm p-4 flex items-center justify-between lg:hidden">
           <button
@@ -123,12 +120,11 @@ const AdminLayout = () => {
             <Menu size={24} />
           </button>
           <h1 className="text-lg font-semibold">Admin Panel</h1>
-          <div className="w-8"></div> {/* Spacer for balance */}
+          <div className="w-8"></div> 
         </header>
       )}
 
       <div className="flex flex-1 mx-auto w-full px-4 lg:px-0 gap-0">
-        {/* Sidebar */}
         <aside
           className={`
             ${
@@ -163,7 +159,6 @@ const AdminLayout = () => {
             <div className="bg-white rounded-lg shadow-sm p-2 mb-4">
               <div className="flex items-center space-x-3 p-2">
                 <div className="h-10 w-10 rounded-full  flex items-center bg-white justify-center text-blue-600">
-                  {/* <User className="h-5 w-5" /> */}
                   <img
                     src={Logo}
                     alt="logo"
@@ -178,7 +173,6 @@ const AdminLayout = () => {
             </div>
 
             <nav className="space-y-1  rounded-lg  p-2">
-              {/* Dashboard Link */}
               <NavLink
                 to="overview"
                 className={({ isActive }) =>
@@ -193,8 +187,6 @@ const AdminLayout = () => {
                 <LayoutDashboard size={18} className="flex-shrink-0" />
                 <span className="text-sm">Overview</span>
               </NavLink>
-
-              {/* Users Management */}
               <NavLink
                 to="users"
                 className={({ isActive }) =>
@@ -209,8 +201,6 @@ const AdminLayout = () => {
                 <Users size={18} className="flex-shrink-0" />
                 <span className="text-sm">Users</span>
               </NavLink>
-
-              {/* Orders Management */}
               <NavLink
                 to="orders"
                 className={({ isActive }) =>
@@ -300,8 +290,6 @@ const AdminLayout = () => {
                 <Package size={18} className="flex-shrink-0" />
                 <span className="text-sm">Products</span>
               </NavLink>
-
-              {/* Notifications */}
               <NavLink
                 to="notifications"
                 className={({ isActive }) =>
@@ -347,8 +335,6 @@ const AdminLayout = () => {
                 <span className="text-sm">Settings</span>
               </NavLink>
             </nav>
-
-            {/* Logout Button */}
             <div className="mt-4 rounded-lg shadow-sm p-2">
               <button
                 onClick={() => handleLogout()}
@@ -360,8 +346,6 @@ const AdminLayout = () => {
             </div>
           </div>
         </aside>
-
-        {/* Main content */}
         <main className="flex-1  lg:py-0">
           <div className="bg-white rounded-lg shadow-sm  lg:p-0">
             <Outlet />

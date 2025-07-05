@@ -43,9 +43,6 @@ exports.uploadCarouselImages = async (req, res) => {
     res.status(500).json({ message: "Upload failed", error: error.message });
   }
 };
-
-
-// Get all carousel images
 exports.getCarouselImages = async (req, res) => {
   try {
     const setting = await WebsiteSetting.findOne({}, { carouselImages: 1 });
@@ -54,8 +51,6 @@ exports.getCarouselImages = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch carousel images", error: err.message });
   }
 };
-
-// Delete specific carousel image by public_id
 exports.deleteCarouselImage = async (req, res) => {
   try {
     const { publicId } = req.body;
@@ -80,7 +75,6 @@ exports.reorderCarouselImages = async (req, res) => {
   try {
     const { orderedPublicIds } = req.body;
     
-    // Validate input
     if (!Array.isArray(orderedPublicIds) ){
       return res.status(400).json({ message: "orderedPublicIds must be an array" });
     }
@@ -89,17 +83,11 @@ exports.reorderCarouselImages = async (req, res) => {
     if (!setting) {
       return res.status(404).json({ message: "Settings not found" });
     }
-
-    // Create a map for quick lookup
     const imageMap = new Map();
     setting.carouselImages.forEach(img => imageMap.set(img.public_id, img));
-
-    // Rebuild the array in the new order, preserving only valid IDs
     const orderedImages = orderedPublicIds
       .map(id => imageMap.get(id))
       .filter(img => img !== undefined);
-
-    // Verify we have all images
     if (orderedImages.length !== setting.carouselImages.length) {
       return res.status(400).json({
         message: "Some image IDs don't exist in current carousel",
@@ -108,8 +96,6 @@ exports.reorderCarouselImages = async (req, res) => {
           .map(img => img.public_id)
       });
     }
-
-    // Update the setting
     setting.carouselImages = orderedImages;
     await setting.save();
 

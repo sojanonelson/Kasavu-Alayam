@@ -1,12 +1,10 @@
-const Product = require("../models/Product"); // Import Product model
-const Category = require("../models/Category"); // Import Category model (if needed for validation)
+const Product = require("../models/Product"); 
+const Category = require("../models/Category");
 const SubCategory = require("../models/Subcategory");
-
 const cloudinary = require("../config/cloudinary");
 const fs = require("fs");
 const path = require("path");
 const generateSKU = require("../utils/generateSKU");
-
 const createProduct = async (req, res) => {
   try {
     const {
@@ -24,13 +22,9 @@ const createProduct = async (req, res) => {
       collection,
     } = req.body;
 
-    
-
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No images uploaded" });
     }
-
-    // Upload each image to Cloudinary
     const uploadPromises = req.files.map((file) => {
       return cloudinary.uploader
         .upload(file.path, {
@@ -40,7 +34,6 @@ const createProduct = async (req, res) => {
           unique_filename: false,
         })
         .then((result) => {
-          // Delete the temp file after upload
           fs.unlinkSync(file.path);
           return {
             url: result.secure_url,
@@ -48,8 +41,6 @@ const createProduct = async (req, res) => {
           };
         });
     });
-
-    // Wait for all uploads to complete
     const imageData = await Promise.all(uploadPromises);
 
     console.log("Uploaded Image URLs:");
@@ -58,20 +49,14 @@ const createProduct = async (req, res) => {
     });
 
     console.log("Color:", color);
-
-    // Check if the category exists
     const categoryExists = await Category.findById(category);
     if (!categoryExists) {
       return res.status(400).json({ message: "Category not found" });
     }
-
-    // Check if the subcategory exists
     const subcategoryExists = await SubCategory.findById(subcategory);
     if (!subcategoryExists) {
       return res.status(400).json({ message: "SubCategory not found" });
     }
-
-    // Create a new product
     const newProduct = new Product({
       title,
       description,
@@ -94,8 +79,6 @@ const createProduct = async (req, res) => {
     return res.status(201).json(newProduct);
   } catch (error) {
     console.error("Error creating product:", error);
-
-    // Clean up any uploaded files if error occurs
     if (req.files) {
       req.files.forEach((file) => {
         if (fs.existsSync(file.path)) {
@@ -118,27 +101,20 @@ const TestcreateProduct = async (req, res) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No images uploaded" });
     }
-
-    // Upload each image to Cloudinary
     const uploadPromises = req.files.map((file) => {
       return cloudinary.uploader
         .upload(file.path, {
-          folder: "products", // Optional folder in Cloudinary
+          folder: "products", 
           use_filename: true,
           quality: "100",
           unique_filename: false,
         })
         .then((result) => {
-          // Delete the temp file after upload
           fs.unlinkSync(file.path);
           return result;
         });
     });
-
-    // Wait for all uploads to complete
     const results = await Promise.all(uploadPromises);
-
-    // Extract the relevant data
     const imageData = results.map((result) => ({
       url: result.secure_url,
       public_id: result.public_id,
@@ -155,8 +131,6 @@ const TestcreateProduct = async (req, res) => {
     });
   } catch (error) {
     console.error("Error uploading images:", error);
-
-    // Clean up any uploaded files if error occurs
     if (req.files) {
       req.files.forEach((file) => {
         if (fs.existsSync(file.path)) {
@@ -184,7 +158,7 @@ const updateProduct = async (req, res) => {
       productDetails,
       category,
       subcategory,
-      collection, // ✅
+      collection, 
     } = req.body;
 
     const updates = {
@@ -236,19 +210,14 @@ const getProductsByIdeal = async (req, res) => {
       color,
       search,
     } = req.query;
-
-    // Build filter object
     const filter = {
       "productDetails.idealFor": { $regex: idealFor, $options: "i" },
     };
-
-    // Add additional filters if provided
     if (minPrice || maxPrice) {
       filter.price = {};
       if (minPrice) filter.price.$gte = parseFloat(minPrice);
       if (maxPrice) filter.price.$lte = parseFloat(maxPrice);
     }
-
     if (minStock || maxStock) {
       filter.stockQuantity = {};
       if (minStock) filter.stockQuantity.$gte = parseInt(minStock);
@@ -274,15 +243,10 @@ const getProductsByIdeal = async (req, res) => {
         { sku: { $regex: search, $options: "i" } },
       ];
     }
-
-    // Calculate skip for pagination
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    // Build sort object
     const sort = {};
     sort[sortBy] = sortOrder === "desc" ? -1 : 1;
-
-    // Execute query with population
     const products = await Product.find(filter)
       .populate("category", "name")
       .populate("subcategory", "name")
@@ -290,12 +254,8 @@ const getProductsByIdeal = async (req, res) => {
       .skip(skip)
       .limit(parseInt(limit))
       .lean();
-
-    // Get total count for pagination
     const totalProducts = await Product.countDocuments(filter);
     const totalPages = Math.ceil(totalProducts / parseInt(limit));
-
-    // Get collection stats
     const stats = await Product.aggregate([
       { $match: filter },
       {
@@ -359,13 +319,10 @@ const getProductsByIdeal = async (req, res) => {
   }
 };
 
-// Update only product images
 const updateProductImages = async (req, res) => {
   try {
     console.log("Image Uploadddd:", req.body);
     const productId = req.params.id;
-
-    // Fetch product
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -374,15 +331,12 @@ const updateProductImages = async (req, res) => {
     const { removeExistingImages } = req.body;
 
     let shouldRemoveExisting = false;
-
-    // Handle both boolean and stringified array input
     if (typeof removeExistingImages === "string") {
       try {
         const parsed = JSON.parse(removeExistingImages);
         if (typeof parsed === "boolean") {
           shouldRemoveExisting = parsed;
         } else if (Array.isArray(parsed)) {
-          // Optional: selectively delete images based on public_ids
           for (const publicId of parsed) {
             await cloudinary.uploader.destroy(publicId);
             product.images = product.images.filter(
@@ -394,8 +348,6 @@ const updateProductImages = async (req, res) => {
         shouldRemoveExisting = removeExistingImages === "true";
       }
     }
-
-    // Upload new images if provided
     let newImageData = [];
     if (req.files && req.files.length > 0) {
       const uploadPromises = req.files.map((file) => {
@@ -417,8 +369,6 @@ const updateProductImages = async (req, res) => {
 
       newImageData = await Promise.all(uploadPromises);
     }
-
-    // Merge or replace images depending on user intent
     if (removeExistingImages === "true") {
       product.images = newImageData;
     } else {
@@ -433,8 +383,6 @@ const updateProductImages = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating images:", error);
-
-    // Clean up uploaded files on error
     if (req.files) {
       req.files.forEach((file) => {
         if (fs.existsSync(file.path)) {
@@ -453,8 +401,6 @@ const updateProductImages = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const productId = req.params.id;
-
-    // Find the product by its ID and delete it
     const deletedProduct = await Product.findByIdAndDelete(productId);
 
     if (!deletedProduct) {
@@ -472,7 +418,6 @@ const deleteProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   try {
-    // Get all products
     const products = await Product.find()
       .populate("category")
       .populate("subcategory");
@@ -490,7 +435,6 @@ const getProductById = async (req, res) => {
   try {
     const productId = req.params.id;
 
-    // Get product by its ID
     const product = await Product.findById(productId)
       .populate("category")
       .populate("subcategory");
@@ -510,13 +454,12 @@ const getProductById = async (req, res) => {
 
 const getProductByName = async (req, res) => {
   try {
-    const { name } = req.query; // Search query by product name
+    const { name } = req.query; 
 
     if (!name) {
       return res.status(400).json({ message: "Product name is required" });
     }
 
-    // Get products by name (case-insensitive search)
     const products = await Product.find({ title: new RegExp(name, "i") })
       .populate("category")
       .populate("review");
@@ -541,9 +484,6 @@ const getProductsByCollection = async (req, res) => {
   try {
    
     const { collection } = req.body;
-    // const collection = 'mens'
-
-    // Validate collection input
     const validCollections = ["mens", "womens", "kids"];
     if (!collection || !validCollections.includes(collection)) {
       return res
@@ -553,8 +493,6 @@ const getProductsByCollection = async (req, res) => {
             "Invalid or missing collection. Valid values: mens, womens, kids",
         });
     }
-
-    // Query products by collection
     const products = await Product.find({ collection })
       .populate("category", "name")
       .populate("subcategory", "name")

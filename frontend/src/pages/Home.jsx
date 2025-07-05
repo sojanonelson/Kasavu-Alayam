@@ -5,27 +5,21 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-
-// Import components and services
 import Footer from '../components/Footer';
 import SideContactNavbar from '../pages/sidecontactbar';
 import EnhancedFeedbackSystem from '../components/EnhancedFeedbackSystem';
 import HomePageSkeleton from './HomePageSkeleton';
 import websiteSettingService from '../services/websiteSettingService';
-
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
-
 import border1 from '../assets/elements/border2.png';
 import weddingSilksImage from '../assets/wedding logo.jpg';
 import bridalBlouseSetsImage from '../assets/bridal logo.jpg';
 import sareesImage from '../assets/sarees logo.png';
 import womensCollectionsImage from '../assets/womens logo.png';
 import mensCollectionsImage from '../assets/mens logo.png';
-
-// Configuration data
 const DEFAULT_HERO_IMAGES = [
   {
     url: "https://kalyansilks.com/_next/image?url=https%3A%2F%2Fapi.kalyansilks.com%2Fmedia%2Fvegam%2Fhomepage%2Fimages%2F1920_x1040_-_Main_Banner_-_01_1.jpg&w=1920&q=75",
@@ -38,9 +32,6 @@ const DEFAULT_HERO_IMAGES = [
     subtitle: "Adorn yourself in ceremonial splendor"
   }
 ];
-
-
-
 const CATEGORIES = [
   {
     title: "Sarees",
@@ -67,9 +58,6 @@ const CATEGORIES = [
     link: "/collections/womens",
   }
 ];
-
-
-
 const useScrolledState = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -153,7 +141,6 @@ const ScrollToTopButton = () => {
     </motion.div>
   );
 };
-
 const HeroCarousel = ({ images, onSlideChange }) => {
   const swiperRef = useRef(null);
   const [imagesLoaded, setImagesLoaded] = useState({});
@@ -180,7 +167,6 @@ const HeroCarousel = ({ images, onSlideChange }) => {
       </div>
     );
   }
-
   return (
     <section className="relative" aria-label="Featured collections carousel">
       <Swiper
@@ -241,7 +227,6 @@ const HeroCarousel = ({ images, onSlideChange }) => {
     </section>
   );
 };
-
 const RoundCollectionCard = ({ title, img, link, description, index, isCategory = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -307,9 +292,6 @@ const RoundCollectionCard = ({ title, img, link, description, index, isCategory 
     </div>
   );
 };
-
-
-
 const ResponsiveAnimatedItem = ({ children, index, isMobile }) => {
   if (isMobile) {
     return (
@@ -323,7 +305,6 @@ const ResponsiveAnimatedItem = ({ children, index, isMobile }) => {
       </motion.div>
     );
   }
-
   return (
     <motion.div
       key={`desktop-${index}`}
@@ -347,7 +328,6 @@ const AnimatedSection = ({ children, className, ...props }) => {
       </section>
     );
   }
-
   return (
     <motion.section
       ref={ref}
@@ -361,8 +341,6 @@ const AnimatedSection = ({ children, className, ...props }) => {
     </motion.section>
   );
 };
-
-// Main Component
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { carouselImages, isLoading } = useCarouselImages();
@@ -375,7 +353,6 @@ const HomePage = () => {
   if (isLoading) {
     return <HomePageSkeleton />;
   }
-
   return (
     <div className="font-sans">
       <Helmet>
@@ -384,14 +361,10 @@ const HomePage = () => {
         <meta name="keywords" content="kasavu, sarees, traditional wear, indian fashion, silk sarees, ethnic wear" />
         <link rel="canonical" href="https://kasavuaalayam.com" />
       </Helmet>
-
       <HeroCarousel images={carouselImages} onSlideChange={handleSlideChange} />
-
       <div className="flex justify-center items-center lg:pt-8 pt-8">
         <img draggable="false" src={border1} className="lg:h-20 h-10" alt="border lg:pt-8"/>
       </div>
-
-      {/* Collections Section */}
       <AnimatedSection
         className="lg:py-16 py-6 px-6 md:px-20 bg-white"
         aria-labelledby="collections-heading"
@@ -432,10 +405,8 @@ const HomePage = () => {
           <SwiperSlide>
             <EnhancedFeedbackSystem />
           </SwiperSlide>
-          {/* Add more SwiperSlides if you have multiple feedback sections */}
         </Swiper>
       </div>
-
       <ScrollToTopButton />
       <Footer />
     </div>

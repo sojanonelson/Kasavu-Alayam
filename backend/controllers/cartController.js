@@ -1,7 +1,5 @@
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
-
-// 🛒 Add or update item in cart
 exports.addToCart = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
@@ -14,14 +12,12 @@ exports.addToCart = async (req, res) => {
     const totalItemPrice = quantity * productPrice;
 
     if (!cart) {
-      // Create new cart
       cart = new Cart({
         userId,
         items: [{ productId, quantity }],
         totalPrice: totalItemPrice
       });
     } else {
-      // Update existing cart
       const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
       if (itemIndex > -1) {
         cart.items[itemIndex].quantity += quantity;
@@ -29,7 +25,6 @@ exports.addToCart = async (req, res) => {
         cart.items.push({ productId, quantity });
       }
 
-      // Recalculate total
       let newTotal = 0;
       for (const item of cart.items) {
         const prod = await Product.findById(item.productId);
@@ -48,8 +43,6 @@ exports.addToCart = async (req, res) => {
     res.status(500).json({ message: 'Error adding to cart' });
   }
 };
-
-// ❌ Remove item from cart
 exports.removeFromCart = async (req, res) => {
   try {
     const { userId, productId } = req.body;
@@ -60,7 +53,6 @@ exports.removeFromCart = async (req, res) => {
 
     cart.items = cart.items.filter(item => item.productId.toString() !== productId);
 
-    // Recalculate total
     let newTotal = 0;
     for (const item of cart.items) {
       const prod = await Product.findById(item.productId);
@@ -78,8 +70,6 @@ exports.removeFromCart = async (req, res) => {
     res.status(500).json({ message: 'Error removing item from cart' });
   }
 };
-
-// 🧾 Get user's cart
 exports.getCartByUser = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -90,9 +80,6 @@ exports.getCartByUser = async (req, res) => {
     res.status(500).json({ message: 'Error getting cart' });
   }
 };
-
-
-// 🔄 Update quantity of an item in cart
 exports.updateCartItemQuantity = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
@@ -110,7 +97,6 @@ exports.updateCartItemQuantity = async (req, res) => {
 
     item.quantity = quantity;
 
-    // 🔁 Recalculate total
     let newTotal = 0;
     for (const item of cart.items) {
       const prod = await Product.findById(item.productId);
