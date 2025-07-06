@@ -26,7 +26,6 @@ const UpdateProduct = () => {
     category: "",
     subcategory: "",
   });
-
   const [images, setImages] = useState([]);
   const [initialImages, setInitialImages] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,6 +35,7 @@ const UpdateProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        console.log("Fetching product data...");
         const res = await productService.getProductById(id);
         setProductData(res);
         setProductForm({
@@ -67,6 +67,7 @@ const UpdateProduct = () => {
   }, [id]);
 
   const handleChange = (e) => {
+    console.log("Handling change...");
     const { name, value } = e.target;
     setProductForm(prev => ({
       ...prev,
@@ -75,6 +76,7 @@ const UpdateProduct = () => {
   };
 
   const handleImageChange = (e) => {
+    console.log("Handling image change...");
     const files = Array.from(e.target.files);
     if (images.length + files.length > 4) {
       alert("You can upload a maximum of 4 images.");
@@ -84,6 +86,7 @@ const UpdateProduct = () => {
   };
 
   const handleDeleteImage = (index) => {
+    console.log("Handling delete image...");
     if (images.length <= 1) {
       alert("You must have at least one image.");
       setShowConfirmDelete(null);
@@ -95,6 +98,7 @@ const UpdateProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Handling submit...");
     setIsSubmitting(true);
     try {
       const updates = {
@@ -114,7 +118,6 @@ const UpdateProduct = () => {
         category: productForm.category,
         subcategory: productForm.subcategory
       };
-
       await productService.updateProduct(id, updates);
       showToast("Product data updated successfully!", "success");
     } catch (err) {
@@ -126,20 +129,18 @@ const UpdateProduct = () => {
   };
 
   const handleImageSubmit = async () => {
+    console.log("Handling image submit...");
     setIsSubmitting(true);
     try {
       const formData = new FormData();
-
-      // Handle removed images
-      const removedImages = initialImages.filter(initialImg => 
+      const removedImages = initialImages.filter(initialImg =>
         !images.some(img => img.public_id === initialImg.public_id)
       ).map(img => img.public_id);
-      
+
       if (removedImages.length > 0) {
         formData.append("removeExistingImages", JSON.stringify(removedImages));
       }
 
-      // Append new images
       images.forEach(image => {
         if (image.file) {
           formData.append("images", image.file);
@@ -148,8 +149,7 @@ const UpdateProduct = () => {
 
       await productService.updateProductImages(id, formData);
       showToast("Product cover image updated successfully!", "success");
-      
-      // Refresh images after update
+
       const res = await productService.getProductById(id);
       setImages(res.images || []);
       setInitialImages(res.images || []);
@@ -165,7 +165,6 @@ const UpdateProduct = () => {
     return <div className="flex justify-center items-center h-screen text-xl font-semibold text-gray-600">Loading product details...</div>;
   }
 
-  // Sidebar menu items with icons
   const sections = [
     { key: "details", label: "Product Details", icon: <Edit className="inline mr-2" size={18} /> },
     { key: "images", label: "Product Images", icon: <Save className="inline mr-2" size={18} /> },
@@ -174,8 +173,7 @@ const UpdateProduct = () => {
 
   return (
     <div className="flex w-full min-h-screen bg-gray-50 text-gray-800">
-      {/* Sidebar */}
-      <aside className="sticky top-4 h-[calc(100vh-)]  border-r-2 w-1/5 bg-white p-6 flex flex-col">
+      <aside className="sticky top-4 h-[calc(100vh-)] border-r-2 w-1/5 bg-white p-6 flex flex-col">
         <h2 className="text-xl font-extrabold mb-6 tracking-wide text-gray-700 select-none">Update Product</h2>
         <nav className="flex flex-col space-y-3">
           {sections.map(({ key, label, icon }) => (
@@ -184,7 +182,7 @@ const UpdateProduct = () => {
               type="button"
               onClick={() => setActiveSection(key)}
               className={`flex items-center px-4 py-3 rounded-lg font-semibold tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                activeSection === key 
+                activeSection === key
                   ? "bg-blue-600 text-white shadow-md shadow-blue-200"
                   : "text-gray-600 hover:text-blue-700 hover:bg-blue-50"
               }`}
@@ -196,16 +194,7 @@ const UpdateProduct = () => {
           ))}
         </nav>
       </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-8 w-full mx-auto rounded-xl bg-white ">
-        {/* Header */}
-        {/* <header className="flex items-center mb-8">
-          <Edit size={32} className="text-blue-600 mr-3" />
-          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 select-none">Update Product</h1>
-        </header> */}
-
-        {/* Sections */}
+      <main className="flex-1 p-8 w-full mx-auto rounded-xl bg-white">
         {activeSection === "details" && (
           <form onSubmit={handleSubmit} className="space-y-6 w-3/5 py-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -216,21 +205,20 @@ const UpdateProduct = () => {
               <FormTextarea label="Description" name="description" value={productForm.description} onChange={handleChange} rows={4} required />
               <FormInput label="Color" name="color" value={productForm.color} onChange={handleChange} required />
             </div>
-            <PrimaryButton disabled={isSubmitting} loading={isSubmitting} icon={<Save />}>
+            <PrimaryButton type="submit" disabled={isSubmitting} loading={isSubmitting} icon={<Save />}>
               Save Changes
             </PrimaryButton>
           </form>
         )}
-
         {activeSection === "images" && (
-          <section className="space-y-8  py-10">
+          <section className="space-y-8 py-10">
             <div>
               <label className="block text-sm font-medium text-gray-800 mb-4">Product Images (Max 4)</label>
               <div className="flex flex-wrap gap-5">
                 {images.map((image, idx) => (
                   <div
                     key={idx}
-                    className="relative group  overflow-hidden w-auto h-64 cursor-pointer transform transition-transform "
+                    className="relative group overflow-hidden w-auto h-64 cursor-pointer transform transition-transform"
                     onMouseEnter={() => setHoveredImageIndex(idx)}
                     onMouseLeave={() => {
                       setHoveredImageIndex(null);
@@ -243,7 +231,7 @@ const UpdateProduct = () => {
                       className="object-cover w-full h-full"
                       draggable={false}
                     />
-                    {(hoveredImageIndex === idx) && (
+                    {hoveredImageIndex === idx && (
                       <>
                         <div
                           className="absolute inset-0 bg-black bg-opacity-30 rounded-xl"
@@ -275,7 +263,6 @@ const UpdateProduct = () => {
                 ))}
               </div>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-800 mb-2">Upload New Images</label>
               <input
@@ -283,27 +270,19 @@ const UpdateProduct = () => {
                 multiple
                 accept="image/*"
                 onChange={handleImageChange}
-                className="block w-full text-sm text-gray-700
-                  file:mr-4 file:py-2 file:px-4
-                  file:rounded-md file:border-0
-                  file:text-sm file:font-semibold
-                  file:bg-blue-50 file:text-blue-700
-                  hover:file:bg-blue-100
-                  cursor-pointer"
+                className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
               />
               <p className="mt-1 text-sm text-gray-500">
                 {images.length} / 4 images uploaded
               </p>
             </div>
-
-            <PrimaryButton disabled={isSubmitting} loading={isSubmitting} icon={<Save />} onClick={handleImageSubmit}>
+            <PrimaryButton type="button" disabled={isSubmitting} loading={isSubmitting} icon={<Save />} onClick={handleImageSubmit}>
               Save Image Changes
             </PrimaryButton>
           </section>
         )}
-
         {activeSection === "basic" && (
-          <form onSubmit={handleSubmit} className="space-y-6  w-3/5  py-10">
+          <form onSubmit={handleSubmit} className="space-y-6 w-3/5 py-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormInput label="Type" name="type" value={productForm.type} onChange={handleChange} />
               <FormInput label="Fabric" name="fabric" value={productForm.fabric} onChange={handleChange} />
@@ -313,7 +292,7 @@ const UpdateProduct = () => {
               <FormInput label="Category ID" name="category" value={productForm.category} onChange={handleChange} readOnly />
               <FormInput label="Subcategory ID" name="subcategory" value={productForm.subcategory} onChange={handleChange} readOnly />
             </div>
-            <PrimaryButton disabled={isSubmitting} loading={isSubmitting} icon={<Save />}>
+            <PrimaryButton type="submit" disabled={isSubmitting} loading={isSubmitting} icon={<Save />}>
               Save Changes
             </PrimaryButton>
           </form>
@@ -323,8 +302,7 @@ const UpdateProduct = () => {
   );
 };
 
-// Components for form input fields with tooltip on label if provided
-const FormInput = ({ label, name, value, onChange, type="text", required=false, min, readOnly=false }) => {
+const FormInput = ({ label, name, value, onChange, type = "text", required = false, min, readOnly = false }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipTextMap = {
     "Special Price": "Optional price lower than main price",
@@ -342,13 +320,9 @@ const FormInput = ({ label, name, value, onChange, type="text", required=false, 
       >
         {label}
         {required && <span className="text-red-600 ml-1">*</span>}
-        {tooltipText && (
-          <Info className="ml-1 text-gray-400" size={14} />
-        )}
+        {tooltipText && <Info className="ml-1 text-gray-400" size={14} />}
       </label>
-      {showTooltip && tooltipText && (
-        <div className={TOOLTIP_STYLE}>{tooltipText}</div>
-      )}
+      {showTooltip && tooltipText && <div className={TOOLTIP_STYLE}>{tooltipText}</div>}
       <input
         type={type}
         id={name}
@@ -358,15 +332,15 @@ const FormInput = ({ label, name, value, onChange, type="text", required=false, 
         min={min}
         required={required}
         readOnly={readOnly}
-        className={`w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 placeholder-gray-400 
-          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150
-          ${readOnly ? "bg-gray-100 cursor-not-allowed" : "bg-white"}`}
+        className={`w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ${
+          readOnly ? "bg-gray-100 cursor-not-allowed" : "bg-white"
+        }`}
       />
     </div>
   );
 };
 
-const FormTextarea = ({ label, name, value, onChange, rows=3, required=false }) => {
+const FormTextarea = ({ label, name, value, onChange, rows = 3, required = false }) => {
   return (
     <div>
       <label htmlFor={name} className="block mb-1 text-sm font-semibold text-gray-700 select-none">
@@ -380,37 +354,29 @@ const FormTextarea = ({ label, name, value, onChange, rows=3, required=false }) 
         onChange={onChange}
         rows={rows}
         required={required}
-        className="w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 placeholder-gray-400
-          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 resize-y"
+        className="w-full rounded-md border border-gray-300 shadow-sm p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 resize-y"
       />
     </div>
   );
 };
 
-const PrimaryButton = ({ children, loading = false, icon, onClick, disabled }) => (
+const PrimaryButton = ({ children, loading = false, icon, onClick, disabled, type = "button" }) => (
   <button
-    type="button"
+    type={type}
     onClick={onClick}
     disabled={disabled || loading}
-    className={`inline-flex justify-center items-center gap-2 rounded-md px-5 py-3 text-white font-semibold shadow-md
-      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition duration-200
-      ${disabled || loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-700 hover:bg-blue-800"}`}
+    className={`inline-flex justify-center items-center gap-2 rounded-md px-5 py-3 text-white font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition duration-200 ${
+      disabled || loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-700 hover:bg-blue-800"
+    }`}
   >
     {loading ? (
       <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle
-          className="opacity-25"
-          cx="12" cy="12" r="10"
-          stroke="currentColor"
-          strokeWidth="4"
-        />
-        <path
-          className="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-        />
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
       </svg>
-    ) : icon ? icon : null}
+    ) : (
+      icon
+    )}
     {children}
   </button>
 );
