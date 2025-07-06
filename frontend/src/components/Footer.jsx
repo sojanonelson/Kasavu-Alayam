@@ -220,14 +220,17 @@ const Footer = () => {
                   © {new Date().getFullYear()} Kasavu Aalayam. All rights reserved.
                 </div>
                 
-                <div className="flex items-center gap-6 text-xs text-white/70">
-                  <span>Made with ❤️ in Kerala</span>
-                  <div className="flex gap-4">
-                    <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
-                    <a href="/terms" className="hover:text-white transition-colors">Terms</a>
-                    <a href="/cookies" className="hover:text-white transition-colors">Cookies</a>
-                  </div>
-                </div>
+             <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-6 text-xs text-white/70 px-4 py-2">
+  <span>
+    Crafted By: <a href="https://techhike.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">TechHike</a>
+  </span>
+  <div className="flex gap-4">
+    <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
+    <a href="/terms" className="hover:text-white transition-colors">Terms</a>
+    <a href="/cookies" className="hover:text-white transition-colors">Cookies</a>
+  </div>
+</div>
+
               </div>
             </div>
           </div>
