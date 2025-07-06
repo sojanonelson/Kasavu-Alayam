@@ -15,7 +15,7 @@ import Navbar from "../components/Navbar";
 import OverviewPage from "../pages/Admin/Overview";
 import Customers from "../pages/Admin/Customers";
 import OrdersPage from "../pages/Admin/Order";
-import NotificationsPage from "../pages/Admin/Notificaton";
+
 import InventoryManagement from "../pages/Admin/Inventory";
 import ManageCategory from "../pages/Admin/ManageCategory";
 import CreateProduct from "../pages/Admin/Products/CreateProduct";
