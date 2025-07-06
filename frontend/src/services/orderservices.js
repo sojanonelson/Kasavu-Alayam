@@ -31,6 +31,7 @@ export const getOrderByTrackingId = async (trackingId) => {
   return response.data;
 };
 export const getPackedOrders = async () => {
+  console.log("JJJJJJ")
   const response = await axios.get(`${API_URL}/order/packed`);
   return response.data;
 };

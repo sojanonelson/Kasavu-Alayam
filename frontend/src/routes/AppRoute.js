@@ -140,7 +140,7 @@ const AppRoutes = () => {
             path="inventory/collection/:id"
             element={<InventoryCollections />}
           />
-          <Route path="notifications" element={<NotificationsPage />} />
+         
           <Route path="category" element={<ManageCategory />} />
           <Route path="products/create" element={<CreateProduct />} />
           <Route path="products/update/:id" element={<UpdateProduct />} />

@@ -47,6 +47,7 @@ exports.uploadCarouselImages = async (req, res) => {
 
 // Get all carousel images
 exports.getCarouselImages = async (req, res) => {
+  console.log("Get Carousel")
   try {
     const setting = await WebsiteSetting.findOne({}, { carouselImages: 1 });
     res.status(200).json(setting?.carouselImages || []);

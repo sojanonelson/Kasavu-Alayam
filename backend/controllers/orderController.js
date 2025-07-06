@@ -105,7 +105,7 @@ exports.getOrderByTrackingId = async (req, res) => {
 
 // Update packed status
 exports.updatePackedStatus = async (req, res) => {
-  console.log("Packed")
+  console.log("packedStatus")
   try {
     const { orderId } = req.params;
     const { packed } = req.body;
